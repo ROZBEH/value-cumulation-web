@@ -127,3 +127,5 @@ export class Checklist {
     return this.dfFinancialRatios['currentRatio'].values.slice(0, years)
   }
 }
+
+toCSV(dfIncomeStatement, { filePath: 'fixtures/dfIncomeStatement.csv' })
