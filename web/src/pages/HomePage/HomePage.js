@@ -1,16 +1,26 @@
-import { MetaTags } from '@redwoodjs/web'
+import { Form, TextField, Submit } from '@redwoodjs/forms'
+import { useState } from 'react'
+// import { MetaTags } from '@redwoodjs/web'
 import './HomePage.css'
+import FundamentalanalysisCell from 'src/components/FundamentalanalysisCell'
 const HomePage = () => {
+  const [ticker, setTicker] = useState()
+  const onSubmit = (data) => {
+    setTicker(data.ticker)
+  }
   return (
-    <body>
-      <MetaTags title="Value Cumulation" description="Home" />
-
-      <p>
-        Welcome to value cumulation where we make investment easy. <br /> We
-        believe everyone should be able to judge the financials of a company and
-        make up their mind when it comes to making investment decisions
-      </p>
-    </body>
+    <>
+      <Form onSubmit={onSubmit} style={{ fontSize: '2rem' }}>
+        <TextField
+          name="ticker"
+          placeholder="Stock Ticker"
+          maxLength="10"
+          // validation={{ required: true, pattern: /^\d{5}$/ }}
+        />
+        <Submit>Go</Submit>
+      </Form>
+      {ticker && <FundamentalanalysisCell ticker={ticker} />}
+    </>
   )
 }
 

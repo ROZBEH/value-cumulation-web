@@ -1,5 +1,5 @@
 import { fetch } from 'cross-undici-fetch'
-import { toCSV, DataFrame } from 'danfojs-node'
+import { DataFrame } from 'danfojs-node'
 
 export class Checklist {
   ticker
@@ -127,5 +127,3 @@ export class Checklist {
     return this.dfFinancialRatios['currentRatio'].values.slice(0, years)
   }
 }
-
-toCSV(dfIncomeStatement, { filePath: 'fixtures/dfIncomeStatement.csv' })

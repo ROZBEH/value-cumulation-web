@@ -1,6 +1,6 @@
 export const QUERY = gql`
   query GetFundamentalsQuery($ticker: String!) {
-    fundamentals: getFundamental(ticker: $ticker) {
+    fundamentalanalysis: getFundamental(ticker: $ticker) {
       ticker
       intrinsic_value
     }
@@ -16,5 +16,10 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ fundamentalanalysis }) => {
-  return <div>{JSON.stringify(fundamentalanalysis)}</div>
+  return (
+    <section>
+      <h1>{fundamentalanalysis.ticker}</h1>
+      <h2>Intrinsic Value: {fundamentalanalysis.intrinsic_value}</h2>
+    </section>
+  )
 }
