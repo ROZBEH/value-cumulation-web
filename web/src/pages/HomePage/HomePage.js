@@ -1,5 +1,6 @@
 import { Form, TextField, Submit } from '@redwoodjs/forms'
 import { useState } from 'react'
+import { Mapping } from 'src/components/Buttons/Buttons'
 // import { MetaTags } from '@redwoodjs/web'
 import './HomePage.css'
 import FundamentalanalysisCell from 'src/components/FundamentalanalysisCell'
@@ -8,8 +9,14 @@ const HomePage = () => {
   const onSubmit = (data) => {
     setTicker(data.ticker)
   }
+  const [metrics, setMetrics] = useState()
+  const onSelect = (data) => {
+    setMetrics(data)
+  }
+
   return (
     <>
+      <Mapping metrics={onSelect} />
       <Form onSubmit={onSubmit} style={{ fontSize: '2rem' }}>
         <TextField
           name="ticker"
@@ -19,7 +26,9 @@ const HomePage = () => {
         />
         <Submit>Go</Submit>
       </Form>
-      {ticker && <FundamentalanalysisCell ticker={ticker} />}
+      {ticker && metrics && (
+        <FundamentalanalysisCell ticker={ticker} metrics={metrics} />
+      )}
     </>
   )
 }
