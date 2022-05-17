@@ -18,11 +18,11 @@ api/types/graphql.d.ts
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
-.vscode
-.yarn/releases
-__pycache__/
 .editorconfig
 .env.defaults
 .env.example
 .nvmrc
 .yarnrc.yml
+.vscode
+.yarn/releases
+__pycache__/
