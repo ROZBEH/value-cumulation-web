@@ -126,4 +126,7 @@ export class Checklist {
   currentRatio = (years = 10) => {
     return this.dfFinancialRatios['currentRatio'].values.slice(0, years)
   }
+  netIncome = (years = 10) => {
+    return this.dfIncomeStatement['netIncome'].values.slice(0, years)
+  }
 }

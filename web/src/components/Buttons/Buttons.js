@@ -3,13 +3,15 @@ const BUTTONS = [
   { id: 0, title: 'Net Profit Margin', value: 'netProfitMargin' },
   { id: 1, title: 'Debt Ratio', value: 'debtRatio' },
   { id: 2, title: 'Burn Ratio', value: 'burnRatio' },
+  { id: 3, title: 'Net Income', value: 'netIncome' },
 ]
 export class Mapping extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      values: [],
+      values: ['netIncome'],
     }
+    this.props.metrics(this.state.values)
   }
 
   handleButton = (button) => {
@@ -24,7 +26,6 @@ export class Mapping extends React.Component {
         values: tmp,
       })
     }
-    this.props.metrics(this.state.values)
   }
 
   render() {

@@ -1,7 +1,7 @@
 import { Checklist } from './Checklist'
 
 export const getFundamental = async ({ ticker, metrics }) => {
-  const checklist = new Checklist(ticker)
+  const checklist = new Checklist(ticker.toUpperCase())
   await checklist.initialize()
   const results = []
   if (metrics.includes('netProfitMargin') === true) {
@@ -13,9 +13,12 @@ export const getFundamental = async ({ ticker, metrics }) => {
   if (metrics.includes('burnRatio') === true) {
     results.push(checklist.burnRatio())
   }
+  if (metrics.includes('netIncome') === true) {
+    results.push(checklist.netIncome())
+  }
 
   return {
-    ticker: ticker,
+    ticker: ticker.toUpperCase(),
     intrinsic_value: results,
   }
 }

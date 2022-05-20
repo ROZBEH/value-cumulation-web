@@ -80,10 +80,11 @@ export const Success = ({ fundamentalanalysis }) => {
         <LineChart
           key={index}
           intractive={true}
-          align="center"
+          align="right"
           width={800}
           height={300}
           data={item}
+          margin={{ top: 10, right: 30, left: 100, bottom: 10 }}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <YAxis dataKey={(v) => v} />

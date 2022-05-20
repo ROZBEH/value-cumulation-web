@@ -1,12 +1,11 @@
-import { Form, TextField, Submit } from '@redwoodjs/forms'
 import { useState } from 'react'
 import { Mapping } from 'src/components/Buttons/Buttons'
-// import { MetaTags } from '@redwoodjs/web'
+import { Mainsubmission } from 'src/components/Mainsubmission/Mainsubmission'
 import './HomePage.css'
 import FundamentalanalysisCell from 'src/components/FundamentalanalysisCell'
 const HomePage = () => {
   const [ticker, setTicker] = useState()
-  const onSubmit = (data) => {
+  const pickTicker = (data) => {
     setTicker(data.ticker)
   }
   const [metrics, setMetrics] = useState()
@@ -17,15 +16,7 @@ const HomePage = () => {
   return (
     <>
       <Mapping metrics={onSelect} />
-      <Form onSubmit={onSubmit} style={{ fontSize: '2rem' }}>
-        <TextField
-          name="ticker"
-          placeholder="Stock Ticker"
-          maxLength="10"
-          // validation={{ required: true, pattern: /^\d{5}$/ }}
-        />
-        <Submit>Go</Submit>
-      </Form>
+      <Mainsubmission pickTicker={pickTicker} />
       {ticker && metrics && (
         <FundamentalanalysisCell ticker={ticker} metrics={metrics} />
       )}
