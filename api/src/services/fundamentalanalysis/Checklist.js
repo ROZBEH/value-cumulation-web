@@ -22,10 +22,15 @@ export class Checklist {
   }
 
   async initialize() {
+    // Company Profile Information
+    this.companyProfile = await this.getFinancials(this.ticker, 'profile')
+
+    // Income Statement
     this.dfIncomeStatement = await this.getFinancials(
       this.ticker,
       'income-statement'
     )
+
     // Balance Sheet
     this.dfBalanceSheetStatement = await this.getFinancials(
       this.ticker,
@@ -107,6 +112,7 @@ export class Checklist {
       return n / revenue[i]
     })
   }
+
   grossProfitMargin = (years = 10) => {
     return this.dfFinancialRatios['grossProfitMargin'].values.slice(0, years)
   }
@@ -126,7 +132,20 @@ export class Checklist {
   currentRatio = (years = 10) => {
     return this.dfFinancialRatios['currentRatio'].values.slice(0, years)
   }
+
   netIncome = (years = 10) => {
     return this.dfIncomeStatement['netIncome'].values.slice(0, years)
+  }
+
+  companyName = () => {
+    return this.companyProfile['companyName'].values[0]
+  }
+
+  freeCashFlow = (years = 10) => {
+    return this.dfCashFlowStatement['CashFlow'].values.slice(0, years)
+  }
+
+  operatingCashFlow = (years = 10) => {
+    return this.dfCashFlowStatement['operatingCashFlow'].values.slice(0, years)
   }
 }

@@ -1,99 +1,82 @@
-import {
-  LineChart,
-  Line,
-  // XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  // Legend,
-  // ResponsiveContainer,
-} from 'recharts'
-
-// import {
-//   Chart as ChartJS,
-//   CategoryScale,
-//   LinearScale,
-//   PointElement,
-//   LineElement,
-//   Title,
-//   Tooltip,
-//   Legend,
-// } from 'chart.js'
-// import { Line } from 'react-chartjs-2'
-// ChartJS.register(
-//   CategoryScale,
-//   LinearScale,
-//   PointElement,
-//   LineElement,
-//   Title,
-//   Tooltip,
-//   Legend
-// )
+import { LineChart, Line, YAxis, CartesianGrid, Tooltip } from 'recharts'
+import { useEffect } from 'react'
+import { TailSpin } from 'react-loader-spinner'
 export const QUERY = gql`
-  query GetFundamentalsQuery($ticker: String!, $metrics: [String!]!) {
-    fundamentalanalysis: getFundamental(ticker: $ticker, metrics: $metrics) {
-      ticker
-      intrinsic_value
+  query GetFundamentalQuery($ticker: String!, $metric: String!) {
+    fundamentalanalysis: getSingleMetric(ticker: $ticker, metric: $metric) {
+      company_name
+      metric_name
+      metric_value
     }
   }
 `
 
-export const Loading = () => <div>Loading...</div>
+export const Loading = () => {
+  const style = {
+    position: 'relative',
+    left: '50%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
+  return (
+    <div style={style}>
+      <TailSpin color="#87CEEB" height="50" width="50" />
+    </div>
+  )
+}
 
 export const Empty = () => <div>Empty</div>
 
-export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
-)
+export const Failure = ({ error }) => {
+  console.log(error)
+  return <div style={{ color: 'red' }}>Error: {error.message}</div>
+}
 
-export const Success = ({ fundamentalanalysis }) => {
-  // const options = {
-  // height: 20%,
-  // width: 50%,
-  // responsive: true,
-  //   plugins: {
-  //     legend: {
-  //       position: 'top',
-  //     },
-  //     title: {
-  //       display: true,
-  //       text: 'Chart.js Line Chart',
-  //     },
-  //   },
-  // }
-  // const labels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
-  // const data = {
-  //   labels,
-  //   datasets: [
-  //     {
-  //       label: 'Dataset 2',
-  //       data: fundamentalanalysis.intrinsic_value,
-  //       borderColor: 'rgb(255, 99, 132)',
-  //       backgroundColor: 'rgba(255, 99, 132, 0.5)',
-  //     },
-  //   ],
-  // }
+export const Success = ({ fundamentalanalysis, updateName }) => {
+  const result = fundamentalanalysis.metric_value
+  const name = fundamentalanalysis.company_name
+  const chartStyle = {
+    position: 'relative',
+    left: '10%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    display: 'inline-block',
+  }
+
+  useEffect(() => {
+    updateName(name)
+  }, [updateName, name])
+
   return (
-    <section>
-      <h1>{fundamentalanalysis.ticker}</h1>
-      {fundamentalanalysis.intrinsic_value.map((item, index) => (
+    <div style={{ display: 'inline-block' }}>
+      <section>
         <LineChart
-          key={index}
           intractive={true}
           align="right"
-          width={800}
-          height={300}
-          data={item}
-          margin={{ top: 10, right: 30, left: 100, bottom: 10 }}
+          width={600}
+          height={250}
+          data={result}
+          margin={{ top: 20, right: 10, left: 20, bottom: 20 }}
+          style={chartStyle}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <YAxis dataKey={(v) => v} />
+          <YAxis
+            label={
+              <text x={200} y={0} dx={50} dy={15} offset={0} angle={-90}>
+                {fundamentalanalysis.metric_name}
+              </text>
+            }
+            dataKey={(v) => v}
+          />
           <Tooltip />
-          <Line type="monotone" dataKey={(v) => v} stroke="#8884d8" />
+          <Line
+            isAnimationActive={false}
+            type="monotone"
+            dataKey={(v) => v}
+            stroke="#8884d8"
+          />
         </LineChart>
-      ))}
-
-      {/* <Line width={100} height={50} options={options} data={data} /> */}
-    </section>
+      </section>
+    </div>
   )
 }
