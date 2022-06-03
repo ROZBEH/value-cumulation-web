@@ -1,43 +1,46 @@
-import { useState } from 'react'
+import { TailSpin } from 'react-loader-spinner'
 import { Mapping } from 'src/components/Buttons/Buttons'
 import { Mainsubmission } from 'src/components/Mainsubmission/Mainsubmission'
 import './HomePage.css'
 import FundamentalanalysisCell from 'src/components/FundamentalanalysisCell'
-import { useEffect } from 'react'
+import { useRecoilValue } from 'recoil'
+import {
+  loadingFinancials as loadingFinancialsA,
+  metrics as metricsA,
+  ticker as tickerA,
+  name as nameA,
+} from 'src/recoil/atoms'
 
 const HomePage = () => {
-  const [ticker, setTicker] = useState()
-  const [name, setName] = useState()
-  const pickTicker = (data) => {
-    setTicker(data.ticker)
-  }
-  const [metrics, setMetrics] = useState()
-  const onSelect = (data) => {
-    if (metrics !== data) {
-      setMetrics(data)
-    }
-  }
-  const updateName = (data) => {
-    setName(data)
-  }
+  const name = useRecoilValue(nameA)
+  const metrics = useRecoilValue(metricsA)
+  const ticker = useRecoilValue(tickerA)
+  const loadingFinancials = useRecoilValue(loadingFinancialsA)
 
-  useEffect(() => {
-    updateName('')
-  }, [ticker])
+  const styleSpin = {
+    position: 'relative',
+    left: '50%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 
   return (
     <>
-      <Mapping parentToChild={ticker} metrics={onSelect} />
-      <Mainsubmission pickTicker={pickTicker} />
+      <Mapping />
+      <Mainsubmission />
       {!name && ticker && <h2>Fetching Data for symbol {ticker} ...</h2>}
       {name && <h1>{name}</h1>}
+      {loadingFinancials && (
+        <div style={styleSpin}>
+          <TailSpin color="#87CEEB" height="50" width="50" />
+        </div>
+      )}
       {metrics &&
         ticker &&
         metrics.map((item, index) => (
           <FundamentalanalysisCell
             key={index}
             ticker={ticker}
-            updateName={updateName}
             metric={metrics[metrics.length - 1 - index]}
           />
         ))}

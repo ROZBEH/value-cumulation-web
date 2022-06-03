@@ -5,12 +5,14 @@ import FatalErrorPage from 'src/pages/FatalErrorPage'
 import Routes from 'src/Routes'
 
 import './index.css'
-
+import { RecoilRoot, useRecoilValue, useRecoilState } from 'recoil'
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodProvider titleTemplate="%PageTitle">
       <RedwoodApolloProvider>
-        <Routes />
+        <RecoilRoot>
+          <Routes />
+        </RecoilRoot>
       </RedwoodApolloProvider>
     </RedwoodProvider>
   </FatalErrorBoundary>

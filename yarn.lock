@@ -14023,6 +14023,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"hamt_plus@npm:1.0.2":
+  version: 1.0.2
+  resolution: "hamt_plus@npm:1.0.2"
+  checksum: c5aa5cc08228e8cc2a90150fef680bd5b09f16a327bdab799daeb80fd3c987663308b14e2c6718abdf75afce21d29607e35f2705eb336a14aa935c0ca5949ce7
+  languageName: node
+  linkType: hard
+
 "handle-thing@npm:^2.0.0":
   version: 2.0.1
   resolution: "handle-thing@npm:2.0.1"
@@ -21006,6 +21013,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"recoil@npm:^0.7.3-alpha.2":
+  version: 0.7.3-alpha.2
+  resolution: "recoil@npm:0.7.3-alpha.2"
+  dependencies:
+    hamt_plus: 1.0.2
+  peerDependencies:
+    react: ">=16.13.1"
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+    react-native:
+      optional: true
+  checksum: a2fbf562c799d08657308b8c5276731ad0d961278b386953c283261468db644c8c646dd6838bd4754833c1ddbc4993b872bae61bcdbd3cbe638326c4353f2328
+  languageName: node
+  linkType: hard
+
 "redent@npm:^3.0.0":
   version: 3.0.0
   resolution: "redent@npm:3.0.0"
@@ -24861,6 +24884,7 @@ __metadata:
     react-dom: 17.0.2
     react-loader-spinner: ^6.0.0-0
     recharts: ^2.1.9
+    recoil: ^0.7.3-alpha.2
   languageName: unknown
   linkType: soft
 

@@ -1,20 +1,15 @@
-import {
-  Form,
-  TextField,
-  TextAreaField,
-  Submit,
-  Label,
-  FieldError,
-  useForm,
-  FormError,
-} from '@redwoodjs/forms'
-import { useMutation } from '@redwoodjs/web'
+import { Form, TextField, Submit, useForm } from '@redwoodjs/forms'
+import { ticker as tickerA, name as nameA } from 'src/recoil/atoms'
+import { useRecoilState } from 'recoil'
 import './Mainsubmission.css'
-export const Mainsubmission = ({ pickTicker }) => {
+export const Mainsubmission = () => {
+  const [, setTicker] = useRecoilState(tickerA)
+  const [, setName] = useRecoilState(nameA)
   const formMethods = useForm({ mode: 'onBlur' })
-  const onSubmit = (data) => {
+  const submitTicker = (data) => {
     formMethods.reset()
-    pickTicker(data)
+    setTicker(data.ticker)
+    setName('')
   }
 
   return (
@@ -22,7 +17,7 @@ export const Mainsubmission = ({ pickTicker }) => {
       <Form
         formMethods={formMethods}
         // error={error}
-        onSubmit={onSubmit}
+        onSubmit={submitTicker}
         style={{ fontSize: '2rem' }}
       >
         <TextField name="ticker" placeholder="Stock Ticker" maxLength="10" />

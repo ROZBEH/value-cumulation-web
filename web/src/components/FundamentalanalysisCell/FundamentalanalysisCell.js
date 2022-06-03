@@ -1,6 +1,7 @@
 import { LineChart, Line, YAxis, CartesianGrid, Tooltip } from 'recharts'
 import { useEffect } from 'react'
-import { TailSpin } from 'react-loader-spinner'
+import { useRecoilState } from 'recoil'
+import { name, loadingFinancials } from 'src/recoil/atoms'
 export const QUERY = gql`
   query GetFundamentalQuery($ticker: String!, $metric: String!) {
     fundamentalanalysis: getSingleMetric(ticker: $ticker, metric: $metric) {
@@ -12,29 +13,24 @@ export const QUERY = gql`
 `
 
 export const Loading = () => {
-  const style = {
-    position: 'relative',
-    left: '50%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  }
-  return (
-    <div style={style}>
-      <TailSpin color="#87CEEB" height="50" width="50" />
-    </div>
-  )
+  const [, setLoadingFinancials] = useRecoilState(loadingFinancials)
+  useEffect(() => {
+    setLoadingFinancials(true)
+  }, [setLoadingFinancials])
+  return null
 }
 
 export const Empty = () => <div>Empty</div>
 
 export const Failure = ({ error }) => {
-  console.log(error)
   return <div style={{ color: 'red' }}>Error: {error.message}</div>
 }
 
-export const Success = ({ fundamentalanalysis, updateName }) => {
+export const Success = ({ fundamentalanalysis }) => {
+  const [, setLoadingFinancials] = useRecoilState(loadingFinancials)
+  const [, setName] = useRecoilState(name)
+  const nameCompany = fundamentalanalysis.company_name
   const result = fundamentalanalysis.metric_value
-  const name = fundamentalanalysis.company_name
   const chartStyle = {
     position: 'relative',
     left: '10%',
@@ -44,8 +40,9 @@ export const Success = ({ fundamentalanalysis, updateName }) => {
   }
 
   useEffect(() => {
-    updateName(name)
-  }, [updateName, name])
+    setName(nameCompany)
+    setLoadingFinancials(false)
+  }, [setName, nameCompany, setLoadingFinancials])
 
   return (
     <div style={{ display: 'inline-block' }}>

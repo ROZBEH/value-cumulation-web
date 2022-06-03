@@ -1,25 +1,25 @@
-import { useState, useEffect } from 'react'
+import { useRecoilState } from 'recoil'
+import { metrics } from 'src/recoil/atoms'
+
 const BUTTONS = [
   { id: 0, title: 'Net Profit Margin', value: 'netProfitMargin' },
   { id: 1, title: 'Debt Ratio', value: 'debtRatio' },
   { id: 2, title: 'Burn Ratio', value: 'burnRatio' },
   { id: 3, title: 'Net Income', value: 'netIncome' },
-  { id: 3, title: 'Free Cash Flow', value: 'freeCashFlow' },
+  { id: 4, title: 'Free Cash Flow', value: 'freeCashFlow' },
 ]
-export const Mapping = ({ metrics }) => {
-  const [values, setValues] = useState(['netIncome'])
+
+export const Mapping = () => {
+  const [metricsA, setMetrics] = useRecoilState(metrics)
   const handleButton = (buttonValue) => {
-    const tmp = [...values]
-    if (values.includes(buttonValue)) {
-      setValues(values.filter((el) => el !== buttonValue))
+    const tmp = [...metricsA]
+    if (metricsA.includes(buttonValue)) {
+      setMetrics(metricsA.filter((el) => el !== buttonValue))
     } else {
       tmp.push(buttonValue)
-      setValues(tmp)
+      setMetrics(tmp)
     }
   }
-  useEffect(() => {
-    metrics(values)
-  }, [metrics, values])
 
   return (
     <>
@@ -27,10 +27,10 @@ export const Mapping = ({ metrics }) => {
         <button
           key={bt.id}
           onClick={() => handleButton(bt.value)}
-          className={values.includes(bt.value) ? 'buttonPressed' : 'button'}
+          className={metricsA.includes(bt.value) ? 'buttonPressed' : 'button'}
           value={bt.value}
           style={{
-            backgroundColor: values.includes(bt.value)
+            backgroundColor: metricsA.includes(bt.value)
               ? 'springgreen'
               : 'gainsboro',
           }}

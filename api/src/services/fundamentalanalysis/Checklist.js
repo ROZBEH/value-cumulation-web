@@ -142,7 +142,7 @@ export class Checklist {
   }
 
   freeCashFlow = (years = 10) => {
-    return this.dfCashFlowStatement['CashFlow'].values.slice(0, years)
+    return this.dfCashFlowStatement['freeCashFlow'].values.slice(0, years)
   }
 
   operatingCashFlow = (years = 10) => {
