@@ -148,4 +148,22 @@ export class Checklist {
   operatingCashFlow = (years = 10) => {
     return this.dfCashFlowStatement['operatingCashFlow'].values.slice(0, years)
   }
+
+  // def mean_FCF_growth_rate(self, years=10):
+  //       """
+  //       What's the average rate of change in free cash flow
+  //       """
+  //       FCF_delta = self.FCF()[0:years] - self.FCF()[1 : years + 1]
+  //       FCF_growth_aapl = np.mean(FCF_delta / self.FCF()[1 : years + 1])
+  //       return FCF_growth_aapl
+
+  meanFCFGrowthRate = (years = 10) => {
+    const fcfDelta =
+      this.freeCashFlow(years).slice(0, years) -
+      this.freeCashFlow(years).slice(1, years + 1)
+    const fcfGrowth = fcfDelta.map(function (n, i) {
+      return n / this.freeCashFlow(years).slice(1, years + 1)[i]
+    })
+    return fcfGrowth.reduce((a, b) => a + b, 0) / years
+  }
 }
