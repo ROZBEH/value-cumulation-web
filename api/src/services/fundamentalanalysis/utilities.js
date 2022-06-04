@@ -1,4 +1,5 @@
 export function numFormatter(num) {
+  /* Format the input number into Millions of Dollars */
   // var absNum = Math.abs(num)
   // if (absNum > 999 && absNum < 1000000) {
   //   return (num / 1000).toFixed(1) // convert to K for number from > 1000 < 1 million
