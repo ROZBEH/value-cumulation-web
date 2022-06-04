@@ -1,5 +1,9 @@
 import { fetch } from 'cross-undici-fetch'
 import { DataFrame } from 'danfojs-node'
+import {
+  discountedCashFlowModelCalculator,
+  terminalValueCalculator,
+} from './utilities'
 
 export class Checklist {
   ticker
@@ -54,6 +58,14 @@ export class Checklist {
       this.ticker,
       'historical-price-full/stock_dividend'
     )
+  }
+
+  netIncome = (years = 10) => {
+    return this.dfIncomeStatement['netIncome'].values.slice(0, years)
+  }
+
+  companyName = () => {
+    return this.companyProfile['companyName'].values[0]
   }
 
   metricDelta = (statement, metric, years = 10) => {
@@ -133,12 +145,8 @@ export class Checklist {
     return this.dfFinancialRatios['currentRatio'].values.slice(0, years)
   }
 
-  netIncome = (years = 10) => {
-    return this.dfIncomeStatement['netIncome'].values.slice(0, years)
-  }
-
-  companyName = () => {
-    return this.companyProfile['companyName'].values[0]
+  priceToFreeCashFlowsRatio = (years = 10) => {
+    return this.dfKeyRatios['priceToFreeCashFlowsRatio'].values.slice(0, years)
   }
 
   freeCashFlow = (years = 10) => {
@@ -149,13 +157,85 @@ export class Checklist {
     return this.dfCashFlowStatement['operatingCashFlow'].values.slice(0, years)
   }
 
-  // def mean_FCF_growth_rate(self, years=10):
-  //       """
-  //       What's the average rate of change in free cash flow
-  //       """
-  //       FCF_delta = self.FCF()[0:years] - self.FCF()[1 : years + 1]
-  //       FCF_growth_aapl = np.mean(FCF_delta / self.FCF()[1 : years + 1])
-  //       return FCF_growth_aapl
+  freeCashFlowToNetIncome = (years = 10) => {
+    const freeCashFlow = this.freeCashFlow(years)
+    const netIncome = this.netIncome(years)
+    return freeCashFlow.map(function (n, i) {
+      return n / netIncome[i]
+    })
+  }
+
+  operatingCFToCurrentLiabilities = (years = 10) => {
+    const operatingCashFlow = this.operatingCashFlow(years)
+    const totalCurrentLiabilities = this.dfBalanceSheetStatement[
+      'totalCurrentLiabilities'
+    ].values.slice(0, years)
+    return operatingCashFlow.map(function (n, i) {
+      return n / totalCurrentLiabilities[i]
+    })
+  }
+
+  dividendYield = (years = 10) => {
+    return this.dfKeyRatios['dividendYield'].values.slice(0, years)
+  }
+
+  incomeTaxToNetIncome = (years = 10) => {
+    const incomeTaxExpense = this.dfIncomeStatement[
+      'incomeTaxExpense'
+    ].values.slice(0, years)
+    const netIncome = this.netIncome(years)
+    return incomeTaxExpense.map(function (n, i) {
+      return n / netIncome[i]
+    })
+  }
+
+  returnOnRetainedEarnings = (years = 10) => {
+    let cumulativeDividend
+    if (this.dfDividend) {
+      cumulativeDividend = this.dfDividend['adjDividend'].values
+        .slice(0, years)
+        .reduce((a, b) => a + b, 0)
+    } else {
+      cumulativeDividend = 0
+    }
+    const epsDilutedDeltaSinceStart =
+      this.dfIncomeStatement['epsDiluted'].values[0] -
+      this.dfIncomeStatement['epsDiluted'].values[years - 1]
+
+    const epsDivDelta =
+      this.dfIncomeStatement['epsDiluted'].values
+        .slice(0, years)
+        .reduce((a, b) => a + b, 0) - cumulativeDividend
+
+    return epsDilutedDeltaSinceStart / epsDivDelta
+  }
+
+  marketCapChangeWithRetainedEarnings = (years = 10) => {
+    const marketCapDelta = this.metricDelta(
+      this.dfKeyMetrics,
+      'marketCap',
+      years
+    )
+    const retainedEarnings = this.dfBalanceSheetStatement[
+      'retainedEarnings'
+    ].values.slice(1, years + 1)
+    return marketCapDelta.map(function (n, i) {
+      return n / retainedEarnings[i]
+    })
+  }
+
+  meanNetIncomeGrowthRate = (years = 10) => {
+    const netIncomeDelta = this.metricDelta(
+      this.dfIncomeStatement,
+      'netIncome',
+      years
+    )
+    const growthRate = netIncomeDelta.map(function (n, i) {
+      return n / this.dfIncomeStatement['netIncome'].values[1 + i]
+    })
+
+    return growthRate.reduce((a, b) => a + b, 0) / years
+  }
 
   meanFCFGrowthRate = (years = 10) => {
     const fcfDelta =
@@ -165,5 +245,39 @@ export class Checklist {
       return n / this.freeCashFlow(years).slice(1, years + 1)[i]
     })
     return fcfGrowth.reduce((a, b) => a + b, 0) / years
+  }
+
+  intrinsicValue = (
+    years = 10,
+    dRate = 0.1,
+    confidence = 1.0,
+    terminalGrowthRate = 0.01,
+    growthMultiple = 'MIN',
+    includeTerminalValue = true
+  ) => {
+    const meanFCFGrowthRate = this.meanFCFGrowthRate(years)
+    const meanNetIncomeGrowthRate = this.meanNetIncomeGrowthRate(years)
+    var growthRate = Math.max(meanFCFGrowthRate, meanNetIncomeGrowthRate)
+    if (growthMultiple === 'MIN') {
+      growthRate = Math.min(meanFCFGrowthRate, meanNetIncomeGrowthRate)
+    }
+    const DCF = discountedCashFlowModelCalculator(
+      this.freeCashFlow(years)[0],
+      years,
+      growthRate,
+      dRate
+    )
+    const fcfYearN =
+      this.freeCashFlow(years)[0] * ((1 + growthRate) / (1 + dRate)) ** years
+    const terminalValue = terminalValueCalculator(
+      fcfYearN,
+      terminalGrowthRate,
+      dRate
+    )
+    if (includeTerminalValue) {
+      return (terminalValue + DCF) * confidence
+    } else {
+      return DCF * confidence
+    }
   }
 }

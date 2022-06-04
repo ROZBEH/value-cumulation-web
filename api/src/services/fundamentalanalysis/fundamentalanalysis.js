@@ -51,6 +51,8 @@ export const getSingleMetric = async ({ ticker, metric }) => {
     result = freeCashFlow.map((item) => {
       return numFormatter(item)
     })
+  } else if (metric === 'marketCapChangeWithRetainedEarnings') {
+    result = checklist.marketCapChangeWithRetainedEarnings()
   }
 
   //Uppper case the metric

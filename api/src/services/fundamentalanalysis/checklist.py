@@ -28,11 +28,11 @@ class Checklist:
         self.key_metrics = fa.key_metrics(stock_ticker, api_key)
 
         try:
-          self.dividend = fa.stock_dividend(
-              stock_ticker, api_key, begin="1000-01-01", end=self.time_now
-          )
+            self.dividend = fa.stock_dividend(
+                stock_ticker, api_key, begin="1000-01-01", end=self.time_now
+            )
         except:
-          self.dividend = None
+            self.dividend = None
 
     def stock_ticker(self):
         return self.ticker
@@ -75,7 +75,8 @@ class Checklist:
         How much a company has to burn in order to make $1 in revenue
         """
         return (
-            self.operating_expenses_delta(years) + self.cost_revenue_delta(years)
+            self.operating_expenses_delta(
+                years) + self.cost_revenue_delta(years)
         ) / self.revenue_delta(years)
 
     def r_and_d_budget_to_revenue(self, years=10):
@@ -171,9 +172,10 @@ class Checklist:
         (most recent EPS - first period EPS) / (cumulative EPS for the period - cumulative dividends paid for the period)
         """
         if self.dividend:
-          cumulative_dividend = self.dividend["adjDividend"].values[0:years].sum()
+            cumulative_dividend = self.dividend["adjDividend"].values[0:years].sum(
+            )
         else:
-          cumulative_dividend = 0
+            cumulative_dividend = 0
         return (
             self.income_statement.loc["epsdiluted"].values[0]
             - self.income_statement.loc["epsdiluted"].values[years - 1]
@@ -188,9 +190,10 @@ class Checklist:
         You would want the ratio to be greater than 1. A ratio of X means that the company
         converts $1 of retained earning into $X in market Cap.
         """
-        market_cap_change_aapl = self.metric_delta(self.key_metrics, "marketCap", years)
+        market_cap_change_aapl = self.metric_delta(
+            self.key_metrics, "marketCap", years)
         retained_earn_aapl = self.balance_s_statement.loc["retainedEarnings"].values[
-            1 : years + 1
+            1: years + 1
         ]
         market_cap_vs_retained_earning = market_cap_change_aapl / retained_earn_aapl
         return market_cap_vs_retained_earning
@@ -199,10 +202,11 @@ class Checklist:
         """
         What's the average rate of change in net income
         """
-        net_income_delta = self.metric_delta(self.income_statement, "netIncome", years)
+        net_income_delta = self.metric_delta(
+            self.income_statement, "netIncome", years)
         growth_rate = np.mean(
             net_income_delta
-            / self.income_statement.loc["netIncome"].values[1 : years + 1]
+            / self.income_statement.loc["netIncome"].values[1: years + 1]
         )
         return growth_rate
 
@@ -210,15 +214,15 @@ class Checklist:
         """
         What's the average rate of change in free cash flow
         """
-        FCF_delta = self.FCF()[0:years] - self.FCF()[1 : years + 1]
-        FCF_growth_aapl = np.mean(FCF_delta / self.FCF()[1 : years + 1])
+        FCF_delta = self.FCF()[0:years] - self.FCF()[1: years + 1]
+        FCF_growth_aapl = np.mean(FCF_delta / self.FCF()[1: years + 1])
         return FCF_growth_aapl
 
     def FCF(self, years=10):
         """
         Returns the free cash flow of the company which is capitalExpenditure + operatingCashFlow
         """
-        FCF = self.cash_f_statement.loc["freeCashFlow"].values[0 : years + 1]
+        FCF = self.cash_f_statement.loc["freeCashFlow"].values[0: years + 1]
         return FCF
 
     def intrinsic_value(
@@ -244,7 +248,8 @@ class Checklist:
         mean_net_income_growth_rate = self.mean_net_income_growth_rate(years)
         growth_rate = max(mean_FCF_growth_rate, mean_net_income_growth_rate)
         if growth_multiple == "MIN":
-            growth_rate = min(mean_FCF_growth_rate, mean_net_income_growth_rate)
+            growth_rate = min(mean_FCF_growth_rate,
+                              mean_net_income_growth_rate)
         # Discounted Cash flow model
         DCF = discounted_cash_flow_model_calculator(
             self.FCF()[0],
@@ -252,8 +257,10 @@ class Checklist:
             g_rate=growth_rate,
             d_rate=d_rate,
         )
-        FCF_N = self.FCF()[0] * (((1 + growth_rate) / (1 + d_rate)) ** years)
-        terminal_value = terminal_value_calculator(FCF_N, terminal_g_rate, d_rate)
+        FCF_N = self.FCF(years)[0] * \
+            (((1 + growth_rate) / (1 + d_rate)) ** years)
+        terminal_value = terminal_value_calculator(
+            FCF_N, terminal_g_rate, d_rate)
         if include_terminal_value:
             intrinsic_value = terminal_value + DCF
         else:
@@ -261,7 +268,9 @@ class Checklist:
 
         return intrinsic_value * confidence
 
+
 checklist = Checklist(sys.argv[1])
-output = {"intrinsic_value":checklist.intrinsic_value(), "FCF":list(checklist.FCF())}
+output = {"intrinsic_value": checklist.intrinsic_value(),
+          "FCF": list(checklist.FCF())}
 logging_output = json.dumps(output)
 print(logging_output)

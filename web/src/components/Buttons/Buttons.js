@@ -7,6 +7,11 @@ const BUTTONS = [
   { id: 2, title: 'Burn Ratio', value: 'burnRatio' },
   { id: 3, title: 'Net Income', value: 'netIncome' },
   { id: 4, title: 'Free Cash Flow', value: 'freeCashFlow' },
+  {
+    id: 5,
+    title: 'Market Cap Change With Retained Earnings',
+    value: 'marketCapChangeWithRetainedEarnings',
+  },
 ]
 
 export const Mapping = () => {
