@@ -178,7 +178,7 @@ class Checklist:
             cumulative_dividend = 0
         return (
             self.income_statement.loc["epsdiluted"].values[0]
-            - self.income_statement.loc["epsdiluted"].values[years - 1]
+            - self.income_statement.loc["epsdiluted"].values[years]
         ) / (
             self.income_statement.loc["epsdiluted"].values[0:years].sum()
             - cumulative_dividend

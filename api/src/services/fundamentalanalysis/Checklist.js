@@ -1,5 +1,5 @@
 import { fetch } from 'cross-undici-fetch'
-import { DataFrame } from 'danfojs-node'
+import { DataFrame, toCSV } from 'danfojs-node'
 import {
   discountedCashFlowModelCalculator,
   terminalValueCalculator,
@@ -58,16 +58,44 @@ export class Checklist {
       this.ticker,
       'historical-price-full/stock_dividend'
     )
-  }
-
-  netIncome = (years = 10) => {
-    /* Net Income of the company for a given number of years */
-    return this.dfIncomeStatement['netIncome'].values.slice(0, years)
+    toCSV(this.companyProfile, {
+      filePath: 'api/fixtures/companyProfile.csv',
+      sep: ';',
+    })
+    toCSV(this.dfIncomeStatement, {
+      filePath: 'api/fixtures/dfIncomeStatement.csv',
+      sep: ';',
+    })
+    toCSV(this.dfBalanceSheetStatement, {
+      filePath: 'api/fixtures/dfBalanceSheetStatement.csv',
+      sep: ';',
+    })
+    toCSV(this.dfCashFlowStatement, {
+      filePath: 'api/fixtures/dfCashFlowStatement.csv',
+      sep: ';',
+    })
+    toCSV(this.dfKeyMetrics, {
+      filePath: 'api/fixtures/dfKeyMetrics.csv',
+      sep: ';',
+    })
+    toCSV(this.dfFinancialRatios, {
+      filePath: 'api/fixtures/dfFinancialRatios.csv',
+      sep: ';',
+    })
+    toCSV(this.dfDividend, {
+      filePath: 'api/fixtures/dfDividend.csv',
+      sep: ';',
+    })
   }
 
   companyName = () => {
     /* Returns the company name */
     return this.companyProfile['companyName'].values[0]
+  }
+
+  netIncome = (years = 10) => {
+    /* Net Income of the company for a given number of years */
+    return this.dfIncomeStatement['netIncome'].values.slice(0, years)
   }
 
   metricDelta = (statement, metric, years = 10) => {
@@ -164,7 +192,10 @@ export class Checklist {
 
   priceToFreeCashFlowsRatio = (years = 10) => {
     /* priceToFreeCashFlowsRatio: Price of Share over Free Cashflow per share */
-    return this.dfKeyRatios['priceToFreeCashFlowsRatio'].values.slice(0, years)
+    return this.dfFinancialRatios['priceToFreeCashFlowsRatio'].values.slice(
+      0,
+      years
+    )
   }
 
   freeCashFlow = (years = 10) => {
@@ -207,7 +238,7 @@ export class Checklist {
   dividendYield = (years = 10) => {
     /* Dividend Yield: dividend per share divided by the price per share. It's a
      good indicator whether the company is dividend payer or price compounder.*/
-    return this.dfKeyRatios['dividendYield'].values.slice(0, years)
+    return this.dfFinancialRatios['dividendYield'].values.slice(0, years)
   }
 
   incomeTaxToNetIncome = (years = 10) => {
@@ -235,16 +266,16 @@ export class Checklist {
     } else {
       cumulativeDividend = 0
     }
+
     const epsDilutedDeltaSinceStart =
-      this.dfIncomeStatement['epsDiluted'].values[0] -
-      this.dfIncomeStatement['epsDiluted'].values[years - 1]
+      this.dfIncomeStatement['epsdiluted'].values[0] -
+      this.dfIncomeStatement['epsdiluted'].values[years]
 
-    const epsDivDelta =
-      this.dfIncomeStatement['epsDiluted'].values
-        .slice(0, years)
-        .reduce((a, b) => a + b, 0) - cumulativeDividend
+    const epsDivDelta = this.dfIncomeStatement['epsdiluted'].values
+      .slice(0, years)
+      .reduce((a, b) => a + b, 0)
 
-    return epsDilutedDeltaSinceStart / epsDivDelta
+    return epsDilutedDeltaSinceStart / (epsDivDelta - cumulativeDividend)
   }
 
   marketCapChangeWithRetainedEarnings = (years = 10) => {
@@ -271,8 +302,9 @@ export class Checklist {
       'netIncome',
       years
     )
+    const netIncome = this.dfIncomeStatement['netIncome'].values
     const growthRate = netIncomeDelta.map(function (n, i) {
-      return n / this.dfIncomeStatement['netIncome'].values[1 + i]
+      return n / netIncome[1 + i]
     })
 
     return growthRate.reduce((a, b) => a + b, 0) / years
@@ -280,23 +312,26 @@ export class Checklist {
 
   meanFCFGrowthRate = (years = 10) => {
     /* The average rate of change in free cash flow over the years */
-    const fcfDelta =
-      this.freeCashFlow(years).slice(0, years) -
-      this.freeCashFlow(years).slice(1, years + 1)
+    const fcfDelta = this.metricDelta(
+      this.dfCashFlowStatement,
+      'freeCashFlow',
+      years
+    )
+    const fcf = this.freeCashFlow(years + 1).slice(1, years + 1)
     const fcfGrowth = fcfDelta.map(function (n, i) {
-      return n / this.freeCashFlow(years).slice(1, years + 1)[i]
+      return n / fcf[i]
     })
     return fcfGrowth.reduce((a, b) => a + b, 0) / years
   }
 
-  intrinsicValue = (
+  intrinsicValue = ({
     years = 10,
     dRate = 0.1,
     confidence = 1.0,
     terminalGrowthRate = 0.01,
     growthMultiple = 'MIN',
-    includeTerminalValue = true
-  ) => {
+    includeTerminalValue = true,
+  }) => {
     /* Given the financials of the company, what's the intrinsic value of this business?
      years: Number of years into the future to make the calculations
      d_rate: Best low risk rate of return that you could achieve on the capital. It could be
