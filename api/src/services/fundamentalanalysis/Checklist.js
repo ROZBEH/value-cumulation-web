@@ -58,34 +58,6 @@ export class Checklist {
       this.ticker,
       'historical-price-full/stock_dividend'
     )
-    toCSV(this.companyProfile, {
-      filePath: 'api/fixtures/companyProfile.csv',
-      sep: ';',
-    })
-    toCSV(this.dfIncomeStatement, {
-      filePath: 'api/fixtures/dfIncomeStatement.csv',
-      sep: ';',
-    })
-    toCSV(this.dfBalanceSheetStatement, {
-      filePath: 'api/fixtures/dfBalanceSheetStatement.csv',
-      sep: ';',
-    })
-    toCSV(this.dfCashFlowStatement, {
-      filePath: 'api/fixtures/dfCashFlowStatement.csv',
-      sep: ';',
-    })
-    toCSV(this.dfKeyMetrics, {
-      filePath: 'api/fixtures/dfKeyMetrics.csv',
-      sep: ';',
-    })
-    toCSV(this.dfFinancialRatios, {
-      filePath: 'api/fixtures/dfFinancialRatios.csv',
-      sep: ';',
-    })
-    toCSV(this.dfDividend, {
-      filePath: 'api/fixtures/dfDividend.csv',
-      sep: ';',
-    })
   }
 
   companyName = () => {

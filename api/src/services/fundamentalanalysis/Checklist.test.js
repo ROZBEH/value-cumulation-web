@@ -5,7 +5,7 @@ expect.extend({ toBeDeepCloseTo })
 
 // Example of saving a fixture to a file
 // toCSV(this.companyProfile, {
-//   filePath: 'api/fixtures/companyProfile.csv',
+//   filePath: 'api/fixtures/companyProfile.csv', sep: ';',
 // })
 
 describe('Run tests on Apple ticker and check the validity of results', () => {
