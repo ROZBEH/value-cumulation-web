@@ -72,16 +72,23 @@ export const UserAddedMetric = () => {
     marginBottom: '1rem',
   }
 
-  const myChangeFunc = (_event, values) => {
-    const tmp = [...metricsA]
-    values.map((el) => {
-      if (metricsA.includes(el.value)) {
-        setMetrics(metricsA.filter((el) => el !== el.value))
-      } else {
-        tmp.push(el.value)
-        setMetrics(tmp)
-      }
-    })
+  const myChangeFunc = (_event, values, reason, detail) => {
+    var tmp = [...metricsA]
+    if (reason === 'removeOption') {
+      tmp = tmp.filter(function (item) {
+        return item !== detail.option.value
+      })
+      setMetrics(tmp)
+    } else {
+      values.map((el) => {
+        if (metricsA.includes(el.value)) {
+          setMetrics(metricsA.filter((el) => el !== el.value))
+        } else {
+          tmp.push(el.value)
+          setMetrics(tmp)
+        }
+      })
+    }
   }
 
   const useStyles = makeStyles({

@@ -213,7 +213,7 @@ describe('Run tests on Apple ticker and check the validity of results', () => {
     // intrinsicValue_2
     expect(
       checklist.intrinsicValue(
-        //yaers
+        //years
         10,
         //dRate
         0.1,
@@ -231,7 +231,7 @@ describe('Run tests on Apple ticker and check the validity of results', () => {
     // intrinsicValue_3
     expect(
       checklist.intrinsicValue(
-        //yaers
+        //years
         10,
         //dRate
         0.1,
@@ -249,7 +249,7 @@ describe('Run tests on Apple ticker and check the validity of results', () => {
     // intrinsicValue_4
     expect(
       checklist.intrinsicValue(
-        //yaers
+        //years
         10,
         //dRate
         0.1,
