@@ -208,21 +208,60 @@ describe('Run tests on Apple ticker and check the validity of results', () => {
     expect(checklist.meanFCFGrowthRate()).toBeDeepCloseTo(0.13856803205605892)
 
     // intrinsicValue_1
-    expect(checklist.intrinsicValue({})).toBeDeepCloseTo(2601355093012.6797)
+    expect(checklist.intrinsicValue()).toBeDeepCloseTo([2601355093012.6797])
 
     // intrinsicValue_2
-    expect(checklist.intrinsicValue({ confidence: 0.5 })).toBeDeepCloseTo(
-      1300677546506.3398
-    )
+    expect(
+      checklist.intrinsicValue(
+        //yaers
+        10,
+        //dRate
+        0.1,
+        //confidence
+        0.5,
+        //terminalGrowthRate
+        0.01,
+        //growthMultiple
+        'MIN',
+        //includeTerminalValue
+        true
+      )
+    ).toBeDeepCloseTo([1300677546506.3398])
 
     // intrinsicValue_3
     expect(
-      checklist.intrinsicValue({ includeTerminalValue: false })
-    ).toBeDeepCloseTo(1129024684255.568)
+      checklist.intrinsicValue(
+        //yaers
+        10,
+        //dRate
+        0.1,
+        //confidence
+        1,
+        //terminalGrowthRate
+        0.01,
+        //growthMultiple
+        'MIN',
+        //includeTerminalValue
+        false
+      )
+    ).toBeDeepCloseTo([1129024684255.568])
 
     // intrinsicValue_4
-    expect(checklist.intrinsicValue({ growthMultiple: 'MAX' })).toBeDeepCloseTo(
-      3205918429421.493
-    )
+    expect(
+      checklist.intrinsicValue(
+        //yaers
+        10,
+        //dRate
+        0.1,
+        //confidence
+        1,
+        //terminalGrowthRate
+        0.01,
+        //growthMultiple
+        'MAX',
+        //includeTerminalValue
+        true
+      )
+    ).toBeDeepCloseTo([3205918429421.493])
   })
 })
