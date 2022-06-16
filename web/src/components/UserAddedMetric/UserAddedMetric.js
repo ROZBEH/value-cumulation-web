@@ -9,12 +9,62 @@ import { useRecoilState } from 'recoil'
 export const UserAddedMetric = () => {
   const [metricsA, setMetrics] = useRecoilState(metrics)
   const availableOptions = [
-    { id: 4, title: 'Free Cash Flow', value: 'freeCashFlow' },
     {
-      id: 5,
+      id: 0,
       title: 'Market Cap Change With Retained Earnings',
       value: 'marketCapChangeWithRetainedEarnings',
     },
+    { id: 1, title: 'Gross Profit Margin', value: 'grossProfitMargin' },
+    { id: 2, title: 'Net Profit Margin', value: 'netProfitMargin' },
+    { id: 3, title: 'Debt Ratio', value: 'debtRatio' },
+    { id: 4, title: 'Burn Ratio', value: 'burnRatio' },
+    { id: 5, title: 'Price To Earning', value: 'priceToEarning' },
+    { id: 6, title: 'R & D Budget To Revenue', value: 'rAndDBudgetToRevenue' },
+    { id: 7, title: 'Current Ratio', value: 'currentRatio' },
+    {
+      id: 8,
+      title: 'Price to Free Cash Flow',
+      value: 'priceToFreeCashFlowsRatio',
+    },
+    { id: 9, title: 'Free Cash Flow', value: 'freeCashFlow' },
+    { id: 10, title: 'Operating Cash Flow', value: 'operatingCashFlow' },
+    {
+      id: 11,
+      title: 'Free Cash Flow to Net Income',
+      value: 'freeCashFlowToNetIncome',
+    },
+    {
+      id: 12,
+      title: 'Operating Cash Flow to Current Liabilities',
+      value: 'operatingCFToCurrentLiabilities',
+    },
+    { id: 13, title: 'Dividend Yield', value: 'dividendYield' },
+    {
+      id: 14,
+      title: 'Income Tax to Net Income',
+      value: 'incomeTaxToNetIncome',
+    },
+    {
+      id: 15,
+      title: 'Return on Retained Earning',
+      value: 'returnOnRetainedEarnings',
+    },
+    {
+      id: 16,
+      title: 'Market Cap Change with Retained Earning',
+      value: 'marketCapChangeWithRetainedEarnings',
+    },
+    {
+      id: 17,
+      title: 'Mean Net Income Growth Rate',
+      value: 'meanNetIncomeGrowthRate',
+    },
+    {
+      id: 18,
+      title: 'Mean Free Cash Flow Growth Rate',
+      value: 'meanFCFGrowthRate',
+    },
+    { id: 19, title: 'Intrinsic Value', value: 'intrinsicValue' },
   ]
 
   const textBox = {
@@ -22,7 +72,7 @@ export const UserAddedMetric = () => {
     marginBottom: '1rem',
   }
 
-  const myChangeFunc = (event, values) => {
+  const myChangeFunc = (_event, values) => {
     const tmp = [...metricsA]
     values.map((el) => {
       if (metricsA.includes(el.value)) {

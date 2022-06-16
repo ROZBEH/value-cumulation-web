@@ -296,14 +296,14 @@ export class Checklist {
     return fcfGrowth.reduce((a, b) => a + b, 0) / years
   }
 
-  intrinsicValue = ({
+  intrinsicValue = (
     years = 10,
     dRate = 0.1,
     confidence = 1.0,
     terminalGrowthRate = 0.01,
     growthMultiple = 'MIN',
-    includeTerminalValue = true,
-  }) => {
+    includeTerminalValue = true
+  ) => {
     /* Given the financials of the company, what's the intrinsic value of this business?
      years: Number of years into the future to make the calculations
      d_rate: Best low risk rate of return that you could achieve on the capital. It could be
@@ -333,9 +333,9 @@ export class Checklist {
       dRate
     )
     if (includeTerminalValue) {
-      return (terminalValue + DCF) * confidence
+      return [(terminalValue + DCF) * confidence]
     } else {
-      return DCF * confidence
+      return [DCF * confidence]
     }
   }
 }

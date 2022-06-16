@@ -33,26 +33,12 @@ export const getSingleMetric = async ({ ticker, metric }) => {
     console.log('Please pick a valid ticker')
   }
 
-  let result
-  if (metric === 'netProfitMargin') {
-    result = checklist.netProfitMargin()
-  } else if (metric === 'debtRatio') {
-    result = checklist.debtRatio()
-  } else if (metric === 'burnRatio') {
-    result = checklist.burnRatio()
-  } else if (metric === 'netIncome') {
-    var netIncome = checklist.netIncome()
-    // Format the numbers into Millions of Dollars
-    result = netIncome.map((item) => {
+  var result = checklist[metric]()
+  // Format the numbers into Millions of Dollars
+  if (result[0] > 1000000000) {
+    result = result.map((item) => {
       return numFormatter(item)
     })
-  } else if (metric === 'freeCashFlow') {
-    var freeCashFlow = checklist.freeCashFlow()
-    result = freeCashFlow.map((item) => {
-      return numFormatter(item)
-    })
-  } else if (metric === 'marketCapChangeWithRetainedEarnings') {
-    result = checklist.marketCapChangeWithRetainedEarnings()
   }
 
   //Uppper case the metric
