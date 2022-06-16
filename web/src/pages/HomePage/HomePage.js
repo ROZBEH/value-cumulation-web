@@ -1,4 +1,5 @@
 import { TailSpin } from 'react-loader-spinner'
+import { UserAddedMetric } from 'src/components/UserAddedMetric'
 import { Mapping } from 'src/components/Buttons/Buttons'
 import { Mainsubmission } from 'src/components/Mainsubmission/Mainsubmission'
 import './HomePage.css'
@@ -10,6 +11,7 @@ import {
   ticker as tickerA,
   name as nameA,
 } from 'src/recoil/atoms'
+import { useEffect } from 'react'
 
 const HomePage = () => {
   const name = useRecoilValue(nameA)
@@ -26,6 +28,7 @@ const HomePage = () => {
 
   return (
     <>
+      <UserAddedMetric />
       <Mapping />
       <Mainsubmission />
       {!name && ticker && <h2>Fetching Data for symbol {ticker} ...</h2>}

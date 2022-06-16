@@ -13,11 +13,12 @@ export const QUERY = gql`
 `
 
 export const Loading = () => {
-  const [, setLoadingFinancials] = useRecoilState(loadingFinancials)
-  useEffect(() => {
-    setLoadingFinancials(true)
-  }, [setLoadingFinancials])
-  return null
+  console.log('in loading')
+  // const [loadingVal, setLoadingFinancials] = useRecoilState(loadingFinancials)
+  // useEffect(() => {
+  //   setLoadingFinancials(true)
+  // }, [setLoadingFinancials, loadingVal])
+  return true
 }
 
 export const Empty = () => <div>Empty</div>
@@ -27,6 +28,7 @@ export const Failure = ({ error }) => {
 }
 
 export const Success = ({ fundamentalanalysis }) => {
+  console.log('in success')
   const [, setLoadingFinancials] = useRecoilState(loadingFinancials)
   const [, setName] = useRecoilState(name)
   const nameCompany = fundamentalanalysis.company_name
@@ -39,10 +41,10 @@ export const Success = ({ fundamentalanalysis }) => {
     display: 'inline-block',
   }
 
-  useEffect(() => {
-    setName(nameCompany)
-    setLoadingFinancials(false)
-  }, [setName, nameCompany, setLoadingFinancials])
+  // useEffect(() => {
+  //   setLoadingFinancials(false)
+  //   setName(nameCompany)
+  // }, [setName, nameCompany, setLoadingFinancials])
 
   return (
     <div style={{ display: 'inline-block' }}>

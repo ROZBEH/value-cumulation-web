@@ -6,12 +6,6 @@ const BUTTONS = [
   { id: 1, title: 'Debt Ratio', value: 'debtRatio' },
   { id: 2, title: 'Burn Ratio', value: 'burnRatio' },
   { id: 3, title: 'Net Income', value: 'netIncome' },
-  { id: 4, title: 'Free Cash Flow', value: 'freeCashFlow' },
-  {
-    id: 5,
-    title: 'Market Cap Change With Retained Earnings',
-    value: 'marketCapChangeWithRetainedEarnings',
-  },
 ]
 
 export const Mapping = () => {
@@ -26,6 +20,15 @@ export const Mapping = () => {
     }
   }
 
+  const buttonStyle = (value) => ({
+    backgroundColor: metricsA.includes(value) ? 'springgreen' : 'gainsboro',
+    marginLeft: '5px',
+    borderRadius: '8px',
+    border: 'none',
+    padding: '6px 36px',
+    cursor: 'pointer',
+  })
+
   return (
     <>
       {BUTTONS.map((bt) => (
@@ -34,11 +37,7 @@ export const Mapping = () => {
           onClick={() => handleButton(bt.value)}
           className={metricsA.includes(bt.value) ? 'buttonPressed' : 'button'}
           value={bt.value}
-          style={{
-            backgroundColor: metricsA.includes(bt.value)
-              ? 'springgreen'
-              : 'gainsboro',
-          }}
+          style={buttonStyle(bt.value)}
         >
           {bt.title}
         </button>
