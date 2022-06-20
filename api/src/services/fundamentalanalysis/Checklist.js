@@ -27,29 +27,30 @@ export class Checklist {
 
   async initialize() {
     // Company Profile Information
+    console.log('here 1')
     this.companyProfile = await this.getFinancials(this.ticker, 'profile')
-
+    console.log('here 2')
     // Income Statement
     this.dfIncomeStatement = await this.getFinancials(
       this.ticker,
       'income-statement'
     )
-
+    console.log('here 3')
     // Balance Sheet
     this.dfBalanceSheetStatement = await this.getFinancials(
       this.ticker,
       'balance-sheet-statement'
     )
-
+    console.log('here 4')
     // Cash Flow Statement
     this.dfCashFlowStatement = await this.getFinancials(
       this.ticker,
       'cash-flow-statement'
     )
-
+    console.log('here 5')
     //Financial Ratios
     this.dfFinancialRatios = await this.getFinancials(this.ticker, 'ratios')
-
+    console.log('here 6')
     // Key Metrics
     this.dfKeyMetrics = await this.getFinancials(this.ticker, 'key-metrics')
 
@@ -58,6 +59,7 @@ export class Checklist {
       this.ticker,
       'historical-price-full/stock_dividend'
     )
+    console.log('here 7')
   }
 
   companyName = () => {

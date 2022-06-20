@@ -33,11 +33,11 @@ async function callApi(ticker, metric) {
     console.log('Please pick a valid ticker')
   }
 
-  var result = checklist[metric]()
+  var result = checklist[metric]().reverse()
   // floating point rounding up to 2 decimal places
   result = result.map((item) => Math.round(item * 100) / 100)
   // Format the numbers into Millions of Dollars
-  if (result[0] > 1000000000) {
+  if (result[result.length - 1] > 1000000000) {
     result = result.map((item) => {
       return numFormatter(item)
     })
@@ -45,6 +45,7 @@ async function callApi(ticker, metric) {
   // Get the year array
   const yearArray = checklist
     .latestYear()
+    .reverse()
     .map((item, _index) => item.split('-')[0])
 
   //Uppper case the metric
