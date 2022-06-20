@@ -141,6 +141,11 @@ export class Checklist {
     return this.dfFinancialRatios['grossProfitMargin'].values.slice(0, years)
   }
 
+  latestYear = (years = 10) => {
+    /* Returns the latest year of the financial data */
+    return this.dfIncomeStatement['date'].values.slice(0, years)
+  }
+
   netProfitMargin = (years = 10) => {
     /* Net Profit Margin over the years: It's ratio of net profit to revenue
      which is the (Net Income)/Revenue */

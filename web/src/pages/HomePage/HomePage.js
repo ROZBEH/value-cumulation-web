@@ -31,7 +31,9 @@ const HomePage = () => {
       <UserAddedMetric />
       <Mapping />
       <Mainsubmission />
-      {!name && ticker && <h2>Fetching Data for symbol {ticker} ...</h2>}
+      {!name && ticker.length != 0 && (
+        <h2>Fetching Data for symbol {ticker} ...</h2>
+      )}
       {name && <h1>{name}</h1>}
       {loadingFinancials && (
         <div style={styleSpin}>
@@ -39,7 +41,7 @@ const HomePage = () => {
         </div>
       )}
       {metrics &&
-        ticker &&
+        ticker.length != 0 &&
         metrics.map((item, index) => (
           <FundamentalanalysisCell
             key={index}

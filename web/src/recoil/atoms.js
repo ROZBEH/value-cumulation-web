@@ -2,12 +2,17 @@ import { atom } from 'recoil'
 
 export const metrics = atom({
   key: 'metrics',
-  default: ['netIncome'],
+  default: ['netIncome', 'freeCashFlow'],
 })
 
 export const ticker = atom({
   key: 'ticker',
-  default: '',
+  default: [],
+})
+
+export const counterCompany = atom({
+  key: 'counterCompany',
+  default: 1,
 })
 
 export const name = atom({

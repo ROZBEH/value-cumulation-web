@@ -23,7 +23,7 @@ export const getFundamental = async ({ ticker, metrics }) => {
   }
 }
 
-export const getSingleMetric = async ({ ticker, metric }) => {
+async function callApi(ticker, metric) {
   const checklist = new Checklist(ticker.toUpperCase())
   await checklist.initialize()
   let companyName
@@ -34,20 +34,41 @@ export const getSingleMetric = async ({ ticker, metric }) => {
   }
 
   var result = checklist[metric]()
+  // floating point rounding up to 2 decimal places
+  result = result.map((item) => Math.round(item * 100) / 100)
   // Format the numbers into Millions of Dollars
   if (result[0] > 1000000000) {
     result = result.map((item) => {
       return numFormatter(item)
     })
   }
+  // Get the year array
+  const yearArray = checklist
+    .latestYear()
+    .map((item, _index) => item.split('-')[0])
 
   //Uppper case the metric
   var metricName = metric.replace(/([A-Z])/g, ' $1')
   metricName = metricName.charAt(0).toUpperCase() + metricName.slice(1)
+  return { companyName, metricName, result, yearArray }
+}
 
+export const getSingleMetric = async ({ ticker, metric }) => {
+  const companyNames = []
+  const metricNames = []
+  const metricValues = []
+  let yearArray = []
+  for (let i = 0; i < ticker.length; i++) {
+    const apiResult = await callApi(ticker[i], metric)
+    companyNames.push(apiResult.companyName)
+    metricNames.push(apiResult.metricName)
+    metricValues.push(apiResult.result)
+    yearArray = apiResult.yearArray
+  }
   return {
-    company_name: companyName,
-    metric_name: metricName,
-    metric_value: result,
+    company_name: companyNames,
+    metric_name: metricNames,
+    metric_value: metricValues,
+    years: yearArray,
   }
 }

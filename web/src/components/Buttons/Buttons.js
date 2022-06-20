@@ -4,8 +4,8 @@ import { metrics } from 'src/recoil/atoms'
 const BUTTONS = [
   { id: 0, title: 'Net Profit Margin', value: 'netProfitMargin' },
   { id: 1, title: 'Debt Ratio', value: 'debtRatio' },
-  { id: 2, title: 'Burn Ratio', value: 'burnRatio' },
   { id: 3, title: 'Net Income', value: 'netIncome' },
+  { id: 9, title: 'Free Cash Flow', value: 'freeCashFlow' },
 ]
 
 export const Mapping = () => {

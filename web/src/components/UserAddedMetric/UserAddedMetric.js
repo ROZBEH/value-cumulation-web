@@ -26,45 +26,44 @@ export const UserAddedMetric = () => {
       title: 'Price to Free Cash Flow',
       value: 'priceToFreeCashFlowsRatio',
     },
-    { id: 9, title: 'Free Cash Flow', value: 'freeCashFlow' },
-    { id: 10, title: 'Operating Cash Flow', value: 'operatingCashFlow' },
+    { id: 9, title: 'Operating Cash Flow', value: 'operatingCashFlow' },
     {
-      id: 11,
+      id: 10,
       title: 'Free Cash Flow to Net Income',
       value: 'freeCashFlowToNetIncome',
     },
     {
-      id: 12,
+      id: 11,
       title: 'Operating Cash Flow to Current Liabilities',
       value: 'operatingCFToCurrentLiabilities',
     },
-    { id: 13, title: 'Dividend Yield', value: 'dividendYield' },
+    { id: 12, title: 'Dividend Yield', value: 'dividendYield' },
     {
-      id: 14,
+      id: 13,
       title: 'Income Tax to Net Income',
       value: 'incomeTaxToNetIncome',
     },
     {
-      id: 15,
+      id: 14,
       title: 'Return on Retained Earning',
       value: 'returnOnRetainedEarnings',
     },
     {
-      id: 16,
+      id: 15,
       title: 'Market Cap Change with Retained Earning',
       value: 'marketCapChangeWithRetainedEarnings',
     },
     {
-      id: 17,
+      id: 16,
       title: 'Mean Net Income Growth Rate',
       value: 'meanNetIncomeGrowthRate',
     },
     {
-      id: 18,
+      id: 17,
       title: 'Mean Free Cash Flow Growth Rate',
       value: 'meanFCFGrowthRate',
     },
-    { id: 19, title: 'Intrinsic Value', value: 'intrinsicValue' },
+    { id: 18, title: 'Intrinsic Value', value: 'intrinsicValue' },
   ]
 
   const textBox = {
@@ -72,13 +71,16 @@ export const UserAddedMetric = () => {
     marginBottom: '1rem',
   }
 
-  const myChangeFunc = (_event, values, reason, detail) => {
+  const myChangeFunc = (event, values, reason, detail) => {
     var tmp = [...metricsA]
     if (reason === 'removeOption') {
       tmp = tmp.filter(function (item) {
         return item !== detail.option.value
       })
       setMetrics(tmp)
+    } else if (values.length === 0) {
+      console.log(values)
+      setMetrics([])
     } else {
       values.map((el) => {
         if (metricsA.includes(el.value)) {
