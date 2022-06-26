@@ -43,26 +43,27 @@ export const Mainsubmission = () => {
   const [counterCompany, setCounterCompany] = useRecoilState(counterCompanyA)
 
   const formMethods = useForm({ mode: 'onBlur' })
+
   const submitTicker = (data) => {
+    console.log('Object.values(data) = ', Object.values(data))
     formMethods.reset()
-    setTicker(Object.values(data))
+    setTicker(text)
     setName('')
   }
+
   let counterArr = new Array(counterCompany).fill('').map((_, i) => i + 1)
   const increaseCounter = () => {
     setCounterCompany(counterCompany + 1)
     counterArr = new Array(counterCompany).fill('').map((_, i) => i + 1)
   }
+
   const decreaseCounter = () => {
     if (counterCompany > 1) {
       setCounterCompany(counterCompany - 1)
       counterArr = new Array(counterCompany).fill('').map((_, i) => i + 1)
     }
   }
-  const onSuggestionHandler = (e) => {
-    setTicker(e.symbol)
-    // console.log(e)
-  }
+
   const [getArticles, { _loading, _error, _data }] = useLazyQuery(QUERY)
 
   const onChangeTextField = async (textPrompt) => {
@@ -94,7 +95,7 @@ export const Mainsubmission = () => {
     float: 'left',
     marginRight: '10px',
   }
-  const myChangeFunc = (event, values, reason, detail) => {
+  const myChangeFunc = (event, values, reason, _detail) => {
     if (reason === 'selectOption') {
       setTicker(values.symbol)
     }
@@ -108,7 +109,7 @@ export const Mainsubmission = () => {
         onSubmit={submitTicker}
         style={{ fontSize: '2rem' }}
       >
-        {counterArr.map((item, index) => (
+        {/* {counterArr.map((item, index) => (
           <RwTextField
             value={text}
             key={index}
@@ -122,40 +123,34 @@ export const Mainsubmission = () => {
               }, 100)
             }}
           />
+        ))} */}
+        {counterArr.map((item, index) => (
+          <Autocomplete
+            key={index}
+            freeSolo // for removing the dropdown arrow
+            onBlur={() => {
+              setTimeout(() => {
+                setPrompt(text)
+                setSuggestion([])
+              }, 100)
+            }}
+            onChange={myChangeFunc}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            options={suggestions}
+            getOptionLabel={(option) => option.name}
+            renderInput={(params) => (
+              <TextField
+                style={textBox}
+                onChange={(e) => onChangeTextField(e.target.value)}
+                {...params}
+                label=""
+                variant="standard"
+                fullWidth
+                placeholder="Company Name"
+              />
+            )}
+          />
         ))}
-        <Autocomplete
-          onBlur={() => {
-            setTimeout(() => {
-              setPrompt(text)
-              setSuggestion([])
-            }, 100)
-          }}
-          onChange={myChangeFunc}
-          isOptionEqualToValue={(option, value) => option.id === value.id}
-          // onInputChange={(event, _value, _reason) => {
-          //   if (event && event.type === 'blur') {
-          //     console.log('text = ', text)
-          //     console.log('event = ', event.type)
-          //     setPrompt(text)
-          //     setSuggestion([])
-          //   }
-          // }}
-          options={suggestions}
-          getOptionLabel={(option) => option.name}
-          // onChange={handleOptionsIdChange()}
-          // multiple={true}
-          renderInput={(params) => (
-            <TextField
-              style={textBox}
-              onChange={(e) => onChangeTextField(e.target.value)}
-              {...params}
-              label=""
-              variant="standard"
-              fullWidth
-              placeholder="Company Name"
-            />
-          )}
-        />
 
         <Submit
           style={{
