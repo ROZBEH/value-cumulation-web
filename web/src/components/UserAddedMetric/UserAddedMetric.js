@@ -125,7 +125,7 @@ export const UserAddedMetric = () => {
       // defaultValue={[availableOptions[0]]}
       renderInput={(params) => (
         <TextField
-          inputProps={{ className: classes.input }}
+          inputprops={{ className: classes.input }}
           style={textBox}
           {...params}
           variant="standard"

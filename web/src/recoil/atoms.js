@@ -20,6 +20,16 @@ export const name = atom({
   default: '',
 })
 
+export const textPrompt = atom({
+  key: 'textPrompt',
+  default: '',
+})
+
+export const suggestions = atom({
+  key: 'suggestions',
+  default: [],
+})
+
 export const loadingFinancials = atom({
   key: 'loadingFinancials',
   default: false,

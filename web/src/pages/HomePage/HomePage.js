@@ -11,6 +11,7 @@ import {
   ticker as tickerA,
   name as nameA,
 } from 'src/recoil/atoms'
+
 import { useEffect } from 'react'
 
 const HomePage = () => {
@@ -28,13 +29,14 @@ const HomePage = () => {
 
   return (
     <>
-      <UserAddedMetric />
-      <Mapping />
       <Mainsubmission />
       {!name && ticker.length != 0 && (
         <h2>Fetching Data for symbol {ticker} ...</h2>
       )}
-      {name && <h1>{name}</h1>}
+
+      <UserAddedMetric />
+      <Mapping />
+      {name && <h2>{name}</h2>}
       {loadingFinancials && (
         <div style={styleSpin}>
           <TailSpin color="#87CEEB" height="50" width="50" />
