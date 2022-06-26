@@ -34,6 +34,7 @@ import { useRecoilState } from 'recoil'
 import './Mainsubmission.css'
 import { useEffect } from 'react'
 import { ContactSupport } from '@material-ui/icons'
+import { alignProperty } from '@mui/material/styles/cssUtils'
 export const Mainsubmission = () => {
   const [, setTicker] = useRecoilState(tickerA)
   const [, setName] = useRecoilState(nameA)
@@ -89,8 +90,14 @@ export const Mainsubmission = () => {
   }
 
   const textBox = {
-    width: '50%',
-    marginBottom: '1rem',
+    width: '30%',
+    float: 'left',
+    marginRight: '10px',
+  }
+  const myChangeFunc = (event, values, reason, detail) => {
+    if (reason === 'selectOption') {
+      setTicker(values.symbol)
+    }
   }
 
   return (
@@ -116,17 +123,6 @@ export const Mainsubmission = () => {
             }}
           />
         ))}
-        {suggestions &&
-          suggestions.map((suggestion, i) => (
-            <div
-              role={'button'}
-              tabIndex={0}
-              key={i}
-              onMouseDown={() => onSuggestionHandler(suggestion)}
-            >
-              {suggestion.symbol}
-            </div>
-          ))}
         <Autocomplete
           onBlur={() => {
             setTimeout(() => {
@@ -134,6 +130,7 @@ export const Mainsubmission = () => {
               setSuggestion([])
             }, 100)
           }}
+          onChange={myChangeFunc}
           isOptionEqualToValue={(option, value) => option.id === value.id}
           // onInputChange={(event, _value, _reason) => {
           //   if (event && event.type === 'blur') {
@@ -160,7 +157,13 @@ export const Mainsubmission = () => {
           )}
         />
 
-        <Submit>Go</Submit>
+        <Submit
+          style={{
+            verticalAlign: 'middle',
+          }}
+        >
+          Go
+        </Submit>
       </Form>
       <button name="comparisonMode" onClick={increaseCounter}>
         {' '}
