@@ -3,7 +3,6 @@ import { UserAddedMetric } from 'src/components/UserAddedMetric'
 import { Mapping } from 'src/components/Buttons/Buttons'
 import { Mainsubmission } from 'src/components/Mainsubmission/Mainsubmission'
 import './HomePage.css'
-import FundamentalanalysisCell from 'src/components/FundamentalanalysisCell'
 import { useRecoilValue } from 'recoil'
 import { PlotFundamentals } from 'src/components/PlotFundamentals/PlotFundamentals'
 import {
@@ -41,16 +40,6 @@ const HomePage = () => {
           <TailSpin color="#87CEEB" height="50" width="50" />
         </div>
       )}
-      {/* {metrics &&
-        ticker.length != 0 &&
-        metrics.map((item, index) => (
-          <FundamentalanalysisCell
-            key={index}
-            ticker={ticker}
-            metric={metrics[metrics.length - 1 - index]}
-          />
-        ))} */}
-
       {metrics &&
         Object.keys(plottingData).length != 0 &&
         metrics.map((item, index) => (
