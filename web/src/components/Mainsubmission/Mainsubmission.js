@@ -52,11 +52,14 @@ const popCompany = (plotData, index) => {
   let company
   for (const metric in plotData) {
     if (plotData[metric]['nameCompany'].length === 1) {
-      return {}
+      if (index) {
+        return {}
+      } else {
+        return plotData
+      }
     }
     if (index) {
       company = plotData[metric]['nameCompany'].splice(index, 1)[0]
-      console.log('company = ', company)
     } else {
       company = plotData[metric]['nameCompany'].pop()
     }
@@ -70,25 +73,25 @@ const popCompany = (plotData, index) => {
 }
 
 const postProcess = (data, plotData) => {
-  const nameCompany = data.company_name
-  const result = data.metric_value
-  const fullMetricNames = data.full_metric_names
-  const metrics = data.metric_names
-  const years = data.years
   // Brining the data into the correct format for the rechart
   // Data format for plotData is in the following format:
   // {
   //    'netIncome': { 'metricName':'Net Income',
   //                'nameCompany': ['Apple Inc.', 'Tesla Inc.'],
-  //                'data': { 'Apple Inc.': [{ 'name': '2020', 'value': 110 }, { 'name': '2021', 'value': 200 }],
-  //                          'Tesla Inc.': [{ 'name': '2020', 'value': 90 }, { 'name': '2021', 'value': 110 }] }
+  //                'data': [{ 'name': '2020', 'Apple Inc.': '$1,000,000', 'Tesla Inc.': '$900,000' },
+  //                         { 'name': '2021', 'Apple Inc.': '$1,100,000', 'Tesla Inc.': '$1,200,000' }]
   //              }
   //    'freeCashflow': { 'metricName':'Free Cashflow',
   //                'nameCompany': ['Apple Inc.', 'Tesla Inc.'],
-  //                'data': { 'Apple Inc.': [{ 'name': '2020', 'value': 110 }, { 'name': '2021', 'value': 220 }],
-  //                          'Tesla Inc.': [{ 'name': '2020', 'value': 100 }, { 'name': '2021', 'value': 120 }] }
+  //                'data': [{ 'name': '2020', 'Apple Inc.': '$11,000,000', 'Tesla Inc.': '$15,000,000' },
+  //                         { 'name': '2021', 'Apple Inc.': '$10,100,000', 'Tesla Inc.': '$11,200,000' }]
   //              }
   // }
+  const nameCompany = data.company_name
+  const result = data.metric_value
+  const fullMetricNames = data.full_metric_names
+  const metrics = data.metric_names
+  const years = data.years
 
   for (var i = 0; i < result.length; i++) {
     if (!(metrics[i] in plotData)) {
@@ -126,9 +129,6 @@ export const Mainsubmission = () => {
   const formMethods = useForm({ mode: 'onBlur' })
 
   const submitTicker = (data) => {
-    console.log(data)
-    console.log('data.target = ', data.target)
-    console.log('Object.values(data) = ', Object.values(data))
     formMethods.reset()
     setTicker(text)
     setName('')
@@ -153,7 +153,6 @@ export const Mainsubmission = () => {
   const [getArticles, { _loading, _error, _data }] = useLazyQuery(QUERY)
 
   const onChangeTextField = async (textPrompt) => {
-    console.log('this textPrompt = ', textPrompt)
     if (textPrompt.length > 0) {
       setPrompt(textPrompt)
       // let matches = []
@@ -168,12 +167,10 @@ export const Mainsubmission = () => {
       matches = [
         ...new Map(matches.map((item) => [item['name'], item])).values(),
       ]
-      console.log(matches.length)
       setSuggestion(matches)
     } else {
       setSuggestion([])
       setPrompt(textPrompt)
-      console.log('Emptying the suggestions')
     }
   }
 
@@ -185,13 +182,10 @@ export const Mainsubmission = () => {
 
   const [getFunamentals, { called, loading, data }] = useLazyQuery(QUERY2)
   const myChangeFunc = async (_event, values, reason, _details, index) => {
-    console.log('here = ')
     if (reason === 'selectOption') {
-      console.log('selected an option')
       var fundamentalanalysis = await getFunamentals({
         variables: { ticker: values.symbol },
       })
-      console.log('fundamentalanalysis = ', fundamentalanalysis)
       var plotData = JSON.parse(JSON.stringify(pltData))
       plotData = postProcess(
         fundamentalanalysis.data.fundamentalanalysis,

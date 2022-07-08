@@ -13,7 +13,7 @@ export class Checklist {
   }
   async getFinancials(ticker, statementType) {
     const responseFinancial = await fetch(
-      `https://financialmodelingprep.com/api/v3/${statementType}/${ticker}?apikey=30d0838215af7a980b24b41cab12410f`
+      `https://financialmodelingprep.com/api/v3/${statementType}/${ticker}?apikey=${process.env.API_KEY}`
     )
     const jsonFinancial = await responseFinancial.json()
     var dfFinancial

@@ -5,7 +5,7 @@ import FatalErrorPage from 'src/pages/FatalErrorPage'
 import Routes from 'src/Routes'
 
 import './index.css'
-import { RecoilRoot, useRecoilValue, useRecoilState } from 'recoil'
+import { RecoilRoot } from 'recoil'
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodProvider titleTemplate="%PageTitle">

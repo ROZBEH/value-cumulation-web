@@ -1,5 +1,4 @@
 import { TailSpin } from 'react-loader-spinner'
-import { useLazyQuery } from '@apollo/react-hooks'
 import { UserAddedMetric } from 'src/components/UserAddedMetric'
 import { Mapping } from 'src/components/Buttons/Buttons'
 import { Mainsubmission } from 'src/components/Mainsubmission/Mainsubmission'
@@ -15,18 +14,6 @@ import {
   name as nameA,
 } from 'src/recoil/atoms'
 
-import { useEffect } from 'react'
-
-export const QUERY = gql`
-  query GetFundamentalQuery($ticker: [String!]!, $metric: String!) {
-    fundamentalanalysis: getSingleMetric(ticker: $ticker, metric: $metric) {
-      company_name
-      metric_name
-      metric_value
-      years
-    }
-  }
-`
 const HomePage = () => {
   const plottingData = useRecoilValue(plottingDataA)
   const name = useRecoilValue(nameA)
@@ -64,10 +51,6 @@ const HomePage = () => {
           />
         ))} */}
 
-      {console.log(
-        'Object.keys(plottingData).length = ',
-        Object.keys(plottingData).length
-      )}
       {metrics &&
         Object.keys(plottingData).length != 0 &&
         metrics.map((item, index) => (

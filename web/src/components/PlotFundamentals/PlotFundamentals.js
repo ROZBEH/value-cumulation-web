@@ -12,9 +12,7 @@ import { useRecoilValue } from 'recoil'
 import { plottingData as plottingDataA } from 'src/recoil/atoms'
 export const PlotFundamentals = (metric) => {
   const plottingData = useRecoilValue(plottingDataA)
-  console.log('plottingData ==== >', plottingData)
   const plotData = plottingData[metric.metric]
-  console.log('plotData = ', plotData)
   const stroke = ['#87CEEB', '#FFA500']
   const chartStyle = {
     position: 'relative',
