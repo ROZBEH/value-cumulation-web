@@ -52,7 +52,7 @@ const popCompany = (plotData, index) => {
   let company
   for (const metric in plotData) {
     if (plotData[metric]['nameCompany'].length === 1) {
-      if (index) {
+      if (typeof index === 'number') {
         return {}
       } else {
         return plotData
@@ -120,7 +120,7 @@ const postProcess = (data, plotData) => {
 }
 export const Mainsubmission = () => {
   const [pltData, setPltData] = useRecoilState(plottingData)
-  const [ticker, setTicker] = useRecoilState(tickerA)
+  const [tickers, setTicker] = useRecoilState(tickerA)
   const [, setName] = useRecoilState(nameA)
   const [text, setPrompt] = useRecoilState(textPromptAtom)
   const [suggestions, setSuggestion] = useRecoilState(suggestionsAtom)
@@ -145,8 +145,11 @@ export const Mainsubmission = () => {
       setCounterCompany(counterCompany - 1)
       counterArr = new Array(counterCompany).fill('').map((_, i) => i + 1)
       var plotData = JSON.parse(JSON.stringify(pltData))
-      plotData = popCompany(plotData, '')
-      setPltData(plotData)
+      // Only remove it if there is more than one company in the plotData
+      if (plotData['netIncome']['nameCompany'].length > 1) {
+        plotData = popCompany(plotData, '')
+        setPltData(plotData)
+      }
     }
   }
 
@@ -183,6 +186,13 @@ export const Mainsubmission = () => {
   const [getFunamentals, { called, loading, data }] = useLazyQuery(QUERY2)
   const myChangeFunc = async (_event, values, reason, _details, index) => {
     if (reason === 'selectOption') {
+      if (
+        Object.keys(pltData).length != 0 &&
+        pltData['netIncome']['nameCompany'].includes(values.name)
+      ) {
+        return
+      }
+
       var fundamentalanalysis = await getFunamentals({
         variables: { ticker: values.symbol },
       })
@@ -193,9 +203,15 @@ export const Mainsubmission = () => {
       )
       setPltData(plotData)
     } else if (reason === 'clear') {
-      plotData = JSON.parse(JSON.stringify(pltData))
-      plotData = popCompany(plotData, index)
-      setPltData(plotData)
+      if (
+        !(
+          counterCompany > 1 && pltData['netIncome']['nameCompany'].length === 1
+        )
+      ) {
+        plotData = JSON.parse(JSON.stringify(pltData))
+        plotData = popCompany(plotData, index)
+        setPltData(plotData)
+      }
     }
   }
   return (
