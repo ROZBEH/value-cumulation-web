@@ -71,7 +71,14 @@ export const UserAddedMetric = () => {
     marginBottom: '1rem',
   }
 
-  const myChangeFunc = (event, values, reason, detail) => {
+  const autoComp = {
+    width: '60%',
+    marginBottom: '2rem',
+    marginTop: '2rem',
+    // float: 'left',
+  }
+
+  const myChangeFunc = (_event, values, reason, detail) => {
     var tmp = [...metricsA]
     if (reason === 'removeOption') {
       tmp = tmp.filter(function (item) {
@@ -102,6 +109,7 @@ export const UserAddedMetric = () => {
 
   return (
     <Autocomplete
+      style={autoComp}
       renderTags={(value, getTagProps) =>
         value.map((option, index) => (
           <Chip

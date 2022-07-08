@@ -237,7 +237,7 @@ export class Checklist {
      (most recent EPS - first period EPS) / (cumulative EPS for the period - cumulative dividends paid for the period)
     */
     let cumulativeDividend
-    if (this.dfDividend) {
+    if (this.dfDividend && this.dfDividend['adjDividend']) {
       cumulativeDividend = this.dfDividend['adjDividend'].values
         .slice(0, years)
         .reduce((a, b) => a + b, 0)
@@ -253,7 +253,7 @@ export class Checklist {
       .slice(0, years)
       .reduce((a, b) => a + b, 0)
 
-    return epsDilutedDeltaSinceStart / (epsDivDelta - cumulativeDividend)
+    return [epsDilutedDeltaSinceStart / (epsDivDelta - cumulativeDividend)]
   }
 
   marketCapChangeWithRetainedEarnings = (years = 10) => {
@@ -285,7 +285,7 @@ export class Checklist {
       return n / netIncome[1 + i]
     })
 
-    return growthRate.reduce((a, b) => a + b, 0) / years
+    return [growthRate.reduce((a, b) => a + b, 0) / years]
   }
 
   meanFCFGrowthRate = (years = 10) => {
@@ -299,7 +299,7 @@ export class Checklist {
     const fcfGrowth = fcfDelta.map(function (n, i) {
       return n / fcf[i]
     })
-    return fcfGrowth.reduce((a, b) => a + b, 0) / years
+    return [fcfGrowth.reduce((a, b) => a + b, 0) / years]
   }
 
   intrinsicValue = (
@@ -318,8 +318,8 @@ export class Checklist {
      confidence: How much confident are you with these numbers. A value between 0 and 1
      growth_multiple: Do you want to consider the MIN of (FCF, net_income) as your
         growth rate or the MAX of these two values? */
-    const meanFCFGrowthRate = this.meanFCFGrowthRate(years)
-    const meanNetIncomeGrowthRate = this.meanNetIncomeGrowthRate(years)
+    const meanFCFGrowthRate = this.meanFCFGrowthRate(years)[0]
+    const meanNetIncomeGrowthRate = this.meanNetIncomeGrowthRate(years)[0]
     var growthRate = Math.max(meanFCFGrowthRate, meanNetIncomeGrowthRate)
     if (growthMultiple === 'MIN') {
       growthRate = Math.min(meanFCFGrowthRate, meanNetIncomeGrowthRate)

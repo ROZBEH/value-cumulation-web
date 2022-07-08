@@ -22,7 +22,6 @@ export const QUERY = gql`
 `
 
 export const Loading = () => {
-  console.log('in loading')
   // const [loadingVal, setLoadingFinancials] = useRecoilState(loadingFinancials)
   // useEffect(() => {
   //   setLoadingFinancials(true)

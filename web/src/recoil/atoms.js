@@ -1,4 +1,4 @@
-import { atom } from 'recoil'
+import { atom, atomFamily, selectorFamily, DefaultValue } from 'recoil'
 
 export const metrics = atom({
   key: 'metrics',
@@ -33,4 +33,9 @@ export const suggestions = atom({
 export const loadingFinancials = atom({
   key: 'loadingFinancials',
   default: false,
+})
+
+export const plottingData = atom({
+  key: 'plottingData',
+  default: {},
 })

@@ -4,16 +4,16 @@ export const schema = gql`
     intrinsic_value: [[Float]]!
   }
   type SingleMetric {
-    company_name: [String!]!
-    metric_name: [String!]!
+    company_name: String!
+    metric_names: [String!]!
+    full_metric_names: [String!]!
     metric_value: [[Float]!]!
-    years: [String!]!
+    years: [[String!]!]!
   }
 
   type Query {
     getFundamental(ticker: String!, metrics: [String!]!): Fundamentals!
       @skipAuth
-    getSingleMetric(ticker: [String!]!, metric: String!): SingleMetric!
-      @skipAuth
+    getSingleMetric(ticker: String!): SingleMetric! @skipAuth
   }
 `
