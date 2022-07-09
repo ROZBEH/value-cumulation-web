@@ -43,7 +43,10 @@ const HomePage = () => {
       {metrics &&
         Object.keys(plottingData).length != 0 &&
         metrics.map((item, index) => (
-          <PlotFundamentals key={index} metric={item} />
+          <PlotFundamentals
+            key={index}
+            metric={metrics[metrics.length - 1 - index]}
+          />
         ))}
     </>
   )

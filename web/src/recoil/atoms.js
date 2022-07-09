@@ -1,4 +1,4 @@
-import { atom, atomFamily, selectorFamily, DefaultValue } from 'recoil'
+import { atom } from 'recoil'
 
 export const metrics = atom({
   key: 'metrics',
