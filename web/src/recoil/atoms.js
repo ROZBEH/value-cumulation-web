@@ -39,3 +39,8 @@ export const plottingData = atom({
   key: 'plottingData',
   default: {},
 })
+
+export const companyList = atom({
+  key: 'companyList',
+  default: {},
+})

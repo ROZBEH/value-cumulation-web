@@ -12,6 +12,7 @@ import Autocomplete from '@mui/material/Autocomplete'
 import { makeStyles } from '@mui/styles'
 import Chip from '@material-ui/core/Chip'
 import {
+  companyList as companyListA,
   plottingData,
   suggestions as suggestionsAtom,
   textPrompt as textPromptAtom,
@@ -20,18 +21,8 @@ import {
   counterCompany as counterCompanyA,
 } from 'src/recoil/atoms'
 import { useLazyQuery } from '@apollo/react-hooks'
-export const QUERY = gql`
-  query SearchBarQuery($input: String!) {
-    searchbar(input: $input) {
-      symbol
-      name
-      price
-      exchange
-      exchangeShortName
-      type
-    }
-  }
-`
+import { useRecoilState, useRecoilValue } from 'recoil'
+import './Mainsubmission.css'
 
 export const QUERY2 = gql`
   query GetFundamentalQuery($ticker: String!) {
@@ -45,12 +36,13 @@ export const QUERY2 = gql`
   }
 `
 
-import { useRecoilState } from 'recoil'
-import './Mainsubmission.css'
-
 const popCompany = (plotData, index) => {
+  // Remove the company from the plotData if the index is given
+  // If the index is not given, remove the last company
   let company
   for (const metric in plotData) {
+    // If only one company is in the plotData, return an empty
+    // object onlyif the index is given as a number
     if (plotData[metric]['nameCompany'].length === 1) {
       if (typeof index === 'number') {
         return {}
@@ -73,7 +65,7 @@ const popCompany = (plotData, index) => {
 }
 
 const postProcess = (data, plotData) => {
-  // Brining the data into the correct format for the rechart
+  // Brining the data into a format that is recognizable by rechart
   // Data format for plotData is in the following format:
   // {
   //    'netIncome': { 'metricName':'Net Income',
@@ -119,6 +111,7 @@ const postProcess = (data, plotData) => {
   return plotData
 }
 export const Mainsubmission = () => {
+  const companyList = useRecoilValue(companyListA)
   const [pltData, setPltData] = useRecoilState(plottingData)
   const [tickers, setTicker] = useRecoilState(tickerA)
   const [, setName] = useRecoilState(nameA)
@@ -153,15 +146,10 @@ export const Mainsubmission = () => {
     }
   }
 
-  const [getArticles, { _loading, _error, _data }] = useLazyQuery(QUERY)
-
   const onChangeTextField = async (textPrompt) => {
     if (textPrompt.length > 0) {
       setPrompt(textPrompt)
-      // let matches = []
-      var jsonRes = await getArticles({ variables: { input: textPrompt } })
-
-      let matches = jsonRes.data.searchbar
+      let matches = companyList
       matches = matches.filter((res) => {
         const regex = new RegExp(`${textPrompt}`, 'gi')
         return res.name.match(regex)

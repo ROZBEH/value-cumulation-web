@@ -9,6 +9,6 @@ export const schema = gql`
   }
 
   type Query {
-    searchbar(input: String!): [Result!]! @skipAuth
+    searchbar: [Result!]! @skipAuth
   }
 `
