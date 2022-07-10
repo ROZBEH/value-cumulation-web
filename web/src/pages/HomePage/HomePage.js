@@ -10,8 +10,6 @@ import {
   plottingData as plottingDataA,
   loadingFinancials as loadingFinancialsA,
   metrics as metricsA,
-  ticker as tickerA,
-  name as nameA,
   companyList as companyListA,
 } from 'src/recoil/atoms'
 import { useEffect } from 'react'
@@ -37,10 +35,8 @@ const onStart = async (getArticles) => {
 const HomePage = () => {
   const [getArticles, { _loading, _error, _data }] = useLazyQuery(QUERY)
   const plottingData = useRecoilValue(plottingDataA)
-  const name = useRecoilValue(nameA)
   const [_companyList, setCompanyList] = useRecoilState(companyListA)
   const metrics = useRecoilValue(metricsA)
-  const ticker = useRecoilValue(tickerA)
   const loadingFinancials = useRecoilValue(loadingFinancialsA)
 
   const styleSpin = {
@@ -60,17 +56,15 @@ const HomePage = () => {
   return (
     <>
       <Mainsubmission />
-      {!name && ticker.length != 0 && (
-        <h2>Fetching Data for symbol {ticker} ...</h2>
-      )}
       <UserAddedMetric />
       <Mapping />
-      {name && <h2>{name}</h2>}
       {loadingFinancials && (
         <div style={styleSpin}>
           <TailSpin color="#87CEEB" height="50" width="50" />
         </div>
       )}
+      {/* Plot specific metric only when that metric is picked and 
+      there is plot data for companies */}
       {metrics &&
         Object.keys(plottingData).length != 0 &&
         metrics.map((item, index) => (

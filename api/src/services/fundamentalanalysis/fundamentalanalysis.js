@@ -1,31 +1,11 @@
 import { Checklist } from './Checklist'
 import { numFormatter } from './utilities'
-export const getFundamental = async ({ ticker, metrics }) => {
-  const checklist = new Checklist(ticker.toUpperCase())
-  await checklist.initialize()
-  const results = []
-  if (metrics.includes('netProfitMargin') === true) {
-    results.push(checklist.netProfitMargin())
-  }
-  if (metrics.includes('debtRatio') === true) {
-    results.push(checklist.debtRatio())
-  }
-  if (metrics.includes('burnRatio') === true) {
-    results.push(checklist.burnRatio())
-  }
-  if (metrics.includes('netIncome') === true) {
-    results.push(checklist.netIncome())
-  }
-
-  return {
-    ticker: ticker.toUpperCase(),
-    intrinsic_value: results,
-  }
-}
 
 async function callApi(ticker) {
   const checklist = new Checklist(ticker.toUpperCase())
   await checklist.initialize()
+  // List of available metrics. This list will get update
+  // as new metrics are added to the API
   var metrics = [
     'netIncome',
     'ratioCostOfRevenue',
@@ -73,7 +53,6 @@ async function callApi(ticker) {
     // Get the year array
     const yearArray = checklist
       .latestYear()
-      .reverse()
       .map((item, _index) => item.split('-')[0])
 
     // only get the years that data exists in the result array for that year

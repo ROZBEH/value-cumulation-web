@@ -8,7 +8,7 @@ expect.extend({ toBeDeepCloseTo })
 //   filePath: 'api/fixtures/companyProfile.csv', sep: ';',
 // })
 
-describe('Run tests on Apple ticker and check the validity of results', () => {
+describe("Run tests on Apple' stock and check the validity of results", () => {
   it('Test for Check Lists', async () => {
     let years
     const checklist = new Checklist('AAPL')

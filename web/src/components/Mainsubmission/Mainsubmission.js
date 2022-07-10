@@ -16,8 +16,6 @@ import {
   plottingData,
   suggestions as suggestionsAtom,
   textPrompt as textPromptAtom,
-  ticker as tickerA,
-  name as nameA,
   counterCompany as counterCompanyA,
 } from 'src/recoil/atoms'
 import { useLazyQuery } from '@apollo/react-hooks'
@@ -113,24 +111,23 @@ const postProcess = (data, plotData) => {
 export const Mainsubmission = () => {
   const companyList = useRecoilValue(companyListA)
   const [pltData, setPltData] = useRecoilState(plottingData)
-  const [tickers, setTicker] = useRecoilState(tickerA)
-  const [, setName] = useRecoilState(nameA)
   const [text, setPrompt] = useRecoilState(textPromptAtom)
   const [suggestions, setSuggestion] = useRecoilState(suggestionsAtom)
   const [counterCompany, setCounterCompany] = useRecoilState(counterCompanyA)
 
   const formMethods = useForm({ mode: 'onBlur' })
 
-  const submitTicker = (data) => {
-    formMethods.reset()
-    setTicker(text)
-    setName('')
-  }
-
+  // counterArr keeps track of the number of searchbars
+  // Users can add and remove searchbars in order to search for multiple companies
+  // They cannot compare more than 5 companies simultaneously
+  // The minimum number of searchbars is 1
   let counterArr = new Array(counterCompany).fill('').map((_, i) => i + 1)
+
   const increaseCounter = () => {
-    setCounterCompany(counterCompany + 1)
-    counterArr = new Array(counterCompany).fill('').map((_, i) => i + 1)
+    if (counterCompany < 5) {
+      setCounterCompany(counterCompany + 1)
+      counterArr = new Array(counterCompany).fill('').map((_, i) => i + 1)
+    }
   }
 
   const decreaseCounter = () => {
@@ -146,6 +143,7 @@ export const Mainsubmission = () => {
     }
   }
 
+  // Spit out list of companies as the user types in the searchbar
   const onChangeTextField = async (textPrompt) => {
     if (textPrompt.length > 0) {
       setPrompt(textPrompt)
@@ -171,8 +169,12 @@ export const Mainsubmission = () => {
     marginRight: '10px',
   }
 
-  const [getFunamentals, { called, loading, data }] = useLazyQuery(QUERY2)
+  // Query the API for financial data of a company that the user has selected
+  const [getFunamentals, { _called, _loading, _data }] = useLazyQuery(QUERY2)
   const myChangeFunc = async (_event, values, reason, _details, index) => {
+    // If the user has selected a company(selectOption), then query the API
+    // for the financial data. And if the user has removed the company(clear),
+    // then remove the company from the plotData
     if (reason === 'selectOption') {
       if (
         Object.keys(pltData).length != 0 &&
@@ -207,7 +209,7 @@ export const Mainsubmission = () => {
       <Form
         formMethods={formMethods}
         // error={error}
-        onSubmit={submitTicker}
+        // onSubmit={submitTicker}
         style={{ fontSize: '2rem' }}
       >
         {/* {counterArr.map((item, index) => (

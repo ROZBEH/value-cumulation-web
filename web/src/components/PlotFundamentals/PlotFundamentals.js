@@ -54,6 +54,8 @@ export const PlotFundamentals = (metric) => {
             dataKey="name"
           />
           <Legend />
+          {/* The following allows multiple lines to be plotted in the same
+          LineChart */}
           {plotData.nameCompany.map((name, index) => (
             <Line
               key={index}

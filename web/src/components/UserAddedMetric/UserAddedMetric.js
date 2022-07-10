@@ -8,6 +8,8 @@ import { useRecoilState } from 'recoil'
 
 export const UserAddedMetric = () => {
   const [metricsA, setMetrics] = useRecoilState(metrics)
+  // List of available metrics for now. This list will be updated as we
+  // decide on the list of metrics to be shown to the user.
   const availableOptions = [
     {
       id: 0,
@@ -80,6 +82,9 @@ export const UserAddedMetric = () => {
 
   const myChangeFunc = (_event, values, reason, detail) => {
     var tmp = [...metricsA]
+    // If the user has selected a metric, then add that metric to the list of metrics
+    // that will be plotted. And if the user has removed a metric(removeOption),
+    // then remove the metric from the list of available metrics
     if (reason === 'removeOption') {
       tmp = tmp.filter(function (item) {
         return item !== detail.option.value

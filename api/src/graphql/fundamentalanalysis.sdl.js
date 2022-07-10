@@ -1,8 +1,7 @@
 export const schema = gql`
-  type Fundamentals {
-    ticker: String!
-    intrinsic_value: [[Float]]!
-  }
+  # the following will query a specific company and get it's financials data
+  # It will return company name as well as the financials data and the data
+  # that accompanies it
   type SingleMetric {
     company_name: String!
     metric_names: [String!]!
@@ -12,8 +11,6 @@ export const schema = gql`
   }
 
   type Query {
-    getFundamental(ticker: String!, metrics: [String!]!): Fundamentals!
-      @skipAuth
     getSingleMetric(ticker: String!): SingleMetric! @skipAuth
   }
 `
