@@ -115,6 +115,11 @@ export const Mainsubmission = () => {
         plotData = JSON.parse(JSON.stringify(pltData))
         plotData = popCompany(plotData, index)
         setPltData(plotData)
+      } else if (
+        counterCompany > 1 &&
+        pltData['netIncome']['nameCompany'].length === 1
+      ) {
+        setPltData({})
       }
     }
   }
