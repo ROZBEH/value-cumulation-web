@@ -12,7 +12,7 @@ export function popCompany(plotData, index) {
   if (currentCompanyList.includes(company)) {
     updatedIndex = currentCompanyList.indexOf(company)
   } else {
-    // nothing to be remove so just return the plotData
+    // nothing to be removed, just return the plotData
     return plotData
   }
   if (updatedIndex === 0 && dataLen === 1) {

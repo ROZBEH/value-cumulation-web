@@ -1,3 +1,4 @@
+import { math } from '@tensorflow/tfjs-node'
 import { Checklist } from './Checklist'
 import { numFormatter } from './utilities'
 
@@ -45,7 +46,8 @@ async function callApi(ticker) {
     // floating point rounding up to 2 decimal places
     result = result.map((item) => Math.round(item * 100) / 100)
     // Format the numbers into Millions of Dollars
-    if (result[result.length - 1] > 1000000000) {
+    console.log('result = ', result)
+    if (Math.abs(result[result.length - 1]) > 1000000) {
       result = result.map((item) => {
         return numFormatter(item)
       })
@@ -63,7 +65,15 @@ async function callApi(ticker) {
       }
       result.reverse()
     }
-    console.log('result: ', result)
+    // Sometimes result contains Nan values because sometimes there isn't data for a certain year.
+    // And we divide by that year's value as a result we get NaN. We need to replace them with null
+    result = result.map((item) => {
+      if (isNaN(item)) {
+        return null
+      } else {
+        return item
+      }
+    })
     results.push(result)
 
     // if there are less than 10 years in years array, fill the rest with previous year
@@ -87,9 +97,7 @@ async function callApi(ticker) {
 }
 
 export const getFundamentals = async ({ ticker }) => {
-  console.log('here 1')
   const apiResult = await callApi(ticker)
-  console.log('here 2')
 
   return {
     companyName: apiResult.companyName,
