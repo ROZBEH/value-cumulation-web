@@ -63,5 +63,5 @@ export const plottingData = atom({
 // }
 export const companyList = atom({
   key: 'companyList',
-  default: {},
+  default: [],
 })
