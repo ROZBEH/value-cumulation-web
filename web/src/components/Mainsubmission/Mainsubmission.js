@@ -76,9 +76,10 @@ export const Mainsubmission = () => {
       }
       matches = matches.filter((res) => {
         const regex = new RegExp(`${inputPrompt}`, 'gi')
-        return res.name.match(regex)
+        return res.name.match(regex) || res.symbol.match(regex)
       })
 
+      // Filter the matches so that they don't contain the same company twice
       matches = [
         ...new Map(matches.map((item) => [item['name'], item])).values(),
       ]
@@ -171,7 +172,7 @@ export const Mainsubmission = () => {
             }
             isOptionEqualToValue={(option, value) => option.id === value.id}
             options={suggestions}
-            getOptionLabel={(option) => option.name}
+            getOptionLabel={(option) => `${option.name} (${option.symbol})`}
             renderInput={(params) => {
               return (
                 <TextField
