@@ -59,8 +59,9 @@ export const Mainsubmission = () => {
       counterArr = new Array(counterCompany).fill('').map((_, i) => i + 1)
       var plotData = JSON.parse(JSON.stringify(pltData))
       // Only remove it if there is more than one company in the plotData
-      if (plotData['netIncome']['nameCompany'].length > 1) {
-        plotData = popCompany(plotData, '')
+      if (plotData['netIncome']) {
+        // passing (counterCompany - 1) since js array starts at index 0
+        plotData = popCompany(plotData, counterCompany - 1)
         setPltData(plotData)
       }
     }
@@ -108,20 +109,9 @@ export const Mainsubmission = () => {
       plotData = postProcess(fundamentalanalysis.data.getFundamentals, plotData)
       setPltData(plotData)
     } else if (reason === 'clear') {
-      if (
-        !(
-          counterCompany > 1 && pltData['netIncome']['nameCompany'].length === 1
-        )
-      ) {
-        plotData = JSON.parse(JSON.stringify(pltData))
-        plotData = popCompany(plotData, index)
-        setPltData(plotData)
-      } else if (
-        counterCompany > 1 &&
-        pltData['netIncome']['nameCompany'].length === 1
-      ) {
-        setPltData({})
-      }
+      plotData = JSON.parse(JSON.stringify(pltData))
+      plotData = popCompany(plotData, index)
+      setPltData(plotData)
     }
   }
 

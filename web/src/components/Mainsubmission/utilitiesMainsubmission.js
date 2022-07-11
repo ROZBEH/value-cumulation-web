@@ -1,25 +1,29 @@
 export function popCompany(plotData, index) {
-  // Remove the company from the plotData if the index is given
-  // If the index is not given, remove the last company
-  let company
-  for (const metric in plotData) {
-    // If only one company is in the plotData, return an empty
-    // object onlyif the index is given as a number
-    if (plotData[metric]['nameCompany'].length === 1) {
-      if (typeof index === 'number') {
-        return {}
-      } else {
-        return plotData
-      }
-    }
-    if (index) {
-      company = plotData[metric]['nameCompany'].splice(index, 1)[0]
-    } else {
-      company = plotData[metric]['nameCompany'].pop()
-    }
-    for (const companyName in plotData[metric]['data']) {
-      if (companyName === company) {
-        plotData[metric]['data'].splice(companyName, 1)
+  // If there is no data in the plotData, then return.
+  if (Object.keys(plotData).length === 0) {
+    return
+  }
+
+  // if the index is greater than the length of the array, then it is the last company
+  let updatedIndex = index
+  let currentCompanyList = plotData['netIncome']['nameCompany']
+  let dataLen = plotData['netIncome']['nameCompany'].length
+  let company = plotData['netIncome']['companyOrder'][index]
+  if (currentCompanyList.includes(company)) {
+    updatedIndex = currentCompanyList.indexOf(company)
+  } else {
+    // nothing to be remove so just return the plotData
+    return plotData
+  }
+  if (updatedIndex === 0 && dataLen === 1) {
+    return {}
+  } else {
+    for (const metric in plotData) {
+      let company = plotData[metric]['nameCompany'].splice(updatedIndex, 1)[0]
+      for (const companyName in plotData[metric]['data']) {
+        if (companyName === company) {
+          plotData[metric]['data'].splice(companyName, 1)
+        }
       }
     }
   }
@@ -52,8 +56,16 @@ export function postProcess(data, plotData) {
       plotData[metricNames[i]] = {}
       plotData[metricNames[i]]['metricName'] = fullMetricNames[i]
       plotData[metricNames[i]]['nameCompany'] = [nameCompany]
+      // companyOrder is an array that keeps track of the order that companies have been
+      // added to the plotData. companyOrder will never get removed from the array until
+      // we delete the last company.
+      plotData[metricNames[i]]['companyOrder'] = {}
+      plotData[metricNames[i]]['companyOrder'][0] = nameCompany
     } else {
       plotData[metricNames[i]]['nameCompany'].push(nameCompany)
+      plotData[metricNames[i]]['companyOrder'][
+        plotData[metricNames[i]]['nameCompany'].length - 1
+      ] = nameCompany
     }
 
     if (!('data' in plotData[metricNames[i]])) {

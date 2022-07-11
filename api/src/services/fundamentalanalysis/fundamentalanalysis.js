@@ -40,6 +40,7 @@ async function callApi(ticker) {
   let years = []
   let metricNames = []
   for (const metric of metrics) {
+    console.log('metric: ', metric)
     var result = checklist[metric]().reverse()
     // floating point rounding up to 2 decimal places
     result = result.map((item) => Math.round(item * 100) / 100)
@@ -62,6 +63,7 @@ async function callApi(ticker) {
       }
       result.reverse()
     }
+    console.log('result: ', result)
     results.push(result)
 
     // if there are less than 10 years in years array, fill the rest with previous year
@@ -71,19 +73,23 @@ async function callApi(ticker) {
       }
       // yearArray.reverse()
     }
+    console.log('yearArray: ', yearArray)
 
     // only get the years that data exists in the result array for that year
     years.push(yearArray.reverse().slice(0, result.length))
     //Uppper case the metric
     var metricName = metric.replace(/([A-Z])/g, ' $1')
     metricNames.push(metricName.charAt(0).toUpperCase() + metricName.slice(1))
+    console.log('------------------------------')
   }
 
   return { companyName, metrics, metricNames, results, years }
 }
 
 export const getFundamentals = async ({ ticker }) => {
+  console.log('here 1')
   const apiResult = await callApi(ticker)
+  console.log('here 2')
 
   return {
     companyName: apiResult.companyName,
