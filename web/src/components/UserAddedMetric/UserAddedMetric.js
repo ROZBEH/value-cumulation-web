@@ -3,11 +3,11 @@ import Autocomplete from '@mui/material/Autocomplete'
 import { makeStyles } from '@mui/styles'
 import Chip from '@material-ui/core/Chip'
 import classNames from 'classnames'
-import { metrics } from 'src/recoil/atoms'
+import { metrics as metricsAtom } from 'src/recoil/atoms'
 import { useRecoilState } from 'recoil'
 
 export const UserAddedMetric = () => {
-  const [metricsA, setMetrics] = useRecoilState(metrics)
+  const [metricsA, setMetrics] = useRecoilState(metricsAtom)
   // List of available metrics for now. This list will be updated as we
   // decide on the list of metrics to be shown to the user.
   const availableOptions = [
@@ -17,63 +17,61 @@ export const UserAddedMetric = () => {
       value: 'marketCapChangeWithRetainedEarnings',
     },
     { id: 1, title: 'Gross Profit Margin', value: 'grossProfitMargin' },
-    { id: 2, title: 'Net Profit Margin', value: 'netProfitMargin' },
-    { id: 3, title: 'Debt Ratio', value: 'debtRatio' },
-    { id: 4, title: 'Burn Ratio', value: 'burnRatio' },
-    { id: 5, title: 'Price To Earning', value: 'priceToEarning' },
-    { id: 6, title: 'R & D Budget To Revenue', value: 'rAndDBudgetToRevenue' },
-    { id: 7, title: 'Current Ratio', value: 'currentRatio' },
+    { id: 2, title: 'Burn Ratio', value: 'burnRatio' },
+    { id: 3, title: 'Price To Earning', value: 'priceToEarning' },
+    { id: 4, title: 'R & D Budget To Revenue', value: 'rAndDBudgetToRevenue' },
+    { id: 5, title: 'Current Ratio', value: 'currentRatio' },
     {
-      id: 8,
+      id: 6,
       title: 'Price to Free Cash Flow',
       value: 'priceToFreeCashFlowsRatio',
     },
-    { id: 9, title: 'Operating Cash Flow', value: 'operatingCashFlow' },
+    { id: 7, title: 'Operating Cash Flow', value: 'operatingCashFlow' },
     {
-      id: 10,
+      id: 8,
       title: 'Free Cash Flow to Net Income',
       value: 'freeCashFlowToNetIncome',
     },
     {
-      id: 11,
+      id: 9,
       title: 'Operating Cash Flow to Current Liabilities',
       value: 'operatingCFToCurrentLiabilities',
     },
-    { id: 12, title: 'Dividend Yield', value: 'dividendYield' },
+    { id: 10, title: 'Dividend Yield', value: 'dividendYield' },
     {
-      id: 13,
+      id: 11,
       title: 'Income Tax to Net Income',
       value: 'incomeTaxToNetIncome',
     },
     {
-      id: 14,
+      id: 12,
       title: 'Return on Retained Earning',
       value: 'returnOnRetainedEarnings',
     },
     {
-      id: 15,
+      id: 13,
       title: 'Market Cap Change with Retained Earning',
       value: 'marketCapChangeWithRetainedEarnings',
     },
     {
-      id: 16,
+      id: 14,
       title: 'Mean Net Income Growth Rate',
       value: 'meanNetIncomeGrowthRate',
     },
     {
-      id: 17,
+      id: 15,
       title: 'Mean Free Cash Flow Growth Rate',
       value: 'meanFCFGrowthRate',
     },
-    { id: 18, title: 'Intrinsic Value', value: 'intrinsicValue' },
+    { id: 16, title: 'Intrinsic Value', value: 'intrinsicValue' },
   ]
 
-  const textBox = {
+  const txtBoxStyle = {
     width: '50%',
     marginBottom: '1rem',
   }
 
-  const autoComp = {
+  const autoCompStyle = {
     width: '60%',
     marginBottom: '2rem',
     marginTop: '2rem',
@@ -91,7 +89,6 @@ export const UserAddedMetric = () => {
       })
       setMetrics(tmp)
     } else if (values.length === 0) {
-      console.log(values)
       setMetrics([])
     } else {
       values.map((el) => {
@@ -110,18 +107,18 @@ export const UserAddedMetric = () => {
       backgroundColor: 'springgreen !important',
     },
   })
-  const classes = useStyles()
+  const buttonColor = useStyles()
 
   return (
     <Autocomplete
-      style={autoComp}
+      style={autoCompStyle}
       renderTags={(value, getTagProps) =>
         value.map((option, index) => (
           <Chip
             key={option.id}
             classes={{
               root: classNames({
-                [classes.backgroundTag]: true,
+                [buttonColor.backgroundTag]: true,
               }),
             }}
             label={`${option.title}`}
@@ -138,8 +135,8 @@ export const UserAddedMetric = () => {
       // defaultValue={[availableOptions[0]]}
       renderInput={(params) => (
         <TextField
-          inputprops={{ className: classes.input }}
-          style={textBox}
+          inputprops={{ className: buttonColor.input }}
+          style={txtBoxStyle}
           {...params}
           variant="standard"
           // label=""

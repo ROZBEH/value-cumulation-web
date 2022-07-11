@@ -7,10 +7,10 @@ import { useRecoilValue, useRecoilState } from 'recoil'
 import { PlotFundamentals } from 'src/components/PlotFundamentals/PlotFundamentals'
 import { useLazyQuery } from '@apollo/react-hooks'
 import {
-  plottingData as plottingDataA,
-  loadingFinancials as loadingFinancialsA,
-  metrics as metricsA,
-  companyList as companyListA,
+  plottingData as plottingDataAtom,
+  loadingFinancials as loadingFinancialsAtom,
+  metrics as metricsAtom,
+  companyList as companyListAtom,
 } from 'src/recoil/atoms'
 import { useEffect } from 'react'
 
@@ -34,10 +34,10 @@ const onStart = async (getArticles) => {
 
 const HomePage = () => {
   const [getArticles, { _loading, _error, _data }] = useLazyQuery(QUERY)
-  const plottingData = useRecoilValue(plottingDataA)
-  const [_companyList, setCompanyList] = useRecoilState(companyListA)
-  const metrics = useRecoilValue(metricsA)
-  const loadingFinancials = useRecoilValue(loadingFinancialsA)
+  const plottingData = useRecoilValue(plottingDataAtom)
+  const [_companyList, setCompanyList] = useRecoilState(companyListAtom)
+  const metrics = useRecoilValue(metricsAtom)
+  const loadingFinancials = useRecoilValue(loadingFinancialsAtom)
 
   const styleSpin = {
     position: 'relative',

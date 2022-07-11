@@ -7,13 +7,21 @@ import {
   Tooltip,
   XAxis,
 } from 'recharts'
-
 import { useRecoilValue } from 'recoil'
-import { plottingData as plottingDataA } from 'src/recoil/atoms'
-export const PlotFundamentals = (metric) => {
-  const plottingData = useRecoilValue(plottingDataA)
-  const plotData = plottingData[metric.metric]
-  const stroke = ['#87CEEB', '#FFA500']
+import { plottingData as plottingDataAtom } from 'src/recoil/atoms'
+
+export const PlotFundamentals = (props) => {
+  const plottingData = useRecoilValue(plottingDataAtom)
+  const plotData = plottingData[props.metric]
+  // stroke determines the color of each line in the plot
+  const stroke = [
+    '#87CEEB',
+    '#FFA500',
+    '#000075',
+    '#e6194B',
+    '#4363d8',
+    '#ffd8b1',
+  ]
   const chartStyle = {
     position: 'relative',
     left: '10%',

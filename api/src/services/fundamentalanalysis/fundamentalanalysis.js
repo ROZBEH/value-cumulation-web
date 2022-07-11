@@ -66,14 +66,14 @@ async function callApi(ticker) {
   return { companyName, metrics, metricNames, results, years }
 }
 
-export const getSingleMetric = async ({ ticker }) => {
+export const getFundamentals = async ({ ticker }) => {
   const apiResult = await callApi(ticker)
 
   return {
-    company_name: apiResult.companyName,
-    metric_names: apiResult.metrics,
-    full_metric_names: apiResult.metricNames,
-    metric_value: apiResult.results,
+    companyName: apiResult.companyName,
+    metricNames: apiResult.metrics,
+    fullMetricNames: apiResult.metricNames,
+    metricValues: apiResult.results,
     years: apiResult.years,
   }
 }

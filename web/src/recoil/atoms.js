@@ -51,7 +51,7 @@ export const plottingData = atom({
   default: {},
 })
 
-// The will get the list of all available companies on NASDAQ and NYSE on startup
+// This will get the list of all available companies on NASDAQ and NYSE on startup
 // The current format for each company is
 // {
 //    exchange: "NASDAQ Global Select"

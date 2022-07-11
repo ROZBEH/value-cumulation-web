@@ -5,117 +5,40 @@ import {
   // TextField
   TextField as RwTextField,
 } from '@redwoodjs/forms'
-// import { Button, Icon, TextField, Paper, Typography } from '@material-ui/core'
 import { TextField } from '@material-ui/core'
-import classNames from 'classnames'
 import Autocomplete from '@mui/material/Autocomplete'
-import { makeStyles } from '@mui/styles'
 import Chip from '@material-ui/core/Chip'
-import {
-  companyList as companyListA,
-  plottingData,
-  suggestions as suggestionsAtom,
-  textPrompt as textPromptAtom,
-  counterCompany as counterCompanyA,
-} from 'src/recoil/atoms'
 import { useLazyQuery } from '@apollo/react-hooks'
 import { useRecoilState, useRecoilValue } from 'recoil'
+import {
+  companyList as companyListAtom,
+  plottingData as plottingDataAtom,
+  suggestions as suggestionsAtom,
+  textPrompt as textPromptAtom,
+  counterCompany as counterCompanyAtom,
+} from 'src/recoil/atoms'
 import './Mainsubmission.css'
+import { popCompany, postProcess } from './utilitiesMainsubmission'
 
 export const QUERY2 = gql`
   query GetFundamentalQuery($ticker: String!) {
-    fundamentalanalysis: getSingleMetric(ticker: $ticker) {
-      company_name
-      metric_names
-      full_metric_names
-      metric_value
+    getFundamentals(ticker: $ticker) {
+      companyName
+      metricNames
+      fullMetricNames
+      metricValues
       years
     }
   }
 `
 
-const popCompany = (plotData, index) => {
-  // Remove the company from the plotData if the index is given
-  // If the index is not given, remove the last company
-  let company
-  for (const metric in plotData) {
-    // If only one company is in the plotData, return an empty
-    // object onlyif the index is given as a number
-    if (plotData[metric]['nameCompany'].length === 1) {
-      if (typeof index === 'number') {
-        return {}
-      } else {
-        return plotData
-      }
-    }
-    if (index) {
-      company = plotData[metric]['nameCompany'].splice(index, 1)[0]
-    } else {
-      company = plotData[metric]['nameCompany'].pop()
-    }
-    for (const companyName in plotData[metric]['data']) {
-      if (companyName === company) {
-        plotData[metric]['data'].splice(companyName, 1)
-      }
-    }
-  }
-  return plotData
-}
-
-const postProcess = (data, plotData) => {
-  // Brining the data into a format that is recognizable by rechart
-  // Data format for plotData is in the following format:
-  // {
-  //    'netIncome': { 'metricName':'Net Income',
-  //                'nameCompany': ['Apple Inc.', 'Tesla Inc.'],
-  //                'data': [{ 'name': '2020', 'Apple Inc.': '$1,000,000', 'Tesla Inc.': '$900,000' },
-  //                         { 'name': '2021', 'Apple Inc.': '$1,100,000', 'Tesla Inc.': '$1,200,000' }]
-  //              }
-  //    'freeCashflow': { 'metricName':'Free Cashflow',
-  //                'nameCompany': ['Apple Inc.', 'Tesla Inc.'],
-  //                'data': [{ 'name': '2020', 'Apple Inc.': '$11,000,000', 'Tesla Inc.': '$15,000,000' },
-  //                         { 'name': '2021', 'Apple Inc.': '$10,100,000', 'Tesla Inc.': '$11,200,000' }]
-  //              }
-  // }
-  const nameCompany = data.company_name
-  const result = data.metric_value
-  const fullMetricNames = data.full_metric_names
-  const metrics = data.metric_names
-  const years = data.years
-
-  for (var i = 0; i < result.length; i++) {
-    if (!(metrics[i] in plotData)) {
-      plotData[metrics[i]] = {}
-      plotData[metrics[i]]['metricName'] = fullMetricNames[i]
-      plotData[metrics[i]]['nameCompany'] = [nameCompany]
-    } else {
-      plotData[metrics[i]]['nameCompany'].push(nameCompany)
-    }
-
-    if (!('data' in plotData[metrics[i]])) {
-      plotData[metrics[i]]['data'] = result[i].map((item, index) => {
-        return {
-          name: years[i][index],
-          [nameCompany]: item,
-        }
-      })
-    } else {
-      plotData[metrics[i]]['data'].map((item, index) => {
-        item[nameCompany] = result[i][index]
-        return item
-      })
-    }
-  }
-  return plotData
-}
 export const Mainsubmission = () => {
-  const companyList = useRecoilValue(companyListA)
-  const [pltData, setPltData] = useRecoilState(plottingData)
-  const [text, setPrompt] = useRecoilState(textPromptAtom)
+  const companyList = useRecoilValue(companyListAtom)
+  const [pltData, setPltData] = useRecoilState(plottingDataAtom)
+  const [textPrompt, setPrompt] = useRecoilState(textPromptAtom)
   const [suggestions, setSuggestion] = useRecoilState(suggestionsAtom)
-  const [counterCompany, setCounterCompany] = useRecoilState(counterCompanyA)
-
-  const formMethods = useForm({ mode: 'onBlur' })
+  const [counterCompany, setCounterCompany] = useRecoilState(counterCompanyAtom)
+  const formCustomMethods = useForm({ mode: 'onBlur' })
 
   // counterArr keeps track of the number of searchbars
   // Users can add and remove searchbars in order to search for multiple companies
@@ -144,12 +67,12 @@ export const Mainsubmission = () => {
   }
 
   // Spit out list of companies as the user types in the searchbar
-  const onChangeTextField = async (textPrompt) => {
-    if (textPrompt.length > 0) {
-      setPrompt(textPrompt)
+  const onChangeTextField = async (inputPrompt) => {
+    if (inputPrompt.length > 0) {
+      setPrompt(inputPrompt)
       let matches = companyList
       matches = matches.filter((res) => {
-        const regex = new RegExp(`${textPrompt}`, 'gi')
+        const regex = new RegExp(`${inputPrompt}`, 'gi')
         return res.name.match(regex)
       })
 
@@ -159,14 +82,8 @@ export const Mainsubmission = () => {
       setSuggestion(matches)
     } else {
       setSuggestion([])
-      setPrompt(textPrompt)
+      setPrompt(inputPrompt)
     }
-  }
-
-  const textBox = {
-    width: '30%',
-    float: 'left',
-    marginRight: '10px',
   }
 
   // Query the API for financial data of a company that the user has selected
@@ -187,10 +104,7 @@ export const Mainsubmission = () => {
         variables: { ticker: values.symbol },
       })
       var plotData = JSON.parse(JSON.stringify(pltData))
-      plotData = postProcess(
-        fundamentalanalysis.data.fundamentalanalysis,
-        plotData
-      )
+      plotData = postProcess(fundamentalanalysis.data.getFundamentals, plotData)
       setPltData(plotData)
     } else if (reason === 'clear') {
       if (
@@ -204,17 +118,24 @@ export const Mainsubmission = () => {
       }
     }
   }
+
+  const textBoxStyle = {
+    width: '30%',
+    float: 'left',
+    marginRight: '10px',
+  }
+
   return (
     <>
       <Form
-        formMethods={formMethods}
+        formMethods={formCustomMethods}
         // error={error}
         // onSubmit={submitTicker}
         style={{ fontSize: '2rem' }}
       >
         {/* {counterArr.map((item, index) => (
           <RwTextField
-            value={text}
+            value={textPrompt}
             key={index}
             name={'ticker' + item}
             placeholder="Stock Ticker"
@@ -233,7 +154,7 @@ export const Mainsubmission = () => {
             freeSolo // for removing the dropdown arrow
             onBlur={() => {
               setTimeout(() => {
-                setPrompt(text)
+                setPrompt(textPrompt)
                 setSuggestion([])
               }, 100)
             }}
@@ -246,7 +167,7 @@ export const Mainsubmission = () => {
             renderInput={(params) => {
               return (
                 <TextField
-                  style={textBox}
+                  style={textBoxStyle}
                   onChange={(e) => onChangeTextField(e.target.value)}
                   {...params}
                   variant="standard"
