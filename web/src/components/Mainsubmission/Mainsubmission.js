@@ -71,6 +71,9 @@ export const Mainsubmission = () => {
     if (inputPrompt.length > 0) {
       setPrompt(inputPrompt)
       let matches = companyList
+      if (!companyList) {
+        matches = []
+      }
       matches = matches.filter((res) => {
         const regex = new RegExp(`${inputPrompt}`, 'gi')
         return res.name.match(regex)
