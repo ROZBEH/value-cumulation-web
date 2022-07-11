@@ -247,7 +247,9 @@ export class Checklist {
 
     const epsDilutedDeltaSinceStart =
       this.dfIncomeStatement['epsdiluted'].values[0] -
-      this.dfIncomeStatement['epsdiluted'].values[years]
+      this.dfIncomeStatement['epsdiluted'].values[
+        Math.min(years, this.dfIncomeStatement['epsdiluted'].values.length - 1)
+      ]
 
     const epsDivDelta = this.dfIncomeStatement['epsdiluted'].values
       .slice(0, years)

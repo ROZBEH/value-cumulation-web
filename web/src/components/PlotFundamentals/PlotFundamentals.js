@@ -66,6 +66,7 @@ export const PlotFundamentals = (props) => {
           LineChart */}
           {plotData.nameCompany.map((name, index) => (
             <Line
+              datasetFill={true}
               key={index}
               isAnimationActive={false}
               type="monotone"
