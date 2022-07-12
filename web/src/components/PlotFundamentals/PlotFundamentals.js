@@ -71,7 +71,7 @@ export const PlotFundamentals = (props) => {
               isAnimationActive={false}
               type="monotone"
               dataKey={name}
-              stroke={stroke[index]}
+              stroke={stroke[plotData.companyOrder[name]]}
             />
           ))}
           <Tooltip />

@@ -56,16 +56,19 @@ export function postProcess(data, plotData) {
       plotData[metricNames[i]] = {}
       plotData[metricNames[i]]['metricName'] = fullMetricNames[i]
       plotData[metricNames[i]]['nameCompany'] = [nameCompany]
-      // companyOrder is an array that keeps track of the order that companies have been
+      // companyOrder is an Object that keeps track of the order that companies have been
       // added to the plotData. companyOrder will never get removed from the array until
-      // we delete the last company.
+      // we delete the last company. It contains both key:value and value:key pairs.
       plotData[metricNames[i]]['companyOrder'] = {}
       plotData[metricNames[i]]['companyOrder'][0] = nameCompany
+      plotData[metricNames[i]]['companyOrder'][nameCompany] = 0
     } else {
       plotData[metricNames[i]]['nameCompany'].push(nameCompany)
       plotData[metricNames[i]]['companyOrder'][
         plotData[metricNames[i]]['nameCompany'].length - 1
       ] = nameCompany
+      plotData[metricNames[i]]['companyOrder'][nameCompany] =
+        plotData[metricNames[i]]['nameCompany'].length - 1
     }
 
     if (!('data' in plotData[metricNames[i]])) {
