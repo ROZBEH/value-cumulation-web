@@ -73,8 +73,11 @@ export const UserAddedMetric = () => {
 
   const autoCompStyle = {
     width: '60%',
-    marginBottom: '2rem',
-    marginTop: '2rem',
+    // marginBottom: '2rem',
+    // marginTop: '2rem',
+    marginBottom: '20px',
+    marginTop: '10px',
+    marginLeft: '10px',
     // float: 'left',
   }
 

@@ -121,29 +121,24 @@ export const Mainsubmission = () => {
     marginRight: '10px',
   }
 
+  const searchBarStyle = {
+    // display: 'flex',
+    marginBottom: '80px',
+    marginTop: '50px',
+    marginLeft: '10px',
+    // float: 'left',
+  }
+
   return (
+    // <>
+    //   <Form
+    //     formMethods={formCustomMethods}
+    //     // error={error}
+    //     // onSubmit={submitTicker}
+    //     style={{ fontSize: '2rem' }}
+    //   >
     <>
-      <Form
-        formMethods={formCustomMethods}
-        // error={error}
-        // onSubmit={submitTicker}
-        style={{ fontSize: '2rem' }}
-      >
-        {/* {counterArr.map((item, index) => (
-          <RwTextField
-            value={textPrompt}
-            key={index}
-            name={'ticker' + item}
-            placeholder="Stock Ticker"
-            maxLength="10"
-            onChange={(e) => onChangeTextField(e.target.value)}
-            onBlur={() => {
-              setTimeout(() => {
-                setSuggestion([])
-              }, 100)
-            }}
-          />
-        ))} */}
+      <div style={searchBarStyle}>
         {counterArr.map((item, index) => (
           <Autocomplete
             key={index}
@@ -175,32 +170,26 @@ export const Mainsubmission = () => {
           />
         ))}
 
-        {/* <Submit
-          style={{
-            verticalAlign: 'middle',
-          }}
+        {/* // </Form> */}
+
+        <button
+          // style={{ clear: 'block' }}
+          name="comparisonMode"
+          onClick={increaseCounter}
         >
-          Go
-        </Submit> */}
-      </Form>
+          {' '}
+          Add Company
+        </button>
 
-      <button
-        // style={{ clear: 'block' }}
-        name="comparisonMode"
-        onClick={increaseCounter}
-      >
-        {' '}
-        Add Company
-      </button>
-
-      <button
-        // style={{ display: 'block' }}
-        name="comparisonMode"
-        onClick={decreaseCounter}
-      >
-        {' '}
-        Remove Company
-      </button>
+        <button
+          // style={{ display: 'block' }}
+          name="comparisonMode"
+          onClick={decreaseCounter}
+        >
+          {' '}
+          Remove Company
+        </button>
+      </div>
     </>
   )
 }

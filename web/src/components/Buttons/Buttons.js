@@ -32,8 +32,15 @@ export const Mapping = () => {
     cursor: 'pointer',
   })
 
+  const divButtonStyle = {
+    display: 'flex',
+    marginBottom: '60px',
+    marginTop: '20px',
+    // float: 'left',
+  }
+
   return (
-    <>
+    <div style={divButtonStyle}>
       {VisiableButtons.map((bt) => (
         <button
           key={bt.id}
@@ -45,6 +52,6 @@ export const Mapping = () => {
           {bt.title}
         </button>
       ))}
-    </>
+    </div>
   )
 }
