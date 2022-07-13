@@ -90,10 +90,11 @@ export const Mainsubmission = () => {
 
   // Query the API for financial data of a company that the user has selected
   const [getFunamentals, { _called, _loading, _data }] = useLazyQuery(QUERY2)
-  const myChangeFunc = async (_event, values, reason, _details, index) => {
+  const myChangeFunc = (_event, values, reason, _details, index) => {
     // If the user has selected a company(selectOption), then query the API
     // for the financial data. And if the user has removed the company(clear),
     // then remove the company from the plotData
+    let plotData
     if (reason === 'selectOption') {
       if (
         Object.keys(pltData).length != 0 &&
@@ -102,12 +103,16 @@ export const Mainsubmission = () => {
         return
       }
 
-      var fundamentalanalysis = await getFunamentals({
+      getFunamentals({
         variables: { ticker: values.symbol },
+      }).then((fundamentalanalysis) => {
+        plotData = JSON.parse(JSON.stringify(pltData))
+        plotData = postProcess(
+          fundamentalanalysis.data.getFundamentals,
+          plotData
+        )
+        setPltData(plotData)
       })
-      var plotData = JSON.parse(JSON.stringify(pltData))
-      plotData = postProcess(fundamentalanalysis.data.getFundamentals, plotData)
-      setPltData(plotData)
     } else if (reason === 'clear') {
       plotData = JSON.parse(JSON.stringify(pltData))
       plotData = popCompany(plotData, index)
