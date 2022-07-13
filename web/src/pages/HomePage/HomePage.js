@@ -27,11 +27,6 @@ export const QUERY = gql`
   }
 `
 
-const onStart = async (getArticles) => {
-  const jsonRes = await getArticles()
-  return jsonRes
-}
-
 const HomePage = () => {
   const [getArticles, { _loading, _error, _data }] = useLazyQuery(QUERY)
   const plottingData = useRecoilValue(plottingDataAtom)
@@ -48,7 +43,7 @@ const HomePage = () => {
 
   // Get the list of available companies on startup
   useEffect(() => {
-    onStart(getArticles).then((jsonRes) => {
+    getArticles().then((jsonRes) => {
       setCompanyList(jsonRes.data.searchbar)
     })
   }, [getArticles, setCompanyList])
