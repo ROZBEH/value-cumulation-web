@@ -67,7 +67,7 @@ export const UserAddedMetric = () => {
   ]
 
   const txtBoxStyle = {
-    width: '50%',
+    width: '70%',
     marginBottom: '1rem',
   }
 
@@ -143,7 +143,7 @@ export const UserAddedMetric = () => {
           {...params}
           variant="standard"
           // label=""
-          placeholder="More Metrics"
+          placeholder="Add More Metrics"
         />
       )}
     />

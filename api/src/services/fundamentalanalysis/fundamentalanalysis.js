@@ -47,11 +47,11 @@ async function callApi(ticker) {
     result = result.map((item) => Math.round(item * 100) / 100)
     // Format the numbers into Millions of Dollars
     console.log('result = ', result)
-    if (Math.abs(result[result.length - 1]) > 1000000) {
-      result = result.map((item) => {
-        return numFormatter(item)
-      })
-    }
+    // if (Math.abs(result[result.length - 1]) > 1000000) {
+    //   result = result.map((item) => {
+    //     return numFormatter(item)
+    //   })
+    // }
     // Get the year array
     const yearArray = checklist
       .latestYear()

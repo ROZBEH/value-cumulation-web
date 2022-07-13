@@ -116,7 +116,7 @@ export const Mainsubmission = () => {
   }
 
   const textBoxStyle = {
-    width: '30%',
+    width: '25%',
     float: 'left',
     marginRight: '10px',
   }
@@ -128,6 +128,15 @@ export const Mainsubmission = () => {
     marginLeft: '10px',
     // float: 'left',
   }
+
+  const buttonStyle = () => ({
+    backgroundColor: '#00BFFF', //lightskyblue
+    marginLeft: '5px',
+    borderRadius: '8px',
+    border: 'none',
+    padding: '6px 36px',
+    cursor: 'pointer',
+  })
 
   return (
     // <>
@@ -163,7 +172,7 @@ export const Mainsubmission = () => {
                   {...params}
                   variant="standard"
                   fullWidth
-                  placeholder="Company Name"
+                  placeholder="Type Company Name"
                 />
               )
             }}
@@ -174,6 +183,7 @@ export const Mainsubmission = () => {
 
         <button
           // style={{ clear: 'block' }}
+          style={buttonStyle()}
           name="comparisonMode"
           onClick={increaseCounter}
         >
@@ -185,6 +195,7 @@ export const Mainsubmission = () => {
           // style={{ display: 'block' }}
           name="comparisonMode"
           onClick={decreaseCounter}
+          style={buttonStyle()}
         >
           {' '}
           Remove Company

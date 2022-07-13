@@ -31,6 +31,41 @@ export const PlotFundamentals = (props) => {
     fontSize: '0.9rem',
   }
 
+  const DataFormater = (number) => {
+    var absNumber = Math.abs(number)
+    if (absNumber > 1000000000) {
+      return (number / 1000000000).toString() + ' B'
+    } else if (absNumber > 1000000) {
+      return (number / 1000000).toString() + ' M'
+    } else if (absNumber > 1000) {
+      return (number / 1000).toString() + ' K'
+    } else {
+      return number.toString()
+    }
+  }
+
+  const CustomTooltipStyle = {
+    fontSize: '0.7rem',
+    color: '#808080',
+  }
+
+  const CustomTooltip = ({ active, payload }) => {
+    if (!active) return null
+    // Sort the payload by value so that the values are displayed in order
+    payload.sort((a, b) => (a.value > b.value ? -1 : 1))
+    return (
+      <div style={CustomTooltipStyle} className="custom-tooltip">
+        {payload.map((item, index) => {
+          return (
+            <p key={index} className="label">
+              {item.name}: {DataFormater(item.value)}
+            </p>
+          )
+        })}
+      </div>
+    )
+  }
+
   return (
     <div style={{ display: 'inline-block' }}>
       <section>
@@ -45,6 +80,7 @@ export const PlotFundamentals = (props) => {
         >
           <CartesianGrid strokeDasharray="3 3" />
           <YAxis
+            tickFormatter={DataFormater}
             style={{
               fontSize: '0.9rem',
             }}
@@ -74,7 +110,9 @@ export const PlotFundamentals = (props) => {
               stroke={stroke[plotData.companyOrder[name]]}
             />
           ))}
-          <Tooltip />
+          <Tooltip
+            content={(active, payload) => CustomTooltip(active, payload)}
+          />
         </LineChart>
       </section>
     </div>
