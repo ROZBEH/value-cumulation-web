@@ -11,6 +11,7 @@ import Chip from '@material-ui/core/Chip'
 import { useLazyQuery } from '@apollo/client'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import {
+  calledCompanies as calledCompaniesAtom,
   loadingFinancials as loadingFinancialsAtom,
   companyList as companyListAtom,
   plottingData as plottingDataAtom,
@@ -35,6 +36,8 @@ export const QUERY2 = gql`
 `
 
 export const Mainsubmission = () => {
+  const [calledCompanies, setCalledCompanies] =
+    useRecoilState(calledCompaniesAtom)
   const [_loadingFinancials, setLoading] = useRecoilState(loadingFinancialsAtom)
   const companyList = useRecoilValue(companyListAtom)
   const [pltData, setPltData] = useRecoilState(plottingDataAtom)
@@ -106,6 +109,8 @@ export const Mainsubmission = () => {
       ) {
         return
       }
+      // Add this company to the list of companies that has been called
+      setCalledCompanies((currentState) => [...currentState, values])
       getFunamentals({
         variables: { ticker: values.symbol },
       }).then((fundamentalanalysis) => {

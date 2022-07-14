@@ -7,6 +7,7 @@ import { useRecoilValue, useRecoilState } from 'recoil'
 import { PlotFundamentals } from 'src/components/PlotFundamentals/PlotFundamentals'
 import { useLazyQuery } from '@apollo/react-hooks'
 import {
+  calledCompanies as calledCompaniesAtom,
   plottingData as plottingDataAtom,
   loadingFinancials as loadingFinancialsAtom,
   metrics as metricsAtom,
@@ -29,16 +30,25 @@ export const QUERY = gql`
 
 const HomePage = () => {
   const [getArticles, { _loading, _error, _data }] = useLazyQuery(QUERY)
+  const calledCompanies = useRecoilValue(calledCompaniesAtom)
   const plottingData = useRecoilValue(plottingDataAtom)
   const [_companyList, setCompanyList] = useRecoilState(companyListAtom)
   const metrics = useRecoilValue(metricsAtom)
   const loadingFinancials = useRecoilValue(loadingFinancialsAtom)
 
   const styleSpin = {
+    margin: 'auto',
     position: 'relative',
-    left: '50%',
+    // left: '50%',
     justifyContent: 'center',
     alignItems: 'center',
+  }
+  const paragStyle = {
+    position: 'relative',
+    // left: '50%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
   }
 
   // Get the list of available companies on startup
@@ -55,7 +65,12 @@ const HomePage = () => {
       <Mapping />
       {loadingFinancials && (
         <div style={styleSpin}>
-          <TailSpin color="#87CEEB" height="50" width="50" />
+          <p style={paragStyle}>
+            Fetching Data for {calledCompanies[calledCompanies.length - 1].name}
+          </p>
+          <div>
+            <TailSpin color="#87CEEB" height="30" width="30" />
+          </div>
         </div>
       )}
       {/* Plot specific metric only when that metric is picked and 
