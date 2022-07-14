@@ -8,9 +8,10 @@ import {
 import { TextField } from '@material-ui/core'
 import Autocomplete from '@mui/material/Autocomplete'
 import Chip from '@material-ui/core/Chip'
-import { useLazyQuery } from '@apollo/react-hooks'
+import { useLazyQuery } from '@apollo/client'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import {
+  loadingFinancials as loadingFinancialsAtom,
   companyList as companyListAtom,
   plottingData as plottingDataAtom,
   suggestions as suggestionsAtom,
@@ -19,6 +20,7 @@ import {
 } from 'src/recoil/atoms'
 import './Mainsubmission.css'
 import { popCompany, postProcess } from './utilitiesMainsubmission'
+import { useEffect } from 'react'
 
 export const QUERY2 = gql`
   query GetFundamentalQuery($ticker: String!) {
@@ -33,6 +35,7 @@ export const QUERY2 = gql`
 `
 
 export const Mainsubmission = () => {
+  const [_loadingFinancials, setLoading] = useRecoilState(loadingFinancialsAtom)
   const companyList = useRecoilValue(companyListAtom)
   const [pltData, setPltData] = useRecoilState(plottingDataAtom)
   const [textPrompt, setPrompt] = useRecoilState(textPromptAtom)
@@ -89,8 +92,9 @@ export const Mainsubmission = () => {
   }
 
   // Query the API for financial data of a company that the user has selected
-  const [getFunamentals, { _called, _loading, _data }] = useLazyQuery(QUERY2)
-  const myChangeFunc = (_event, values, reason, _details, index) => {
+  const [getFunamentals, { _called, loading, _data }] = useLazyQuery(QUERY2)
+
+  const myChangeFunc = async (_event, values, reason, _details, index) => {
     // If the user has selected a company(selectOption), then query the API
     // for the financial data. And if the user has removed the company(clear),
     // then remove the company from the plotData
@@ -102,7 +106,6 @@ export const Mainsubmission = () => {
       ) {
         return
       }
-
       getFunamentals({
         variables: { ticker: values.symbol },
       }).then((fundamentalanalysis) => {
@@ -142,6 +145,12 @@ export const Mainsubmission = () => {
     padding: '6px 36px',
     cursor: 'pointer',
   })
+
+  // The following is kind of hacky, it should be refactored
+  // Actually I hate doing it this way
+  useEffect(() => {
+    setLoading(loading)
+  }, [setLoading, loading])
 
   return (
     // <>

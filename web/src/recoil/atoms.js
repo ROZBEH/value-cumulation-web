@@ -65,3 +65,9 @@ export const companyList = atom({
   key: 'companyList',
   default: [],
 })
+
+// This will keep track of the list of companies that the user has picked
+export const calledCompanies = atom({
+  key: 'calledCompanies',
+  default: [],
+})
