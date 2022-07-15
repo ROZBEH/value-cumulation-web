@@ -45,6 +45,8 @@ export const Mainsubmission = () => {
   const [suggestions, setSuggestion] = useRecoilState(suggestionsAtom)
   const [counterCompany, setCounterCompany] = useRecoilState(counterCompanyAtom)
   const formCustomMethods = useForm({ mode: 'onBlur' })
+  // Handling errors for user input
+  let errors = ''
 
   // counterArr keeps track of the number of searchbars
   // Users can add and remove searchbars in order to search for multiple companies
@@ -107,6 +109,7 @@ export const Mainsubmission = () => {
         Object.keys(pltData).length != 0 &&
         pltData['netIncome']['nameCompany'].includes(values.name)
       ) {
+        errors = 'Company already added, pick another company'
         return
       }
       // Add this company to the list of companies that has been called
@@ -193,6 +196,8 @@ export const Mainsubmission = () => {
                   variant="standard"
                   fullWidth
                   placeholder="Type Company Name"
+                  error={errors ? true : false}
+                  helperText={errors}
                 />
               )
             }}
