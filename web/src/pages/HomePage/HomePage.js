@@ -37,11 +37,7 @@ const HomePage = () => {
   const loadingFinancials = useRecoilValue(loadingFinancialsAtom)
 
   const styleSpin = {
-    margin: 'auto',
-    position: 'relative',
-    // left: '50%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    textAlign: 'center',
   }
   const paragStyle = {
     position: 'relative',
@@ -64,12 +60,19 @@ const HomePage = () => {
       <UserAddedMetric />
       <Mapping />
       {loadingFinancials && (
-        <div style={styleSpin}>
-          <p style={paragStyle}>
-            Fetching Data for {calledCompanies[calledCompanies.length - 1].name}
-          </p>
-          <div>
-            <TailSpin color="#87CEEB" height="30" width="30" />
+        <div className="loader">
+          <div className="loader-content">
+            <TailSpin
+              color="#15518e"
+              height="40"
+              width="40"
+              className="tail-spinner"
+            />
+            <div className="loader-message">
+              {' '}
+              Fetching Data for{' '}
+              {calledCompanies[calledCompanies.length - 1].name}
+            </div>
           </div>
         </div>
       )}

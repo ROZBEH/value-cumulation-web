@@ -117,7 +117,8 @@ export const Mainsubmission = () => {
         plotData = JSON.parse(JSON.stringify(pltData))
         plotData = postProcess(
           fundamentalanalysis.data.getFundamentals,
-          plotData
+          plotData,
+          index
         )
         setPltData(plotData)
       })

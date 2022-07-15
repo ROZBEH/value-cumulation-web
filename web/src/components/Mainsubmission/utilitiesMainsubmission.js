@@ -20,6 +20,9 @@ export function popCompany(plotData, index) {
   } else {
     for (const metric in plotData) {
       let company = plotData[metric]['nameCompany'].splice(updatedIndex, 1)[0]
+      var seqNum = plotData[metric]['companyOrder'][company]
+      delete plotData[metric]['companyOrder'][company]
+      delete plotData[metric]['companyOrder'][seqNum]
       for (const companyName in plotData[metric]['data']) {
         if (companyName === company) {
           plotData[metric]['data'].splice(companyName, 1)
@@ -30,7 +33,7 @@ export function popCompany(plotData, index) {
   return plotData
 }
 
-export function postProcess(data, plotData) {
+export function postProcess(data, plotData, index) {
   // Brining the data into a format that is recognizable by rechart
   // Data format for plotData is in the following format:
   // {
@@ -60,16 +63,11 @@ export function postProcess(data, plotData) {
       // added to the plotData. companyOrder will never get removed from the array until
       // we delete the last company. It contains both key:value and value:key pairs.
       plotData[metricNames[i]]['companyOrder'] = {}
-      plotData[metricNames[i]]['companyOrder'][0] = nameCompany
-      plotData[metricNames[i]]['companyOrder'][nameCompany] = 0
     } else {
       plotData[metricNames[i]]['nameCompany'].push(nameCompany)
-      plotData[metricNames[i]]['companyOrder'][
-        plotData[metricNames[i]]['nameCompany'].length - 1
-      ] = nameCompany
-      plotData[metricNames[i]]['companyOrder'][nameCompany] =
-        plotData[metricNames[i]]['nameCompany'].length - 1
     }
+    plotData[metricNames[i]]['companyOrder'][index] = nameCompany
+    plotData[metricNames[i]]['companyOrder'][nameCompany] = index
 
     if (!('data' in plotData[metricNames[i]])) {
       plotData[metricNames[i]]['data'] = metricsArrays[i].map((item, index) => {
