@@ -1,4 +1,5 @@
 import { TailSpin } from 'react-loader-spinner'
+import { useAuth } from '@redwoodjs/auth'
 import { UserAddedMetric } from 'src/components/UserAddedMetric'
 import { Mapping } from 'src/components/Buttons/Buttons'
 import { Mainsubmission } from 'src/components/Mainsubmission/Mainsubmission'
@@ -29,6 +30,7 @@ export const QUERY = gql`
 `
 
 const HomePage = () => {
+  const { isAuthenticated, _currentUser, _logOut } = useAuth()
   const [getArticles, { _loading, _error, _data }] = useLazyQuery(QUERY)
   const calledCompanies = useRecoilValue(calledCompaniesAtom)
   const plottingData = useRecoilValue(plottingDataAtom)
@@ -38,10 +40,15 @@ const HomePage = () => {
 
   // Get the list of available companies on startup
   useEffect(() => {
-    getArticles().then((jsonRes) => {
-      setCompanyList(jsonRes.data.searchbar)
-    })
-  }, [getArticles, setCompanyList])
+    if (isAuthenticated) {
+      getArticles().then((jsonRes) => {
+        setCompanyList(jsonRes.data.searchbar)
+      })
+    }
+  }, [getArticles, setCompanyList, isAuthenticated])
+  if (!isAuthenticated) {
+    return <div>You are not logged in. Please click on the Log In.</div>
+  }
 
   return (
     <>

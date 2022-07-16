@@ -20,6 +20,7 @@
     "@material-ui/icons": "^4.11.3",
     "@mui/material": "^5.8.4",
     "@mui/styles": "^5.8.4",
+    "@redwoodjs/auth": "1.5.1",
     "@redwoodjs/forms": "^1.5.1",
     "@redwoodjs/router": "^1.5.1",
     "@redwoodjs/web": "^1.5.1",

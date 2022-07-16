@@ -1,18 +1,32 @@
+import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
 const MainLayout = ({ children }) => {
+  const { isAuthenticated, currentUser, logOut } = useAuth()
   return (
     <>
       <header>
-        <Link to={routes.home()}>
-          <p>
-            <img
-              src="/logo-text.svg"
-              className="Applogo"
-              alt="logo"
-              width="300"
-            />
-          </p>
-        </Link>
+        <div className="flex-between">
+          <Link to={routes.home()}>
+            <p>
+              <img
+                src="/logo-text.svg"
+                className="Applogo"
+                alt="logo"
+                width="300"
+              />
+            </p>
+          </Link>
+          {isAuthenticated ? (
+            <div>
+              <span>Logged in as {currentUser.email}</span>{' '}
+              <button type="button" onClick={logOut}>
+                Logout
+              </button>
+            </div>
+          ) : (
+            <Link to={routes.login()}>Login</Link>
+          )}
+        </div>
         <nav>
           <ul>
             <li>
