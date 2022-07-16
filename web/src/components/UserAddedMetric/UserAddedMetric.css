@@ -1,0 +1,14 @@
+.txtBox-metric{
+  width: 70% !important;
+  margin-bottom: 1rem !important;
+}
+
+.user-added-metric-autocomplete{
+  width: 60%;
+  /* marginBottom: '2rem', */
+  /* marginTop: '2rem', */
+  margin-bottom: 20px !important;
+  margin-top: 10px !important;
+  margin-left: 10px !important;
+  /* float: 'left', */
+}

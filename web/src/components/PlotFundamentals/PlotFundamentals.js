@@ -9,6 +9,7 @@ import {
 } from 'recharts'
 import { useRecoilValue } from 'recoil'
 import { plottingData as plottingDataAtom } from 'src/recoil/atoms'
+import './PlotFundamentals.css'
 
 export const PlotFundamentals = (props) => {
   const plottingData = useRecoilValue(plottingDataAtom)
@@ -22,14 +23,6 @@ export const PlotFundamentals = (props) => {
     '#4363d8',
     '#ffd8b1',
   ]
-  const chartStyle = {
-    position: 'relative',
-    left: '10%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    display: 'inline-block',
-    fontSize: '0.9rem',
-  }
 
   const DataFormater = (number) => {
     var absNumber = Math.abs(number)
@@ -44,17 +37,12 @@ export const PlotFundamentals = (props) => {
     }
   }
 
-  const CustomTooltipStyle = {
-    fontSize: '0.7rem',
-    color: '#808080',
-  }
-
   const CustomTooltip = ({ active, payload }) => {
     if (!active) return null
     // Sort the payload by value so that the values are displayed in order
     payload.sort((a, b) => (a.value > b.value ? -1 : 1))
     return (
-      <div style={CustomTooltipStyle} className="custom-tooltip">
+      <div className="custom-tooltip">
         {payload.map((item, index) => {
           return (
             <p key={index} className="label">
@@ -67,7 +55,7 @@ export const PlotFundamentals = (props) => {
   }
 
   return (
-    <div style={{ display: 'inline-block' }}>
+    <div className="main-div-linechart">
       <section>
         <LineChart
           intractive={true}
@@ -76,27 +64,19 @@ export const PlotFundamentals = (props) => {
           width={600}
           height={250}
           margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
-          style={chartStyle}
+          className="line-chart"
         >
           <CartesianGrid strokeDasharray="3 3" />
           <YAxis
             tickFormatter={DataFormater}
-            style={{
-              fontSize: '0.9rem',
-            }}
+            className="y-axis-chart"
             label={
               <text x={200} y={0} dx={50} dy={15} offset={0} angle={-90}>
                 {plotData.metricName}
               </text>
             }
           />
-          <XAxis
-            style={{
-              fontSize: '0.9rem',
-            }}
-            interval={0}
-            dataKey="name"
-          />
+          <XAxis className="x-axis-chart" interval={0} dataKey="name" />
           <Legend />
           {/* The following allows multiple lines to be plotted in the same
           LineChart */}

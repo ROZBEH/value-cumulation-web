@@ -36,17 +36,6 @@ const HomePage = () => {
   const metrics = useRecoilValue(metricsAtom)
   const loadingFinancials = useRecoilValue(loadingFinancialsAtom)
 
-  const styleSpin = {
-    textAlign: 'center',
-  }
-  const paragStyle = {
-    position: 'relative',
-    // left: '50%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
-  }
-
   // Get the list of available companies on startup
   useEffect(() => {
     getArticles().then((jsonRes) => {

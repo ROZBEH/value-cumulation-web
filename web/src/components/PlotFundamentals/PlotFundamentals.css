@@ -1,0 +1,18 @@
+.line-chart {
+    position: relative;
+    left: 10%;
+    justify-content: center;
+    align-items: center;
+    display: inline-block;
+    font-size: 0.9rem;
+  }
+
+.custom-tooltip {
+    font-size: 0.7rem;
+    color: #808080;
+  }
+
+.main-div-linechart{ display: inline-block; }
+
+.x-axis-chart,
+.y-axis-chart{font-size: 0.9rem !important;}

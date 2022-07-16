@@ -1,5 +1,6 @@
 import { useRecoilState } from 'recoil'
 import { metrics as metricsAtom } from 'src/recoil/atoms'
+import './Buttons.css'
 
 // Buttons that are visible on the main submission page
 //There are more more buttons in the dropdown menu
@@ -32,15 +33,8 @@ export const Mapping = () => {
     cursor: 'pointer',
   })
 
-  const divButtonStyle = {
-    display: 'flex',
-    marginBottom: '60px',
-    marginTop: '20px',
-    // float: 'left',
-  }
-
   return (
-    <div style={divButtonStyle}>
+    <div className="div-btn">
       {VisiableButtons.map((bt) => (
         <button
           key={bt.id}

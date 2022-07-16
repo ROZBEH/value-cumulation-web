@@ -5,7 +5,7 @@ import Chip from '@material-ui/core/Chip'
 import classNames from 'classnames'
 import { metrics as metricsAtom } from 'src/recoil/atoms'
 import { useRecoilState } from 'recoil'
-
+import './UserAddedMetric.css'
 export const UserAddedMetric = () => {
   const [metricsA, setMetrics] = useRecoilState(metricsAtom)
   // List of available metrics for now. This list will be updated as we
@@ -66,11 +66,6 @@ export const UserAddedMetric = () => {
     { id: 16, title: 'Intrinsic Value', value: 'intrinsicValue' },
   ]
 
-  const txtBoxStyle = {
-    width: '70%',
-    marginBottom: '1rem',
-  }
-
   const autoCompStyle = {
     width: '60%',
     // marginBottom: '2rem',
@@ -114,7 +109,7 @@ export const UserAddedMetric = () => {
 
   return (
     <Autocomplete
-      style={autoCompStyle}
+      className="user-added-metric-autocomplete"
       renderTags={(value, getTagProps) =>
         value.map((option, index) => (
           <Chip
@@ -139,7 +134,7 @@ export const UserAddedMetric = () => {
       renderInput={(params) => (
         <TextField
           inputprops={{ className: buttonColor.input }}
-          style={txtBoxStyle}
+          className="txtBox-metric"
           {...params}
           variant="standard"
           // label=""

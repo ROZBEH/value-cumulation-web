@@ -132,29 +132,6 @@ export const Mainsubmission = () => {
     }
   }
 
-  const textBoxStyle = {
-    width: '25%',
-    float: 'left',
-    marginRight: '10px',
-  }
-
-  const searchBarStyle = {
-    // display: 'flex',
-    marginBottom: '80px',
-    marginTop: '50px',
-    marginLeft: '10px',
-    // float: 'left',
-  }
-
-  const buttonStyle = () => ({
-    backgroundColor: '#00BFFF', //lightskyblue
-    marginLeft: '5px',
-    borderRadius: '8px',
-    border: 'none',
-    padding: '6px 36px',
-    cursor: 'pointer',
-  })
-
   // The following is kind of hacky, it should be refactored
   // Actually I hate doing it this way
   useEffect(() => {
@@ -170,7 +147,7 @@ export const Mainsubmission = () => {
     //     style={{ fontSize: '2rem' }}
     //   >
     <>
-      <div style={searchBarStyle}>
+      <div className="searchbar-company">
         {counterArr.map((item, index) => (
           <Autocomplete
             key={index}
@@ -190,7 +167,7 @@ export const Mainsubmission = () => {
             renderInput={(params) => {
               return (
                 <TextField
-                  style={textBoxStyle}
+                  className="text-field-searchbar"
                   onChange={(e) => onChangeTextField(e.target.value)}
                   {...params}
                   variant="standard"
@@ -207,8 +184,7 @@ export const Mainsubmission = () => {
         {/* // </Form> */}
 
         <button
-          // style={{ clear: 'block' }}
-          style={buttonStyle()}
+          className="btn-add"
           name="comparisonMode"
           onClick={increaseCounter}
         >
@@ -217,10 +193,9 @@ export const Mainsubmission = () => {
         </button>
 
         <button
-          // style={{ display: 'block' }}
+          className="btn-remove"
           name="comparisonMode"
           onClick={decreaseCounter}
-          style={buttonStyle()}
         >
           {' '}
           Remove Company
