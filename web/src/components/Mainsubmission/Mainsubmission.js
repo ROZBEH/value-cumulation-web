@@ -72,6 +72,21 @@ export const Mainsubmission = () => {
         plotData = popCompany(plotData, counterCompany - 1)
         setPltData(plotData)
       }
+    } else if (counterCompany === 1) {
+      plotData = JSON.parse(JSON.stringify(pltData))
+      if (plotData['netIncome']) {
+        // passing (counterCompany - 1) since js array starts at index 0
+        plotData = popCompany(plotData, counterCompany - 1)
+        setPltData(plotData)
+      }
+      // Resetting the items inside the autocomplete searchbar
+      // This is kind of hacky but it works
+      const autoCompleteClear = document.getElementsByClassName(
+        'MuiAutocomplete-clearIndicator'
+      )[0]
+      if (autoCompleteClear) {
+        autoCompleteClear.click()
+      }
     }
   }
 
@@ -90,9 +105,6 @@ export const Mainsubmission = () => {
         ...new Map(matches.map((item) => [item['name'], item])).values(),
       ]
       setSuggestion(matches)
-    } else {
-      setSuggestion([])
-      setPrompt(inputPrompt)
     }
   }
 
