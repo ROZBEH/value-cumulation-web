@@ -14,6 +14,7 @@ import {
   metrics as metricsAtom,
   companyList as companyListAtom,
 } from 'src/recoil/atoms'
+import { Link, routes } from '@redwoodjs/router'
 import { useEffect } from 'react'
 
 export const QUERY = gql`
@@ -47,7 +48,11 @@ const HomePage = () => {
     }
   }, [getArticles, setCompanyList, isAuthenticated])
   if (!isAuthenticated) {
-    return <div>You are not logged in. Please click on the Log In.</div>
+    return (
+      <div>
+        You are not logged in. Please <Link to={routes.login()}>Login</Link>
+      </div>
+    )
   }
 
   return (

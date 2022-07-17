@@ -6,25 +6,33 @@ const MainLayout = ({ children }) => {
     <>
       <header>
         <div className="flex-between">
-          <Link to={routes.home()}>
-            <p>
+          <h1 style={{ display: 'inline-block' }}>
+            <Link to={routes.home()}>
               <img
                 src="/logo-text.svg"
                 className="Applogo"
                 alt="logo"
                 width="300"
               />
-            </p>
-          </Link>
+            </Link>
+          </h1>
           {isAuthenticated ? (
-            <div>
-              <span>Logged in as {currentUser.email}</span>{' '}
+            <div
+              style={{
+                marginTop: '2rem',
+                float: 'right',
+                verticalAlign: 'top',
+                display: 'inline-block',
+                alignItems: 'center',
+              }}
+            >
+              Logged in as {currentUser.email}{' '}
               <button type="button" onClick={logOut}>
                 Logout
               </button>
             </div>
           ) : (
-            <Link to={routes.login()}>Login</Link>
+            ''
           )}
         </div>
         <nav>

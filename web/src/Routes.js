@@ -7,7 +7,7 @@
 // 'src/pages/HomePage/HomePage.js'         -> HomePage
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
-import { Router, Route, Set } from '@redwoodjs/router'
+import { Router, Private, Route, Set } from '@redwoodjs/router'
 import MainLayout from 'src/layouts/MainLayout'
 const Routes = () => {
   return (
@@ -18,6 +18,8 @@ const Routes = () => {
         <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
         <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
         <Route path="/about" page={AboutPage} name="about" />
+        {/* Wrap the following around anything that you'd like to make it private and need authentication
+        <Private unauthenticated="about"> </Private> */}
         <Route path="/" page={HomePage} name="home" />
         <Route notfound page={NotFoundPage} />
       </Set>
