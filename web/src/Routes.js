@@ -18,6 +18,8 @@ const Routes = () => {
         <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
         <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
         <Route path="/about" page={AboutPage} name="about" />
+        <Route path="/contact" page={ContactPage} name="contact" />
+
         {/* Wrap the following around anything that you'd like to make it private and need authentication
         <Private unauthenticated="about"> </Private> */}
         <Route path="/" page={HomePage} name="home" />
