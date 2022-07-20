@@ -3,6 +3,7 @@ import { useAuth } from '@redwoodjs/auth'
 import { UserAddedMetric } from 'src/components/UserAddedMetric'
 import { Mapping } from 'src/components/Buttons/Buttons'
 import { Mainsubmission } from 'src/components/Mainsubmission/Mainsubmission'
+import { Content } from 'src/components/Content/Content'
 import './HomePage.css'
 import { useRecoilValue, useRecoilState } from 'recoil'
 import { PlotFundamentals } from 'src/components/PlotFundamentals/PlotFundamentals'
@@ -14,7 +15,7 @@ import {
   metrics as metricsAtom,
   companyList as companyListAtom,
 } from 'src/recoil/atoms'
-import { Link, routes } from '@redwoodjs/router'
+import { Link, Private, routes } from '@redwoodjs/router'
 import { useEffect } from 'react'
 
 export const QUERY = gql`
@@ -57,6 +58,7 @@ const HomePage = () => {
 
   return (
     <>
+      <Content />
       <Mainsubmission />
       <UserAddedMetric />
       <Mapping />

@@ -22,7 +22,9 @@ const Routes = () => {
 
         {/* Wrap the following around anything that you'd like to make it private and need authentication
         <Private unauthenticated="about"> </Private> */}
+        {/* <Private unauthenticated="login"> */}
         <Route path="/" page={HomePage} name="home" />
+        {/* </Private> */}
         <Route notfound page={NotFoundPage} />
       </Set>
     </Router>
