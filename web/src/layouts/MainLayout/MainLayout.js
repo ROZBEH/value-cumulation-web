@@ -43,6 +43,9 @@ const MainLayout = ({ children }) => {
             <li>
               <Link to={routes.about()}>About</Link>
             </li>
+            <li>
+              <Link to={routes.contact()}>Contact us</Link>
+            </li>
           </ul>
         </nav>
       </header>
