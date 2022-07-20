@@ -1,32 +1,33 @@
 import { MetaTags, useMutation } from '@redwoodjs/web'
 import {
   FieldError,
+  FormError,
+  useForm,
   Form,
   Label,
   TextField,
   TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
-import { useAuth } from '@redwoodjs/auth'
-import { useRef } from 'react'
 import { toast, Toaster } from '@redwoodjs/web/toast'
-import { useEffect } from 'react'
 const CREATE_CONTACT = gql`
   mutation CreateContactMutation($input: CreateContactInput!) {
     createContact(input: $input) {
-      id
+      name
     }
   }
 `
 const ContactPage = () => {
-  let contactName
-  const [create, { loading, _error }] = useMutation(CREATE_CONTACT, {
-    onCompleted: () => {
+  const formMethods = useForm({ mode: 'onBlur' })
+  // for displaying the contact name after submission
+  const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
+    onCompleted: (data) => {
+      var contactName = data.createContact.name.split(' ')[0].toUpperCase()
       toast.success(`Thank you for your submission ${contactName}!`)
+      formMethods.reset()
     },
   })
   const onSubmit = (data) => {
-    contactName = data.name
     create({ variables: { input: data } })
   }
 
@@ -45,10 +46,12 @@ const ContactPage = () => {
             <div className="rw-segment-main">
               <div className="rw-form-wrapper">
                 <Form
-                  config={{ mode: 'onBlur' }}
+                  formMethods={formMethods}
                   onSubmit={onSubmit}
                   className="rw-form-wrapper"
+                  error={error}
                 >
+                  <FormError error={error} wrapperClassName="form-error" />
                   <Label
                     name="name"
                     className="rw-label"
