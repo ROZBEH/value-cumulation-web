@@ -38,17 +38,17 @@ const MainLayout = ({ children }) => {
           )}
         </div>
         <nav>
-          <ul>
-            <li>
+          <div>
+            <div className="inline-block">
               <Link to={routes.home()}>Home</Link>
-            </li>
-            <li>
+            </div>
+            <div className="inline-block">
               <Link to={routes.about()}>About</Link>
-            </li>
-            <li>
+            </div>
+            <div className="inline-block">
               <Link to={routes.contact()}>Contact us</Link>
-            </li>
-          </ul>
+            </div>
+          </div>
         </nav>
       </header>
       <main>{children}</main>
