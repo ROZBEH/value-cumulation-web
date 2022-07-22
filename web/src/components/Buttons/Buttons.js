@@ -29,8 +29,11 @@ export const Mapping = () => {
     marginLeft: '5px',
     borderRadius: '8px',
     border: 'none',
-    padding: '6px 36px',
+    padding: '6px 15px',
     cursor: 'pointer',
+    fontSize: '0.8rem',
+    fontFamily:
+      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif',
   })
 
   return (

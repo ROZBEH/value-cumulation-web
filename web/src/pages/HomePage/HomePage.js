@@ -49,11 +49,7 @@ const HomePage = () => {
     }
   }, [getArticles, setCompanyList, isAuthenticated])
   if (!isAuthenticated) {
-    return (
-      <div>
-        You are not logged in. Please <Link to={routes.login()}>Login</Link>
-      </div>
-    )
+    return <div></div>
   }
 
   return (
