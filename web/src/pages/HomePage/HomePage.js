@@ -49,7 +49,7 @@ const HomePage = () => {
     }
   }, [getArticles, setCompanyList, isAuthenticated])
   if (!isAuthenticated) {
-    return <div></div>
+    return <Content />
   }
 
   return (
