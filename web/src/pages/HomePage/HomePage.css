@@ -1,9 +1,11 @@
 body {
-  margin-top: 20px;
-  margin:9px;
   color:#241716;
   font: 67.5% "Lucida Sans Unicode", "Bitstream Vera Sans", "Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica, sans-serif;
   font-size: 18px;
+  margin: 0;
+  padding: 0;
+  background-color: rgb(236 254 255);
+  
 }
 .loader {
   background-color: #ffffff;

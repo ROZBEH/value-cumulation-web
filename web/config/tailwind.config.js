@@ -6,6 +6,7 @@ module.exports = {
     extend: {
       colors: {
         'lightsky-blue': '#00BFFF',
+        'bg-sky-300': '#7dd3fc',
       },
     },
   },
