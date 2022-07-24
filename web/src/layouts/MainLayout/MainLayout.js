@@ -7,48 +7,51 @@ const MainLayout = ({ children }) => {
     <>
       <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
       <header>
-        <div className="flex-between">
-          <h1 style={{ display: 'inline-block' }}>
+        <nav className="flex items-center justify-between flex-wrap bg-gold-800 p-6">
+          <div>
             <Link to={routes.home()}>
               <img
                 src="/logo-text.svg"
                 className="Applogo"
                 alt="logo"
-                width="300"
+                width="200"
               />
             </Link>
-          </h1>
+          </div>
+
+          <div className="text-sm sm:flex-grow">
+            <div className="block mt-4 sm:inline-block sm:mt-0 text-base text-lime-700 hover:text-orange-900 mr-8">
+              <Link to={routes.home()}>Home</Link>
+            </div>
+            <div className="block mt-4 sm:inline-block sm:mt-0 text-base text-lime-700 hover:text-orange-900 mr-8">
+              <Link to={routes.about()}>About</Link>
+            </div>
+            <div className="block mt-4 sm:inline-block sm:mt-0 text-base text-lime-700 hover:text-orange-900 mr-8">
+              <Link to={routes.contact()}>Contact us</Link>
+            </div>
+          </div>
+
           {isAuthenticated ? (
-            <div
-              style={{
-                marginTop: '2rem',
-                float: 'right',
-                verticalAlign: 'top',
-                display: 'inline-block',
-                alignItems: 'center',
-              }}
-            >
-              Logged in as {currentUser.email}{' '}
-              <button type="button" onClick={logOut}>
+            <div className="block mt-4 sm:inline-block sm:mt-0 text-base text-lime-700 mr-8">
+              {currentUser.email}{' '}
+              <button
+                onClick={logOut}
+                type="button"
+                className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-2 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+              >
                 Logout
               </button>
             </div>
           ) : (
-            ''
+            <div className="block mt-4 sm:inline-block sm:mt-0 text-base text-lime-700 mr-8">
+              <button
+                type="button"
+                className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-2 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+              >
+                <Link to={routes.login()}>Login</Link>
+              </button>
+            </div>
           )}
-        </div>
-        <nav>
-          <ul>
-            <li>
-              <Link to={routes.home()}>Home</Link>
-            </li>
-            <li>
-              <Link to={routes.about()}>About</Link>
-            </li>
-            <li>
-              <Link to={routes.contact()}>Contact us</Link>
-            </li>
-          </ul>
         </nav>
       </header>
       <main>{children}</main>

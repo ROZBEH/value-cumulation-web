@@ -17,13 +17,3 @@ body {
   margin-top: 50px !important;
   margin-left: 10px !important;
 }
-
-.btn-add,
-.btn-remove{
-  background-color: #00BFFF; /*lightskyblue*/
-  margin-left: 5px;
-  border-radius: 8px;
-  border: none;
-  padding: 6px 36px;
-  cursor: pointer;
-}

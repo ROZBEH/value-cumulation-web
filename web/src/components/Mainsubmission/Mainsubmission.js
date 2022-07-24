@@ -196,7 +196,13 @@ export const Mainsubmission = () => {
         {/* // </Form> */}
 
         <button
-          className="btn-add"
+          //     marginLeft: '5px',
+          // borderRadius: '8px',
+          // border: 'none',
+          // padding: '6px 15px',
+          // cursor: 'pointer',
+          // fontSize: '0.8rem',
+          className="rounded-md bg-lightsky-blue text-xs px-2 py-1.5 cursor-pointer ml-1"
           name="comparisonMode"
           onClick={increaseCounter}
         >
@@ -205,7 +211,7 @@ export const Mainsubmission = () => {
         </button>
 
         <button
-          className="btn-remove"
+          className="rounded-lg bg-lightsky-blue text-xs px-2 py-1.5 cursor-pointer ml-1"
           name="comparisonMode"
           onClick={decreaseCounter}
         >

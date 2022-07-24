@@ -103,6 +103,8 @@ export const UserAddedMetric = () => {
   const useStyles = makeStyles({
     backgroundTag: {
       backgroundColor: 'springgreen !important',
+      fontFamily:
+        '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif',
     },
   })
   const buttonColor = useStyles()
