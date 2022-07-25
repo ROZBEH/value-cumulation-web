@@ -49,15 +49,29 @@ const HomePage = () => {
     }
   }, [getArticles, setCompanyList, isAuthenticated])
   if (!isAuthenticated) {
-    return <Content />
+    return (
+      <div className="mx-96">
+        <Content />
+      </div>
+    )
   }
 
   return (
     <>
-      <Content />
-      <Mainsubmission />
-      <UserAddedMetric />
-      <Mapping />
+      <div className="grid grid-rows-3 grid-cols-2 gap-4">
+        <div className="col-span-1">
+          <Mainsubmission />
+        </div>
+        <div className="row-span-3 content-center">
+          <Content />
+        </div>
+        <div className="row-span-1 col-span-1">
+          <UserAddedMetric />
+        </div>
+        <div className="row-span-1 col-span-1">
+          <Mapping />
+        </div>
+      </div>
       {loadingFinancials && (
         <div className="loader">
           <div className="loader-content">

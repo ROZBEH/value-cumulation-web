@@ -1,6 +1,6 @@
 export const Content = () => {
   return (
-    <div className="flex flex-col mx-96">
+    <div className="flex flex-col mx-10 my-10">
       <p className="my-2">Focus on metrics that matter to you</p>
       <p className="my-2">
         Compare the performance of companies of your interest
