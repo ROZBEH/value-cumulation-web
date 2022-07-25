@@ -58,17 +58,17 @@ const HomePage = () => {
 
   return (
     <>
-      <div className="grid grid-rows-3 grid-cols-2 gap-4">
-        <div className="col-span-1">
+      <div className="grid grid-rows-3 grid-cols-2">
+        <div className="col-span-1 flex grid items-center mx-5">
           <Mainsubmission />
         </div>
-        <div className="row-span-3 content-center">
+        <div className="row-span-3">
           <Content />
         </div>
-        <div className="row-span-1 col-span-1">
+        <div className="row-span-1 col-span-1 flex items-center mx-5">
           <UserAddedMetric />
         </div>
-        <div className="row-span-1 col-span-1">
+        <div className="row-span-1 col-span-1 mx-3">
           <Mapping />
         </div>
       </div>
