@@ -1,6 +1,6 @@
 # README
 
-Welcome to [RedwoodJS](https://redwoodjs.com)!
+Welcome to [ValueCumulation](https://valuecumulation.com)!
 
 > **Prerequisites**
 >
@@ -16,18 +16,14 @@ yarn install
 Then change into that directory and start the development server:
 
 ```
-cd my-redwood-project
+cd value-cumulation-redwood
 yarn redwood dev
 ```
 
 Your browser should automatically open to http://localhost:8910 where you'll see the Welcome Page, which links out to a ton of great resources.
 
 > **The Redwood CLI**
->
-> Congratulations on running your first Redwood CLI command!
-> From dev to deploy, the CLI is with you the whole way.
-> And there's quite a few commands at your disposal:
-> ```
+> Run the command below for more info
 > yarn redwood --help
 > ```
 > For all the details, see the [CLI reference](https://redwoodjs.com/docs/cli-commands).
@@ -110,10 +106,6 @@ Lock down your front and backends with Redwood's built-in, database-backed authe
 ```
 yarn rw setup auth --help
 ```
-
-## Next Steps
-
-The best way to learn Redwood is by going through the comprehensive [tutorial](https://redwoodjs.com/docs/tutorial/foreword) and joining the community (via the [Discourse forum](https://community.redwoodjs.com) or the [Discord server](https://discord.gg/redwoodjs)).
 
 ## Quick Links
 
