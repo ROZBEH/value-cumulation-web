@@ -6,6 +6,11 @@ module.exports = {
     extend: {
       colors: {
         'lightsky-blue': '#00BFFF',
+        'bg-sky-300': '#7dd3fc',
+      },
+      flex: {
+        50: '0 0 50%',
+        100: '0 0 100%',
       },
     },
   },

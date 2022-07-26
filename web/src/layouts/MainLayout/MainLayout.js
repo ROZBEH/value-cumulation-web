@@ -6,7 +6,7 @@ const MainLayout = ({ children }) => {
   return (
     <>
       <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
-      <header>
+      <header className="bg-cyan-300 sticky top-0 z-50 rounded-b-xl">
         <nav className="flex items-center justify-between flex-wrap bg-gold-800 p-6">
           <div>
             <Link to={routes.home()}>
