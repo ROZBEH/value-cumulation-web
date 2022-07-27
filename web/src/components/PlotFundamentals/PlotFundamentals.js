@@ -58,8 +58,8 @@ export const PlotFundamentals = (props) => {
   return (
     <div className="main-div-linechart">
       <section>
-        <div className="ml-72">
-          <Infopop text={plotData.metricName} />
+        <div className="ml-80 text-sm">
+          {plotData.metricName} <Infopop text={plotData.metricName} />
         </div>
         <LineChart
           intractive={true}
@@ -74,11 +74,11 @@ export const PlotFundamentals = (props) => {
           <YAxis
             tickFormatter={DataFormater}
             className="y-axis-chart"
-            label={
-              <text x={200} y={0} dx={50} dy={15} offset={0} angle={-90}>
-                {plotData.metricName}
-              </text>
-            }
+            // label={
+            //   <text x={200} y={0} dx={50} dy={15} offset={0} angle={-90}>
+            //     {plotData.metricName}
+            //   </text>
+            // }
           />
           <XAxis className="x-axis-chart" interval={0} dataKey="name" />
           <Legend />

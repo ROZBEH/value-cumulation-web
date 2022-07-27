@@ -10,7 +10,7 @@ export const Infopop = (inputText) => {
     <Popover placement="top">
       <PopoverHandler>
         <Button className="normal-case bg-gray-300 text-black text-sm rounded-50 h-4 w-4">
-          i
+          ?
         </Button>
       </PopoverHandler>
       <PopoverContent toggle="popover" className="arrow border-2 rounded-md">
