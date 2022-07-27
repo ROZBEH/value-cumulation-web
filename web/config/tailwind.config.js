@@ -4,6 +4,17 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      borderRadius: {
+        50: '50%',
+      },
+      maxWidth: {
+        '200px': '200px',
+        '100px': '100px',
+      },
+      maxHeight: {
+        '200px': '200px',
+        '100px': '100px',
+      },
       colors: {
         'lightsky-blue': '#00BFFF',
         'bg-sky-300': '#7dd3fc',

@@ -10,6 +10,7 @@ import {
 import { useRecoilValue } from 'recoil'
 import { plottingData as plottingDataAtom } from 'src/recoil/atoms'
 import './PlotFundamentals.css'
+import { Infopop } from 'src/components/Infopop/Infopop'
 
 export const PlotFundamentals = (props) => {
   const plottingData = useRecoilValue(plottingDataAtom)
@@ -57,6 +58,9 @@ export const PlotFundamentals = (props) => {
   return (
     <div className="main-div-linechart">
       <section>
+        <div className="ml-72">
+          <Infopop text={plotData.metricName} />
+        </div>
         <LineChart
           intractive={true}
           data={plotData.data}
