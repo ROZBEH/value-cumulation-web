@@ -3,6 +3,7 @@ import { Link, routes } from '@redwoodjs/router'
 import { Toaster } from '@redwoodjs/web/toast'
 const MainLayout = ({ children }) => {
   const { isAuthenticated, currentUser, logOut } = useAuth()
+  console.log(currentUser)
   return (
     <>
       <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
