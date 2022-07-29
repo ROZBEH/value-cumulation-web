@@ -20,11 +20,11 @@ model Metric {
 model User {
   id                  Int       @id @default(autoincrement())
   email               String    @unique
-  hashedPassword      String // <─┐
-  salt                String // <─┼─ add these lines
-  resetToken          String? // <─┤
-  resetTokenExpiresAt DateTime? // <─┘
-  favoriteMetrics     Metric[] //
+  hashedPassword      String    @default("")
+  salt                String    @default("")
+  resetToken          String?
+  resetTokenExpiresAt DateTime?
+  favoriteMetrics     Metric[]
 }
 
 model Contact {

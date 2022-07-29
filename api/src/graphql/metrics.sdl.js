@@ -1,4 +1,13 @@
 export const schema = gql`
+  # type User {
+  #   id: Int!
+  #   email: String!
+  #   # hashedPassword: String!
+  #   # salt: String!
+  #   resetToken: String
+  #   resetTokenExpiresAt: DateTime
+  #   favoriteMetrics: [Metric]
+  # }
   type Metric {
     id: Int!
     name: String!
@@ -7,8 +16,8 @@ export const schema = gql`
   }
 
   type Query {
-    metrics: [Metric!]! @requireAuth
-    metric(id: Int!): Metric @requireAuth
+    metrics: [Metric!]! @skipAuth
+    metric(id: Int!): Metric @skipAuth
   }
 
   input CreateMetricInput {
@@ -22,8 +31,8 @@ export const schema = gql`
   }
 
   type Mutation {
-    createMetric(input: CreateMetricInput!): Metric! @requireAuth
-    updateMetric(id: Int!, input: UpdateMetricInput!): Metric! @requireAuth
-    deleteMetric(id: Int!): Metric! @requireAuth
+    createMetric(input: CreateMetricInput!): Metric! @skipAuth
+    updateMetric(id: Int!, input: UpdateMetricInput!): Metric! @skipAuth
+    deleteMetric(id: Int!): Metric! @skipAuth
   }
 `

@@ -19,7 +19,7 @@ import { Link, Private, routes } from '@redwoodjs/router'
 import { useEffect } from 'react'
 
 export const QUERY = gql`
-  query SearchBarQuery {
+  query ($id: Int!) {
     searchbar {
       symbol
       name
@@ -28,11 +28,17 @@ export const QUERY = gql`
       exchangeShortName
       type
     }
+    user(id: $id) {
+      email
+      favoriteMetrics {
+        id
+      }
+    }
   }
 `
 
 const HomePage = () => {
-  const { isAuthenticated, _currentUser, _logOut } = useAuth()
+  const { isAuthenticated, currentUser, _logOut } = useAuth()
   const [getArticles, { _loading, _error, _data }] = useLazyQuery(QUERY)
   const calledCompanies = useRecoilValue(calledCompaniesAtom)
   const plottingData = useRecoilValue(plottingDataAtom)
@@ -43,11 +49,15 @@ const HomePage = () => {
   // Get the list of available companies on startup
   useEffect(() => {
     if (isAuthenticated) {
-      getArticles().then((jsonRes) => {
+      getArticles({
+        variables: { id: currentUser.id },
+      }).then((jsonRes) => {
         setCompanyList(jsonRes.data.searchbar)
+        console.log(jsonRes.data.user.email)
+        console.log(jsonRes.data.user.favoriteMetrics)
       })
     }
-  }, [getArticles, setCompanyList, isAuthenticated])
+  }, [getArticles, setCompanyList, isAuthenticated, currentUser])
   if (!isAuthenticated) {
     return (
       <div className="mx-96">
