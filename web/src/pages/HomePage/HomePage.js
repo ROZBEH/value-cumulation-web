@@ -9,6 +9,7 @@ import { useRecoilValue, useRecoilState } from 'recoil'
 import { PlotFundamentals } from 'src/components/PlotFundamentals/PlotFundamentals'
 import { useLazyQuery } from '@apollo/react-hooks'
 import {
+  userFavMetrics as userFavMetricsAtom,
   calledCompanies as calledCompaniesAtom,
   plottingData as plottingDataAtom,
   loadingFinancials as loadingFinancialsAtom,
@@ -32,6 +33,7 @@ export const QUERY = gql`
       email
       favoriteMetrics {
         id
+        name
       }
     }
   }
@@ -43,8 +45,9 @@ const HomePage = () => {
   const calledCompanies = useRecoilValue(calledCompaniesAtom)
   const plottingData = useRecoilValue(plottingDataAtom)
   const [_companyList, setCompanyList] = useRecoilState(companyListAtom)
-  const metrics = useRecoilValue(metricsAtom)
+  const [metrics, setMetrics] = useRecoilState(metricsAtom)
   const loadingFinancials = useRecoilValue(loadingFinancialsAtom)
+  const [_, setUserFavMetrics] = useRecoilState(userFavMetricsAtom)
 
   // Get the list of available companies on startup
   useEffect(() => {
@@ -53,11 +56,19 @@ const HomePage = () => {
         variables: { id: currentUser.id },
       }).then((jsonRes) => {
         setCompanyList(jsonRes.data.searchbar)
-        console.log(jsonRes.data.user.email)
-        console.log(jsonRes.data.user.favoriteMetrics)
+        var favMetrics = jsonRes.data.user.favoriteMetrics.map(function (fav) {
+          return fav.name
+        })
+        setUserFavMetrics(favMetrics)
       })
     }
-  }, [getArticles, setCompanyList, isAuthenticated, currentUser])
+  }, [
+    getArticles,
+    setCompanyList,
+    isAuthenticated,
+    currentUser,
+    setUserFavMetrics,
+  ])
   if (!isAuthenticated) {
     return (
       <div className="mx-96">

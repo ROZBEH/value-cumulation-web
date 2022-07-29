@@ -7,8 +7,8 @@ import './Buttons.css'
 const VisiableButtons = [
   { id: 0, title: 'Net Profit Margin', value: 'netProfitMargin' },
   { id: 1, title: 'Debt Ratio', value: 'debtRatio' },
-  { id: 3, title: 'Net Income', value: 'netIncome' },
-  { id: 9, title: 'Free Cash Flow', value: 'freeCashFlow' },
+  { id: 2, title: 'Net Income', value: 'netIncome' },
+  { id: 3, title: 'Free Cash Flow', value: 'freeCashFlow' },
 ]
 
 export const Mapping = () => {

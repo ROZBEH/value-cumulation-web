@@ -1,8 +1,6 @@
 import { db } from 'src/lib/db'
 
 export const users = () => {
-  console.log('------------------------------------------')
-  console.log('I was here once upon a time')
   return db.user.findMany({
     // Include the user's favorite metrics in the response
     include: { favoriteMetrics: true },
@@ -26,6 +24,7 @@ export const createUser = ({ input }) => {
 export const createMetric = ({ input }) => {
   return db.metric.create({
     data: input,
+    // include: { user: { include: { favoriteMetrics: true } } },
   })
 }
 

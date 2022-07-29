@@ -50,6 +50,6 @@ export const schema = gql`
     createMetric(input: CreateMetricInput!): Metric! @skipAuth
     # createUser(input: CreateUserInput!): User! @skipAuth
     # updateUser(id: Int!, metric: Metric, input: UpdateUserInput!): User! @skipAuth
-    # deleteUser(id: Int!): User! @skipAuth
+    deleteUser(id: Int!): User! @skipAuth
   }
 `
