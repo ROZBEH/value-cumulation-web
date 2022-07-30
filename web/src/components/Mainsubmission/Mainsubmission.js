@@ -1,13 +1,12 @@
 import {
-  Form,
-  Submit,
+  // Form,
+  // Submit,
   useForm,
   // TextField
-  TextField as RwTextField,
+  // TextField as RwTextField,
 } from '@redwoodjs/forms'
 import { TextField } from '@material-ui/core'
 import Autocomplete from '@mui/material/Autocomplete'
-import Chip from '@material-ui/core/Chip'
 import { useLazyQuery } from '@apollo/client'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import {
@@ -36,7 +35,7 @@ export const QUERY2 = gql`
 `
 
 export const Mainsubmission = () => {
-  const [calledCompanies, setCalledCompanies] =
+  const [_calledCompanies, setCalledCompanies] =
     useRecoilState(calledCompaniesAtom)
   const [_loadingFinancials, setLoading] = useRecoilState(loadingFinancialsAtom)
   const companyList = useRecoilValue(companyListAtom)
@@ -44,7 +43,7 @@ export const Mainsubmission = () => {
   const [textPrompt, setPrompt] = useRecoilState(textPromptAtom)
   const [suggestions, setSuggestion] = useRecoilState(suggestionsAtom)
   const [counterCompany, setCounterCompany] = useRecoilState(counterCompanyAtom)
-  const formCustomMethods = useForm({ mode: 'onBlur' })
+  const _formCustomMethods = useForm({ mode: 'onBlur' })
   // Handling errors for user input
   let errors = ''
 

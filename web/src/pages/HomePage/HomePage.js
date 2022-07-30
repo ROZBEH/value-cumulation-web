@@ -16,7 +16,6 @@ import {
   metrics as metricsAtom,
   companyList as companyListAtom,
 } from 'src/recoil/atoms'
-import { Link, Private, routes } from '@redwoodjs/router'
 import { useEffect } from 'react'
 
 export const QUERY = gql`
@@ -45,7 +44,7 @@ const HomePage = () => {
   const calledCompanies = useRecoilValue(calledCompaniesAtom)
   const plottingData = useRecoilValue(plottingDataAtom)
   const [_companyList, setCompanyList] = useRecoilState(companyListAtom)
-  const [metrics, setMetrics] = useRecoilState(metricsAtom)
+  const [metrics, _setMetrics] = useRecoilState(metricsAtom)
   const loadingFinancials = useRecoilValue(loadingFinancialsAtom)
   const [_, setUserFavMetrics] = useRecoilState(userFavMetricsAtom)
 

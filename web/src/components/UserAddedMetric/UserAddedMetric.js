@@ -3,11 +3,18 @@ import Autocomplete from '@mui/material/Autocomplete'
 import { makeStyles } from '@mui/styles'
 import Chip from '@material-ui/core/Chip'
 import classNames from 'classnames'
-import { metrics as metricsAtom } from 'src/recoil/atoms'
-import { useRecoilState } from 'recoil'
+import {
+  metrics as metricsAtom,
+  userFavMetrics as userFavMetricsAtom,
+} from 'src/recoil/atoms'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import './UserAddedMetric.css'
+import { useState } from 'react'
 export const UserAddedMetric = () => {
   const [metricsA, setMetrics] = useRecoilState(metricsAtom)
+  const favoriteMetrics = useRecoilValue(userFavMetricsAtom)
+  // const diableFavButton = useState(favoriteMetrics.length === 0)
+  const [defaultVisiableOptions, setdefaultVisiableOptions] = useState([])
   // List of available metrics for now. This list will be updated as we
   // decide on the list of metrics to be shown to the user.
   const availableOptions = [
@@ -66,37 +73,55 @@ export const UserAddedMetric = () => {
     { id: 16, title: 'Intrinsic Value', value: 'intrinsicValue' },
   ]
 
-  const autoCompStyle = {
-    width: '60%',
-    // marginBottom: '2rem',
-    // marginTop: '2rem',
-    marginBottom: '20px',
-    marginTop: '10px',
-    marginLeft: '10px',
-    // float: 'left',
+  const loadFavoriteMetrics = () => {
+    var tmp = availableOptions.filter((item) =>
+      favoriteMetrics.includes(item.value)
+    )
+    setMetrics(favoriteMetrics)
+    setdefaultVisiableOptions(tmp)
   }
 
-  const myChangeFunc = (_event, values, reason, detail) => {
-    var tmp = [...metricsA]
+  const updateUserPickedMetrics = (value, getTagProps) => {
+    {
+      return value.map((option, index) => (
+        <Chip
+          key={option.id}
+          classes={{
+            root: classNames({
+              [buttonColor.backgroundTag]: true,
+            }),
+          }}
+          label={`${option.title}`}
+          {...getTagProps({ index })}
+        />
+      ))
+    }
+  }
+
+  const myChangeFunc = (event, values, reason, detail) => {
+    // tmp arrays for keeping the values of metrics
+    // Metrics to be shown to the user
+    var tmpMetrics = [...metricsA]
+    // Metrics to be loaded inside the AutoComplete text field
+    var tmpVisiableOptions = [...defaultVisiableOptions]
     // If the user has selected a metric, then add that metric to the list of metrics
     // that will be plotted. And if the user has removed a metric(removeOption),
     // then remove the metric from the list of available metrics
-    if (reason === 'removeOption') {
-      tmp = tmp.filter(function (item) {
-        return item !== detail.option.value
-      })
-      setMetrics(tmp)
-    } else if (values.length === 0) {
+    if (reason === 'selectOption') {
+      tmpMetrics.push(detail.option.value)
+      setMetrics(tmpMetrics)
+      tmpVisiableOptions.push(detail.option)
+      setdefaultVisiableOptions(tmpVisiableOptions)
+    } else if (reason === 'removeOption') {
+      tmpMetrics = tmpMetrics.filter((item) => item !== detail.option.value)
+      setMetrics(tmpMetrics)
+      tmpVisiableOptions = tmpVisiableOptions.filter(
+        (item) => item !== detail.option
+      )
+      setdefaultVisiableOptions(tmpVisiableOptions)
+    } else if (reason === 'clear') {
       setMetrics([])
-    } else {
-      values.map((el) => {
-        if (metricsA.includes(el.value)) {
-          setMetrics(metricsA.filter((el) => el !== el.value))
-        } else {
-          tmp.push(el.value)
-          setMetrics(tmp)
-        }
-      })
+      setdefaultVisiableOptions([])
     }
   }
 
@@ -110,39 +135,39 @@ export const UserAddedMetric = () => {
   const buttonColor = useStyles()
 
   return (
-    <Autocomplete
-      className="user-added-metric-autocomplete"
-      renderTags={(value, getTagProps) =>
-        value.map((option, index) => (
-          <Chip
-            key={option.id}
-            classes={{
-              root: classNames({
-                [buttonColor.backgroundTag]: true,
-              }),
-            }}
-            label={`${option.title}`}
-            {...getTagProps({ index })}
+    <>
+      <Autocomplete
+        className="user-added-metric-autocomplete"
+        renderTags={(value, getTagProps) =>
+          updateUserPickedMetrics(value, getTagProps)
+        }
+        multiple
+        onChange={myChangeFunc}
+        id="tags-standard"
+        filterSelectedOptions
+        options={availableOptions}
+        isOptionEqualToValue={(option, value) => option.id === value.id}
+        getOptionLabel={(option) => option.title}
+        value={defaultVisiableOptions}
+        renderInput={(params) => (
+          <TextField
+            inputprops={{ className: buttonColor.input }}
+            className="txtBox-metric"
+            {...params}
+            variant="standard"
+            placeholder="Add More Metrics"
           />
-        ))
-      }
-      multiple
-      onChange={myChangeFunc}
-      id="tags-standard"
-      options={availableOptions}
-      isOptionEqualToValue={(option, value) => option.id === value.id}
-      getOptionLabel={(option) => option.title}
-      // defaultValue={[availableOptions[0]]}
-      renderInput={(params) => (
-        <TextField
-          inputprops={{ className: buttonColor.input }}
-          className="txtBox-metric"
-          {...params}
-          variant="standard"
-          // label=""
-          placeholder="Add More Metrics"
-        />
-      )}
-    />
+        )}
+      />
+      <button
+        className="disabled:bg-gainsboro rounded-lg bg-amber-200 text-xs px-2 py-1.5 cursor-pointer ml-1"
+        onClick={loadFavoriteMetrics}
+        name="comparisonMode"
+        disabled={favoriteMetrics.length === 0}
+      >
+        {' '}
+        Load Favorites
+      </button>
+    </>
   )
 }

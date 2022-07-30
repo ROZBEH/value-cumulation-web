@@ -17,7 +17,10 @@ module.exports = {
       },
       colors: {
         'lightsky-blue': '#00BFFF',
-        'bg-sky-300': '#7dd3fc',
+        'sky-300': '#7dd3fc',
+      },
+      backgroundColor: {
+        gainsboro: '#DCDCDC',
       },
       flex: {
         50: '0 0 50%',

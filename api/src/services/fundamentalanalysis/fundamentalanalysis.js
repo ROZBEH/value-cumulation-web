@@ -1,6 +1,4 @@
-import { math } from '@tensorflow/tfjs-node'
 import { Checklist } from './Checklist'
-import { numFormatter } from './utilities'
 
 async function callApi(ticker) {
   const checklist = new Checklist(ticker.toUpperCase())
@@ -90,7 +88,6 @@ async function callApi(ticker) {
     //Uppper case the metric
     var metricName = metric.replace(/([A-Z])/g, ' $1')
     metricNames.push(metricName.charAt(0).toUpperCase() + metricName.slice(1))
-    console.log('------------------------------')
   }
 
   return { companyName, metrics, metricNames, results, years }
