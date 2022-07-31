@@ -1,7 +1,9 @@
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
+import { Favorite, CancelRounded } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 import Chip from '@material-ui/core/Chip'
+import { Tooltip } from '@material-ui/core'
 import classNames from 'classnames'
 import {
   metrics as metricsAtom,
@@ -108,12 +110,15 @@ export const UserAddedMetric = () => {
     }
   }
 
+  const favIconOnClick = (e) => {
+    bgColor = 'blue'
+  }
   const updateUserPickedMetrics = (value, getTagProps) => {
     {
       return value.map((option, index) => (
         <Chip
           key={option.id}
-          size="small"
+          size="medium"
           variant="outlined"
           classes={{
             root: classNames({
@@ -122,6 +127,20 @@ export const UserAddedMetric = () => {
           }}
           label={`${option.title}`}
           {...getTagProps({ index })}
+          deleteIcon={
+            <Tooltip title="Remove Metric">
+              <CancelRounded />
+            </Tooltip>
+          }
+          icon={
+            <Tooltip title="Add to Favorite">
+              <Favorite
+                className="cursor-pointer"
+                // style={{ color: bgColor }}
+                onClick={(e) => favIconOnClick(e)}
+              />
+            </Tooltip>
+          }
         />
       ))
     }
@@ -139,6 +158,11 @@ export const UserAddedMetric = () => {
   return (
     <>
       <Autocomplete
+        clearIcon={
+          <Tooltip title="Clear all Metric">
+            <CancelRounded />
+          </Tooltip>
+        }
         className="user-added-metric-autocomplete"
         renderTags={(value, getTagProps) =>
           updateUserPickedMetrics(value, getTagProps)
