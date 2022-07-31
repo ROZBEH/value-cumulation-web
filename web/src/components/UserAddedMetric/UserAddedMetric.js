@@ -1,6 +1,6 @@
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
-import { makeStyles } from '@mui/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import Chip from '@material-ui/core/Chip'
 import classNames from 'classnames'
 import {
@@ -81,23 +81,6 @@ export const UserAddedMetric = () => {
     setdefaultVisiableOptions(tmp)
   }
 
-  const updateUserPickedMetrics = (value, getTagProps) => {
-    {
-      return value.map((option, index) => (
-        <Chip
-          key={option.id}
-          classes={{
-            root: classNames({
-              [buttonColor.backgroundTag]: true,
-            }),
-          }}
-          label={`${option.title}`}
-          {...getTagProps({ index })}
-        />
-      ))
-    }
-  }
-
   const myChangeFunc = (event, values, reason, detail) => {
     // tmp arrays for keeping the values of metrics
     // Metrics to be shown to the user
@@ -125,6 +108,25 @@ export const UserAddedMetric = () => {
     }
   }
 
+  const updateUserPickedMetrics = (value, getTagProps) => {
+    {
+      return value.map((option, index) => (
+        <Chip
+          key={option.id}
+          size="small"
+          variant="outlined"
+          classes={{
+            root: classNames({
+              [buttonColor.backgroundTag]: true,
+            }),
+          }}
+          label={`${option.title}`}
+          {...getTagProps({ index })}
+        />
+      ))
+    }
+  }
+
   const useStyles = makeStyles({
     backgroundTag: {
       backgroundColor: 'springgreen !important',
@@ -149,15 +151,17 @@ export const UserAddedMetric = () => {
         isOptionEqualToValue={(option, value) => option.id === value.id}
         getOptionLabel={(option) => option.title}
         value={defaultVisiableOptions}
-        renderInput={(params) => (
-          <TextField
-            inputprops={{ className: buttonColor.input }}
-            className="txtBox-metric"
-            {...params}
-            variant="standard"
-            placeholder="Add More Metrics"
-          />
-        )}
+        renderInput={(params) => {
+          return (
+            <TextField
+              inputProps={{ className: buttonColor.input }}
+              className="txtBox-metric"
+              {...params}
+              variant="standard"
+              placeholder="Add More Metrics"
+            />
+          )
+        }}
       />
       <button
         className="disabled:bg-gainsboro rounded-lg bg-amber-200 text-xs px-2 py-1.5 cursor-pointer ml-1"
