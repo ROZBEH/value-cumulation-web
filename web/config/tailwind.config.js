@@ -21,6 +21,7 @@ module.exports = {
       },
       backgroundColor: {
         gainsboro: '#DCDCDC',
+        springgreen: '#00FF7F',
       },
       flex: {
         50: '0 0 50%',

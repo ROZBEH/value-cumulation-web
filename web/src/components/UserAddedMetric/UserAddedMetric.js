@@ -9,12 +9,13 @@ import {
   metrics as metricsAtom,
   userFavMetrics as userFavMetricsAtom,
 } from 'src/recoil/atoms'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import './UserAddedMetric.css'
 import { useState } from 'react'
 export const UserAddedMetric = () => {
   const [metricsA, setMetrics] = useRecoilState(metricsAtom)
-  const favoriteMetrics = useRecoilValue(userFavMetricsAtom)
+  const [favoriteMetrics, setFavoriteMetrics] =
+    useRecoilState(userFavMetricsAtom)
   // const diableFavButton = useState(favoriteMetrics.length === 0)
   const [defaultVisiableOptions, setdefaultVisiableOptions] = useState([])
   // List of available metrics for now. This list will be updated as we
@@ -110,39 +111,53 @@ export const UserAddedMetric = () => {
     }
   }
 
-  const favIconOnClick = (e) => {
-    bgColor = 'blue'
+  const favIconOnClick = (event, option) => {
+    var tmp = [...favoriteMetrics]
+    if (!tmp.includes(option.value)) {
+      tmp.push(option.value)
+      setFavoriteMetrics(tmp)
+    } else {
+      setFavoriteMetrics(tmp.filter((el) => el !== option.value))
+    }
   }
-  const updateUserPickedMetrics = (value, getTagProps) => {
+
+  const updateUserPickedMetrics = (values, getTagProps) => {
     {
-      return value.map((option, index) => (
-        <Chip
-          key={option.id}
-          size="medium"
-          variant="outlined"
-          classes={{
-            root: classNames({
-              [buttonColor.backgroundTag]: true,
-            }),
-          }}
-          label={`${option.title}`}
-          {...getTagProps({ index })}
-          deleteIcon={
-            <Tooltip title="Remove Metric">
-              <CancelRounded />
-            </Tooltip>
-          }
-          icon={
-            <Tooltip title="Add to Favorite">
-              <Favorite
-                className="cursor-pointer"
-                // style={{ color: bgColor }}
-                onClick={(e) => favIconOnClick(e)}
-              />
-            </Tooltip>
-          }
-        />
-      ))
+      return values.map((option, index) => {
+        return (
+          <Chip
+            key={option.id}
+            size="medium"
+            variant="outlined"
+            classes={{
+              root: classNames({
+                [buttonColor.backgroundTag]: true,
+              }),
+            }}
+            label={`${option.title}`}
+            {...getTagProps({ index })}
+            deleteIcon={
+              <Tooltip title="Remove Metric">
+                <CancelRounded />
+              </Tooltip>
+            }
+            icon={
+              <Tooltip title="Add to Favorite">
+                <Favorite
+                  fontSize="medium"
+                  className={`cursor-pointer`}
+                  style={{
+                    color: favoriteMetrics.includes(option.value)
+                      ? 'rgb(185 28 28)'
+                      : 'rgb(156 163 175)',
+                  }}
+                  onClick={(e) => favIconOnClick(e, option)}
+                />
+              </Tooltip>
+            }
+          />
+        )
+      })
     }
   }
 
