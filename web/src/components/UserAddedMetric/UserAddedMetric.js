@@ -1,4 +1,5 @@
 import TextField from '@mui/material/TextField'
+import { useAuth } from '@redwoodjs/auth'
 import Autocomplete from '@mui/material/Autocomplete'
 import { Favorite, CancelRounded } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
@@ -12,7 +13,31 @@ import {
 import { useRecoilState } from 'recoil'
 import './UserAddedMetric.css'
 import { useState } from 'react'
+import { useMutation } from '@redwoodjs/web'
+const UPDATE_FAVORITES = gql`
+  mutation addmetric($input: CreateMetricInput!) {
+    createMetric(input: $input) {
+      userId
+      user {
+        id
+        email
+        favoriteMetrics {
+          id
+          name
+        }
+      }
+      name
+      id
+    }
+  }
+`
 export const UserAddedMetric = () => {
+  const { _isAuthenticated, currentUser, _logOut } = useAuth()
+  const [updateFavoriteDB, { loading, error }] = useMutation(UPDATE_FAVORITES, {
+    onCompleted: (data) => {
+      console.log(data)
+    },
+  })
   const [metricsA, setMetrics] = useRecoilState(metricsAtom)
   const [favoriteMetrics, setFavoriteMetrics] =
     useRecoilState(userFavMetricsAtom)
@@ -115,6 +140,12 @@ export const UserAddedMetric = () => {
     var tmp = [...favoriteMetrics]
     if (!tmp.includes(option.value)) {
       tmp.push(option.value)
+      var inData = {
+        name: option.value,
+        userId: currentUser.id,
+      }
+
+      updateFavoriteDB({ variables: { input: inData } })
       setFavoriteMetrics(tmp)
     } else {
       setFavoriteMetrics(tmp.filter((el) => el !== option.value))

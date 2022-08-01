@@ -54,6 +54,7 @@ const HomePage = () => {
       getArticles({
         variables: { id: currentUser.id },
       }).then((jsonRes) => {
+        console.log(jsonRes)
         setCompanyList(jsonRes.data.searchbar)
         var favMetrics = jsonRes.data.user.favoriteMetrics.map(function (fav) {
           return fav.name

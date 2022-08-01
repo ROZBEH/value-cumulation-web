@@ -3,7 +3,7 @@ import { db } from 'src/lib/db'
 export const users = () => {
   return db.user.findMany({
     // Include the user's favorite metrics in the response
-    include: { favoriteMetrics: true },
+    // include: { favoriteMetrics: true },
   })
 }
 
@@ -11,20 +11,13 @@ export const user = ({ id }) => {
   return db.user.findUnique({
     where: { id },
     // Include the user's favorite metrics in the response
-    include: { favoriteMetrics: true },
+    // include: { favoriteMetrics: true },
   })
 }
 
 export const createUser = ({ input }) => {
   return db.user.create({
     data: input,
-  })
-}
-
-export const createMetric = ({ input }) => {
-  return db.metric.create({
-    data: input,
-    // include: { user: { include: { favoriteMetrics: true } } },
   })
 }
 
