@@ -29,10 +29,10 @@ describe('favoriteMetrics', () => {
 
   scenario('creates a favoriteMetric', async () => {
     const result = await createFavoriteMetric({
-      input: { name: 'String' },
+      input: { name: 'String5457219' },
     })
 
-    expect(result.name).toEqual('String')
+    expect(result.name).toEqual('String5457219')
   })
 
   scenario('updates a favoriteMetric', async (scenario) => {
@@ -42,10 +42,10 @@ describe('favoriteMetrics', () => {
 
     const result = await updateFavoriteMetric({
       id: original.id,
-      input: { name: 'String2' },
+      input: { name: 'String28936102' },
     })
 
-    expect(result.name).toEqual('String2')
+    expect(result.name).toEqual('String28936102')
   })
 
   scenario('deletes a favoriteMetric', async (scenario) => {
