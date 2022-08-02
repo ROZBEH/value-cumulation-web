@@ -12,13 +12,27 @@ generator client {
 // to create migrations for them and apply to your dev DB.
 
 model User {
-  id                  Int       @id @default(autoincrement())
-  email               String    @unique
-  hashedPassword      String    @default("")
-  salt                String    @default("")
+  id                  Int                    @id @default(autoincrement())
+  email               String                 @unique
+  hashedPassword      String                 @default("")
+  salt                String                 @default("")
   resetToken          String?
   resetTokenExpiresAt DateTime?
-  favoriteMetrics     String[]
+  favoriteMetrics     FavoriteMetricOnUser[]
+}
+
+model FavoriteMetric {
+  id    Int                    @id @default(autoincrement())
+  name  String
+  users FavoriteMetricOnUser[]
+}
+
+model FavoriteMetricOnUser {
+  id               Int            @id @default(autoincrement())
+  favoriteMetricId Int
+  favoriteMetric   FavoriteMetric @relation(fields: [favoriteMetricId], references: [id])
+  userId           Int
+  user             User           @relation(fields: [userId], references: [id])
 }
 
 model Contact {

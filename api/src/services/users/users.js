@@ -1,17 +1,12 @@
 import { db } from 'src/lib/db'
 
 export const users = () => {
-  return db.user.findMany({
-    // Include the user's favorite metrics in the response
-    // include: { favoriteMetrics: true },
-  })
+  return db.user.findMany()
 }
 
 export const user = ({ id }) => {
   return db.user.findUnique({
     where: { id },
-    // Include the user's favorite metrics in the response
-    // include: { favoriteMetrics: true },
   })
 }
 
@@ -34,7 +29,7 @@ export const deleteUser = ({ id }) => {
   })
 }
 
-// export const User = {
-//   favoriteMetrics: (_obj, { root }) =>
-//     db.user.findUnique({ where: { id: root.id } }).favoriteMetrics(),
-// }
+export const User = {
+  favoriteMetrics: (_obj, { root }) =>
+    db.user.findUnique({ where: { id: root.id } }).favoriteMetrics(),
+}
