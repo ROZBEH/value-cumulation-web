@@ -15,7 +15,12 @@ export default async () => {
       // { name: 'alice', email: 'alice@example.com' },
       // { name: 'mark', email: 'mark@example.com' },
       // { name: 'jackie', email: 'jackie@example.com' },
-      // { name: 'bob', email: 'bob@example.com' },
+      {
+        email: 'mrymfrh@gmail.com',
+        favoriteMetrics: [
+          { create: { favoriteMetricId: 1 }, where: { id: 2 } },
+        ],
+      },
     ]
     console.log(
       "\nUsing the default './scripts/seed.{js,ts}' template\nEdit the file to add seed data\n"
@@ -28,8 +33,20 @@ export default async () => {
       // Change to match your data model and seeding needs
       //
       data.map(async (data) => {
-        const record = await db.userExample.create({ data })
-        console.log(record)
+        const record = await db.user.upsert({
+          where: { email: data.email },
+          create: {
+            email: data.email,
+            favoriteMetrics: {
+              connectOrCreate: data.favoriteMetrics,
+            },
+          },
+          update: {
+            favoriteMetrics: { connectOrCreate: data.favoriteMetrics },
+          },
+        })
+        // const record = await db.userExample.create({ data })
+        console.log('record = ', record)
       })
     )
   } catch (error) {

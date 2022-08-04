@@ -10,7 +10,18 @@ export const favoriteMetric = ({ id }) => {
   })
 }
 
+export const favoriteMetricExists = ({ name }) => {
+  return db.favoriteMetric.findUnique({
+    where: { name },
+  })
+}
+
 export const createFavoriteMetric = ({ input }) => {
+  // favoriteMetricExists({ name: input.name })
+  // if (favoriteMetricExists({ name: input.name })) {
+  //   console.log('Favorite metric already exists')
+  //   return {}
+  // }
   return db.favoriteMetric.create({
     data: input,
   })
