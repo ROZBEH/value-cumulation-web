@@ -17,14 +17,37 @@ export const favoriteMetricExists = ({ name }) => {
 }
 
 export const createFavoriteMetric = ({ input }) => {
-  // favoriteMetricExists({ name: input.name })
-  // if (favoriteMetricExists({ name: input.name })) {
-  //   console.log('Favorite metric already exists')
-  //   return {}
-  // }
-  return db.favoriteMetric.create({
-    data: input,
+  // Associate the speciific metric with the user. Create the metric if it doesn't exist.
+  const connetCreateMetric = db.favoriteMetric.upsert({
+    where: { name: input.name },
+    create: {
+      name: input.name,
+      users: {
+        connectOrCreate: [
+          {
+            create: { userId: input.userId },
+            // The following id is required. It can be an arbitray value.
+            // Not sure what it supposed to do.
+            where: { id: 2 },
+          },
+        ],
+      },
+    },
+    update: {
+      users: {
+        connectOrCreate: [
+          {
+            create: { userId: input.userId },
+            // The following id is required. It can be an arbitray value.
+            // Not sure what it supposed to do.
+            where: { id: 2 },
+          },
+        ],
+      },
+    },
   })
+
+  return connetCreateMetric
 }
 
 export const updateFavoriteMetric = ({ id, input }) => {

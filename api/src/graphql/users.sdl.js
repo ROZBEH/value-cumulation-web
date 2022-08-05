@@ -6,7 +6,11 @@ export const schema = gql`
     salt: String!
     resetToken: String
     resetTokenExpiresAt: DateTime
-    favoriteMetrics: [FavoriteMetricOnUser]!
+  }
+  type UserInfo {
+    id: Int!
+    email: String!
+    favoriteMetrics: [String]
   }
 
   type Query {
@@ -33,6 +37,7 @@ export const schema = gql`
   type Mutation {
     createUser(input: CreateUserInput!): User! @skipAuth
     updateUser(id: Int!, input: UpdateUserInput!): User! @skipAuth
+    userInfo(id: Int!): UserInfo! @skipAuth
     deleteUser(id: Int!): User! @skipAuth
   }
 `

@@ -2,7 +2,6 @@ export const schema = gql`
   type FavoriteMetric {
     id: Int!
     name: String!
-    users: [FavoriteMetricOnUser]!
   }
 
   type Query {
@@ -12,6 +11,7 @@ export const schema = gql`
 
   input CreateFavoriteMetricInput {
     name: String!
+    userId: Int!
   }
 
   input UpdateFavoriteMetricInput {
