@@ -30,7 +30,7 @@ export const QUERY = gql`
     }
     user(id: $id) {
       email
-      favoriteMetrics {
+      favorites {
         id
         name
       }
@@ -56,9 +56,10 @@ const HomePage = () => {
       }).then((jsonRes) => {
         console.log(jsonRes)
         setCompanyList(jsonRes.data.searchbar)
-        var favMetrics = jsonRes.data.user.favoriteMetrics.map(function (fav) {
+        var favMetrics = jsonRes.data.user.favorites.map(function (fav) {
           return fav.name
         })
+        console.log(favMetrics)
         setUserFavMetrics(favMetrics)
       })
     }

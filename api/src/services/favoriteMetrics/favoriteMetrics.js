@@ -28,7 +28,7 @@ export const createFavoriteMetric = ({ input }) => {
             create: { userId: input.userId },
             // The following id is required. It can be an arbitray value.
             // Not sure what it supposed to do.
-            where: { id: 2 },
+            where: { id: input.userId },
           },
         ],
       },
@@ -40,7 +40,7 @@ export const createFavoriteMetric = ({ input }) => {
             create: { userId: input.userId },
             // The following id is required. It can be an arbitray value.
             // Not sure what it supposed to do.
-            where: { id: 2 },
+            where: { id: input.userId },
           },
         ],
       },

@@ -3,8 +3,11 @@ import {
   metrics as metricsAtom,
   userFavMetrics as userFavMetricsAtom,
 } from 'src/recoil/atoms'
+import { useAuth } from '@redwoodjs/auth'
 import { Tooltip } from '@material-ui/core'
 import { Favorite } from '@material-ui/icons'
+import { useMutation } from '@redwoodjs/web'
+import { UPDATE_FAVORITES } from 'src/components/UserAddedMetric/UserAddedMetric'
 import './Buttons.css'
 
 // Buttons that are visible on the main submission page
@@ -17,6 +20,15 @@ const VisiableButtons = [
 ]
 
 export const Mapping = () => {
+  const { _isAuthenticated, currentUser, _logOut } = useAuth()
+  const [updateFavoriteDB, { _loading, _error }] = useMutation(
+    UPDATE_FAVORITES,
+    {
+      onCompleted: (data) => {
+        console.log(data)
+      },
+    }
+  )
   const [favoriteMetrics, setFavoriteMetrics] =
     useRecoilState(userFavMetricsAtom)
   const [metrics, setMetrics] = useRecoilState(metricsAtom)
@@ -33,6 +45,11 @@ export const Mapping = () => {
   const favIconOnClick = (event, option) => {
     var tmp = [...favoriteMetrics]
     if (!tmp.includes(option.value)) {
+      var inData = {
+        name: option.value,
+        userId: currentUser.id,
+      }
+      updateFavoriteDB({ variables: { input: inData } })
       tmp.push(option.value)
       setFavoriteMetrics(tmp)
     } else {

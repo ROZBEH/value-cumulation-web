@@ -14,20 +14,11 @@ import { useRecoilState } from 'recoil'
 import './UserAddedMetric.css'
 import { useState } from 'react'
 import { useMutation } from '@redwoodjs/web'
-const UPDATE_FAVORITES = gql`
-  mutation addmetric($input: CreateMetricInput!) {
-    createMetric(input: $input) {
-      userId
-      user {
-        id
-        email
-        favoriteMetrics {
-          id
-          name
-        }
-      }
-      name
+export const UPDATE_FAVORITES = gql`
+  mutation addmetric($input: CreateFavoriteMetricInput!) {
+    createFavoriteMetric(input: $input) {
       id
+      name
     }
   }
 `
@@ -144,7 +135,6 @@ export const UserAddedMetric = () => {
         name: option.value,
         userId: currentUser.id,
       }
-
       updateFavoriteDB({ variables: { input: inData } })
       setFavoriteMetrics(tmp)
     } else {
