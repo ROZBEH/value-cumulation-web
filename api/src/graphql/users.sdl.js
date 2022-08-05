@@ -1,4 +1,8 @@
 export const schema = gql`
+  type favorite {
+    id: Int!
+    name: String!
+  }
   type User {
     id: Int!
     email: String!
@@ -6,11 +10,7 @@ export const schema = gql`
     salt: String!
     resetToken: String
     resetTokenExpiresAt: DateTime
-  }
-  type UserInfo {
-    id: Int!
-    email: String!
-    favoriteMetrics: [String]
+    favorites: [favorite]
   }
 
   type Query {
@@ -37,7 +37,6 @@ export const schema = gql`
   type Mutation {
     createUser(input: CreateUserInput!): User! @skipAuth
     updateUser(id: Int!, input: UpdateUserInput!): User! @skipAuth
-    userInfo(id: Int!): UserInfo! @skipAuth
     deleteUser(id: Int!): User! @skipAuth
   }
 `

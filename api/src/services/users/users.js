@@ -4,13 +4,7 @@ export const users = () => {
   return db.user.findMany()
 }
 
-export const user = ({ id }) => {
-  return db.user.findUnique({
-    where: { id },
-  })
-}
-
-export const userInfo = async ({ id }) => {
+export const user = async ({ id }) => {
   const userInfo = await db.user.findUnique({
     where: { id },
     include: { favoriteMetrics: { include: { favoriteMetric: true } } },
@@ -19,9 +13,7 @@ export const userInfo = async ({ id }) => {
   const result = {
     id: userInfo.id,
     email: userInfo.email,
-    favoriteMetrics: userInfo.favoriteMetrics.map(
-      (item) => item.favoriteMetric.name
-    ),
+    favorites: userInfo.favoriteMetrics.map((item) => item.favoriteMetric),
   }
 
   return result
