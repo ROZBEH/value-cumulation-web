@@ -7,9 +7,23 @@ import { useAuth } from '@redwoodjs/auth'
 import { Tooltip } from '@material-ui/core'
 import { Favorite } from '@material-ui/icons'
 import { useMutation } from '@redwoodjs/web'
-import { UPDATE_FAVORITES } from 'src/components/UserAddedMetric/UserAddedMetric'
 import './Buttons.css'
 
+const UPDATE_FAVORITES = gql`
+  mutation addmetric($input: CreateFavoriteMetricInput!) {
+    createFavoriteMetric(input: $input) {
+      id
+      name
+    }
+  }
+`
+const DELETE_FAVORITES = gql`
+  mutation addmetric($input: DeleteFavoriteMetricOnUser!) {
+    deleteFavoriteMetricOnUser(input: $input) {
+      id
+    }
+  }
+`
 // Buttons that are visible on the main submission page
 //There are more more buttons in the dropdown menu
 const VisiableButtons = [
@@ -21,14 +35,16 @@ const VisiableButtons = [
 
 export const Mapping = () => {
   const { _isAuthenticated, currentUser, _logOut } = useAuth()
-  const [updateFavoriteDB, { _loading, _error }] = useMutation(
-    UPDATE_FAVORITES,
-    {
-      onCompleted: (data) => {
-        console.log(data)
-      },
-    }
-  )
+  const [updateFavoriteDB] = useMutation(UPDATE_FAVORITES, {
+    onCompleted: (data) => {
+      console.log(data)
+    },
+  })
+  const [deleteFavoriteDB] = useMutation(DELETE_FAVORITES, {
+    onCompleted: (data) => {
+      console.log(data)
+    },
+  })
   const [favoriteMetrics, setFavoriteMetrics] =
     useRecoilState(userFavMetricsAtom)
   const [metrics, setMetrics] = useRecoilState(metricsAtom)
@@ -44,15 +60,16 @@ export const Mapping = () => {
   }
   const favIconOnClick = (event, option) => {
     var tmp = [...favoriteMetrics]
+    var inData = {
+      name: option.value,
+      userId: currentUser.id,
+    }
     if (!tmp.includes(option.value)) {
-      var inData = {
-        name: option.value,
-        userId: currentUser.id,
-      }
       updateFavoriteDB({ variables: { input: inData } })
       tmp.push(option.value)
       setFavoriteMetrics(tmp)
     } else {
+      deleteFavoriteDB({ variables: { input: inData } })
       setFavoriteMetrics(tmp.filter((el) => el !== option.value))
     }
   }
