@@ -14,7 +14,7 @@ import { useRecoilState } from 'recoil'
 import './UserAddedMetric.css'
 import { useState } from 'react'
 import { useMutation } from '@redwoodjs/web'
-export const UPDATE_FAVORITES = gql`
+const UPDATE_FAVORITES = gql`
   mutation addmetric($input: CreateFavoriteMetricInput!) {
     createFavoriteMetric(input: $input) {
       id
@@ -22,9 +22,21 @@ export const UPDATE_FAVORITES = gql`
     }
   }
 `
+const DELETE_FAVORITES = gql`
+  mutation addmetric($input: DeleteFavoriteMetricOnUser!) {
+    deleteFavoriteMetricOnUser(input: $input) {
+      id
+    }
+  }
+`
 export const UserAddedMetric = () => {
   const { _isAuthenticated, currentUser, _logOut } = useAuth()
   const [updateFavoriteDB, { loading, error }] = useMutation(UPDATE_FAVORITES, {
+    onCompleted: (data) => {
+      console.log(data)
+    },
+  })
+  const [deleteFavoriteDB] = useMutation(DELETE_FAVORITES, {
     onCompleted: (data) => {
       console.log(data)
     },
@@ -129,15 +141,16 @@ export const UserAddedMetric = () => {
 
   const favIconOnClick = (event, option) => {
     var tmp = [...favoriteMetrics]
+    var inData = {
+      name: option.value,
+      userId: currentUser.id,
+    }
     if (!tmp.includes(option.value)) {
       tmp.push(option.value)
-      var inData = {
-        name: option.value,
-        userId: currentUser.id,
-      }
       updateFavoriteDB({ variables: { input: inData } })
       setFavoriteMetrics(tmp)
     } else {
+      deleteFavoriteDB({ variables: { input: inData } })
       setFavoriteMetrics(tmp.filter((el) => el !== option.value))
     }
   }
