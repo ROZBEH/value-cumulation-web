@@ -9,17 +9,17 @@ import { useRecoilValue, useRecoilState } from 'recoil'
 import { PlotFundamentals } from 'src/components/PlotFundamentals/PlotFundamentals'
 import { useLazyQuery } from '@apollo/react-hooks'
 import {
+  userFavMetrics as userFavMetricsAtom,
   calledCompanies as calledCompaniesAtom,
   plottingData as plottingDataAtom,
   loadingFinancials as loadingFinancialsAtom,
   metrics as metricsAtom,
   companyList as companyListAtom,
 } from 'src/recoil/atoms'
-import { Link, Private, routes } from '@redwoodjs/router'
 import { useEffect } from 'react'
 
 export const QUERY = gql`
-  query SearchBarQuery {
+  query ($id: Int!) {
     searchbar {
       symbol
       name
@@ -28,26 +28,48 @@ export const QUERY = gql`
       exchangeShortName
       type
     }
+    user(id: $id) {
+      email
+      favorites {
+        id
+        name
+      }
+    }
   }
 `
 
 const HomePage = () => {
-  const { isAuthenticated, _currentUser, _logOut } = useAuth()
+  const { isAuthenticated, currentUser, _logOut } = useAuth()
   const [getArticles, { _loading, _error, _data }] = useLazyQuery(QUERY)
   const calledCompanies = useRecoilValue(calledCompaniesAtom)
   const plottingData = useRecoilValue(plottingDataAtom)
   const [_companyList, setCompanyList] = useRecoilState(companyListAtom)
-  const metrics = useRecoilValue(metricsAtom)
+  const [metrics, _setMetrics] = useRecoilState(metricsAtom)
   const loadingFinancials = useRecoilValue(loadingFinancialsAtom)
+  const [_, setUserFavMetrics] = useRecoilState(userFavMetricsAtom)
 
   // Get the list of available companies on startup
   useEffect(() => {
     if (isAuthenticated) {
-      getArticles().then((jsonRes) => {
+      getArticles({
+        variables: { id: currentUser.id },
+      }).then((jsonRes) => {
+        console.log(jsonRes)
         setCompanyList(jsonRes.data.searchbar)
+        var favMetrics = jsonRes.data.user.favorites.map(function (fav) {
+          return fav.name
+        })
+        console.log(favMetrics)
+        setUserFavMetrics(favMetrics)
       })
     }
-  }, [getArticles, setCompanyList, isAuthenticated])
+  }, [
+    getArticles,
+    setCompanyList,
+    isAuthenticated,
+    currentUser,
+    setUserFavMetrics,
+  ])
   if (!isAuthenticated) {
     return (
       <div className="mx-96">

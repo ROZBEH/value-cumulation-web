@@ -71,3 +71,8 @@ export const calledCompanies = atom({
   key: 'calledCompanies',
   default: [],
 })
+
+export const userFavMetrics = atom({
+  key: 'userFavMetrics',
+  default: [],
+})
