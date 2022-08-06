@@ -5,6 +5,7 @@ import { Favorite, CancelRounded } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 import Chip from '@material-ui/core/Chip'
 import { Tooltip } from '@material-ui/core'
+import { toast } from '@redwoodjs/web/toast'
 import classNames from 'classnames'
 import {
   metrics as metricsAtom,
@@ -77,6 +78,12 @@ export const UserAddedMetric = () => {
   }))
 
   const loadFavoriteMetrics = () => {
+    if (favoriteMetrics.length === 0) {
+      // alert('You have no favorite metrics yet!')
+      toast.error(
+        'You have no favorites yet.\n Please add some by clicking on ❤️'
+      )
+    }
     var tmp = availableOptions.filter((item) =>
       favoriteMetrics.includes(item.value)
     )
@@ -154,7 +161,8 @@ export const UserAddedMetric = () => {
                   className={`cursor-pointer`}
                   style={{
                     color: favoriteMetrics.includes(option.value)
-                      ? 'rgb(185 28 28)'
+                      ? // corresponds to text-red-500
+                        'rgb(239 68 68)'
                       : 'rgb(156 163 175)',
                   }}
                   onClick={(e) => favIconOnClick(e, option)}
@@ -169,7 +177,7 @@ export const UserAddedMetric = () => {
 
   const useStyles = makeStyles({
     backgroundTag: {
-      backgroundColor: 'springgreen !important',
+      backgroundColor: 'rgb(134 239 172) !important',
       fontFamily:
         '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif',
     },
@@ -208,15 +216,17 @@ export const UserAddedMetric = () => {
           )
         }}
       />
-      <button
-        className="disabled:bg-gainsboro rounded-lg bg-amber-200 text-xs px-2 py-1.5 cursor-pointer ml-1"
-        onClick={loadFavoriteMetrics}
-        name="comparisonMode"
-        disabled={favoriteMetrics.length === 0}
-      >
-        {' '}
-        Load Favorites
-      </button>
+      <Tooltip title="Click to Load Favorites">
+        <button
+          className="disabled:bg-gainsboro rounded-lg bg-green-300 border border-gray-300 text-xs px-2 py-1.5 cursor-pointer ml-1"
+          onClick={loadFavoriteMetrics}
+          name="comparisonMode"
+          // disabled={favoriteMetrics.length === 0}
+        >
+          {' '}
+          Load Favorites
+        </button>
+      </Tooltip>
     </>
   )
 }

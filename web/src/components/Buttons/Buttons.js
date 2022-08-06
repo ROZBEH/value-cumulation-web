@@ -79,8 +79,8 @@ export const Mapping = () => {
       {VisiableButtons.map((bt) => (
         <div key={bt.id} className="flex items-center">
           <button
-            className={`text-red-700 text-xs pl-1.5 rounded-l-lg h-9 cursor-pointer ${
-              metrics.includes(bt.value) ? 'bg-springgreen' : 'bg-gainsboro'
+            className={`text-red-500 text-xs pl-1.5 rounded-l-lg h-9 cursor-pointer ${
+              metrics.includes(bt.value) ? 'bg-green-300' : 'bg-gainsboro'
             } `}
           >
             <Tooltip title="Add to Favorite">
@@ -88,22 +88,24 @@ export const Mapping = () => {
                 onClick={(e) => favIconOnClick(e, bt)}
                 className={`${
                   favoriteMetrics.includes(bt.value)
-                    ? 'text-red-700'
+                    ? 'text-red-500'
                     : 'text-gray-400'
                 }`}
                 fontSize="medium"
               />
             </Tooltip>
           </button>
-          <button
-            onClick={() => handleButton(bt.value)}
-            className={`text-xs pl-1.5 mr-2.5 pr-1.5 rounded-r-lg h-9 cursor-pointer ${
-              metrics.includes(bt.value) ? 'bg-springgreen' : 'bg-gainsboro'
-            } `}
-            value={bt.value}
-          >
-            {bt.title}
-          </button>
+          <Tooltip title="Add or Remove Metric">
+            <button
+              onClick={() => handleButton(bt.value)}
+              className={`text-xs pl-1.5 mr-2.5 pr-1.5 rounded-r-lg h-9 cursor-pointer ${
+                metrics.includes(bt.value) ? 'bg-green-300' : 'bg-gainsboro'
+              } `}
+              value={bt.value}
+            >
+              {bt.title}
+            </button>
+          </Tooltip>
         </div>
       ))}
     </div>
