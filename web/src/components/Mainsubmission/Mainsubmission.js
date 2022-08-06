@@ -5,6 +5,8 @@ import {
   // TextField
   // TextField as RwTextField,
 } from '@redwoodjs/forms'
+import { Button } from '@mui/material'
+import { Tooltip } from '@material-ui/core'
 import { TextField } from '@material-ui/core'
 import Autocomplete from '@mui/material/Autocomplete'
 import { useLazyQuery } from '@apollo/client'
@@ -194,29 +196,32 @@ export const Mainsubmission = () => {
 
         {/* // </Form> */}
 
-        <button
-          //     marginLeft: '5px',
-          // borderRadius: '8px',
-          // border: 'none',
-          // padding: '6px 15px',
-          // cursor: 'pointer',
-          // fontSize: '0.8rem',
-          className="rounded-md bg-lightsky-blue text-xs px-2 py-1.5 cursor-pointer ml-1"
-          name="comparisonMode"
-          onClick={increaseCounter}
-        >
-          {' '}
-          Add Company
-        </button>
+        <Tooltip title="Add Company">
+          <button
+            //     marginLeft: '5px',
+            // borderRadius: '8px',
+            // border: 'none',
+            // padding: '6px 15px',
+            // cursor: 'pointer',
+            // fontSize: '0.8rem',
+            // title="Add Company"
+            className="rounded-lg w-8 h-8 bg-lightsky-blue border border-gray-300 text-white text-xs cursor-pointer ml-1"
+            name="comparisonMode"
+            onClick={increaseCounter}
+          >
+            +
+          </button>
+        </Tooltip>
 
-        <button
-          className="rounded-lg bg-lightsky-blue text-xs px-2 py-1.5 cursor-pointer ml-1"
-          name="comparisonMode"
-          onClick={decreaseCounter}
-        >
-          {' '}
-          Remove Company
-        </button>
+        <Tooltip title="Remove Company">
+          <button
+            className="rounded-lg w-8 h-8 bg-lightsky-blue border border-gray-300 text-white text-xs cursor-pointer ml-1"
+            name="comparisonMode"
+            onClick={decreaseCounter}
+          >
+            -
+          </button>
+        </Tooltip>
       </div>
     </>
   )

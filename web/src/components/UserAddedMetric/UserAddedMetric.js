@@ -5,6 +5,7 @@ import { Favorite, CancelRounded } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 import Chip from '@material-ui/core/Chip'
 import { Tooltip } from '@material-ui/core'
+import { toast } from '@redwoodjs/web/toast'
 import classNames from 'classnames'
 import {
   metrics as metricsAtom,
@@ -48,63 +49,41 @@ export const UserAddedMetric = () => {
   const [defaultVisiableOptions, setdefaultVisiableOptions] = useState([])
   // List of available metrics for now. This list will be updated as we
   // decide on the list of metrics to be shown to the user.
-  const availableOptions = [
-    {
-      id: 0,
-      title: 'Market Cap Change With Retained Earnings',
-      value: 'marketCapChangeWithRetainedEarnings',
-    },
-    { id: 1, title: 'Gross Profit Margin', value: 'grossProfitMargin' },
-    { id: 2, title: 'Burn Ratio', value: 'burnRatio' },
-    { id: 3, title: 'Price To Earning', value: 'priceToEarning' },
-    { id: 4, title: 'R & D Budget To Revenue', value: 'rAndDBudgetToRevenue' },
-    { id: 5, title: 'Current Ratio', value: 'currentRatio' },
-    {
-      id: 6,
-      title: 'Price to Free Cash Flow',
-      value: 'priceToFreeCashFlowsRatio',
-    },
-    { id: 7, title: 'Operating Cash Flow', value: 'operatingCashFlow' },
-    {
-      id: 8,
-      title: 'Free Cash Flow to Net Income',
-      value: 'freeCashFlowToNetIncome',
-    },
-    {
-      id: 9,
-      title: 'Operating Cash Flow to Current Liabilities',
-      value: 'operatingCFToCurrentLiabilities',
-    },
-    { id: 10, title: 'Dividend Yield', value: 'dividendYield' },
-    {
-      id: 11,
-      title: 'Income Tax to Net Income',
-      value: 'incomeTaxToNetIncome',
-    },
-    {
-      id: 12,
-      title: 'Return on Retained Earning',
-      value: 'returnOnRetainedEarnings',
-    },
-    {
-      id: 13,
-      title: 'Market Cap Change with Retained Earning',
-      value: 'marketCapChangeWithRetainedEarnings',
-    },
-    {
-      id: 14,
-      title: 'Mean Net Income Growth Rate',
-      value: 'meanNetIncomeGrowthRate',
-    },
-    {
-      id: 15,
-      title: 'Mean Free Cash Flow Growth Rate',
-      value: 'meanFCFGrowthRate',
-    },
-    { id: 16, title: 'Intrinsic Value', value: 'intrinsicValue' },
-  ]
+  const availableMetrics = [
+    'marketCapChangeWithRetainedEarnings',
+    'grossProfitMargin',
+    'burnRatio',
+    'priceToEarning',
+    'rAndDBudgetToRevenue',
+    'currentRatio',
+    'priceToFreeCashFlowsRatio',
+    'operatingCashFlow',
+    'freeCashFlowToNetIncome',
+    'operatingCFToCurrentLiabilities',
+    'dividendYield',
+    'incomeTaxToNetIncome',
+    'returnOnRetainedEarnings',
+    'meanNetIncomeGrowthRate',
+    'meanFCFGrowthRate',
+    'intrinsicValue',
+  ].sort()
+  const availableOptions = availableMetrics.map((item, index) => ({
+    id: index,
+    value: item,
+    // First capitalize the first letter of the metric name and
+    // then place space between capitalized section.
+    title: (item[0].toUpperCase() + item.slice(1))
+      .match(/[A-Z]+(?![a-z])|[A-Z]?[a-z]+|\d+/g)
+      .join(' '),
+  }))
 
   const loadFavoriteMetrics = () => {
+    if (favoriteMetrics.length === 0) {
+      // alert('You have no favorite metrics yet!')
+      toast.error(
+        'You have no favorites yet.\n Please add some by clicking on ❤️'
+      )
+    }
     var tmp = availableOptions.filter((item) =>
       favoriteMetrics.includes(item.value)
     )
@@ -182,7 +161,8 @@ export const UserAddedMetric = () => {
                   className={`cursor-pointer`}
                   style={{
                     color: favoriteMetrics.includes(option.value)
-                      ? 'rgb(185 28 28)'
+                      ? // corresponds to text-red-500
+                        'rgb(239 68 68)'
                       : 'rgb(156 163 175)',
                   }}
                   onClick={(e) => favIconOnClick(e, option)}
@@ -197,7 +177,7 @@ export const UserAddedMetric = () => {
 
   const useStyles = makeStyles({
     backgroundTag: {
-      backgroundColor: 'springgreen !important',
+      backgroundColor: 'rgb(134 239 172) !important',
       fontFamily:
         '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif',
     },
@@ -236,15 +216,17 @@ export const UserAddedMetric = () => {
           )
         }}
       />
-      <button
-        className="disabled:bg-gainsboro rounded-lg bg-amber-200 text-xs px-2 py-1.5 cursor-pointer ml-1"
-        onClick={loadFavoriteMetrics}
-        name="comparisonMode"
-        disabled={favoriteMetrics.length === 0}
-      >
-        {' '}
-        Load Favorites
-      </button>
+      <Tooltip title="Click to Load Favorites">
+        <button
+          className="disabled:bg-gainsboro rounded-lg bg-green-300 border border-gray-300 text-xs px-2 py-1.5 cursor-pointer ml-1"
+          onClick={loadFavoriteMetrics}
+          name="comparisonMode"
+          // disabled={favoriteMetrics.length === 0}
+        >
+          {' '}
+          Load Favorites
+        </button>
+      </Tooltip>
     </>
   )
 }
