@@ -6,6 +6,7 @@ import {
   CartesianGrid,
   Tooltip,
   XAxis,
+  Brush,
 } from 'recharts'
 import { useRecoilValue } from 'recoil'
 import { plottingData as plottingDataAtom } from 'src/recoil/atoms'
@@ -67,7 +68,7 @@ export const PlotFundamentals = (props) => {
           align="right"
           width={600}
           height={250}
-          margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
+          margin={{ top: 20, right: 50, left: 20, bottom: 20 }}
           className="line-chart"
         >
           <CartesianGrid strokeDasharray="3 3" />
@@ -82,6 +83,7 @@ export const PlotFundamentals = (props) => {
           />
           <XAxis className="x-axis-chart" interval={0} dataKey="name" />
           <Legend />
+
           {/* The following allows multiple lines to be plotted in the same
           LineChart */}
           {plotData.nameCompany.map((name, index) => (
@@ -97,6 +99,7 @@ export const PlotFundamentals = (props) => {
           <Tooltip
             content={(active, payload) => CustomTooltip(active, payload)}
           />
+          <Brush dataKey="name" height={40} />
         </LineChart>
       </section>
     </div>
