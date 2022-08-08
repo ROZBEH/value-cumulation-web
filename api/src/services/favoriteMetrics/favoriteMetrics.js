@@ -17,7 +17,7 @@ export const favoriteMetricExists = ({ name }) => {
 }
 
 export const createFavoriteMetric = ({ input }) => {
-  // Associate the speciific metric with the user. Create the metric if it doesn't exist.
+  // Associate the specific metric with the user. Create the metric if it doesn't exist.
   const connetCreateMetric = db.favoriteMetric.upsert({
     where: { name: input.name },
     create: {

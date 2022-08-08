@@ -24,6 +24,8 @@ export const updateFavoriteMetricOnUser = ({ id, input }) => {
 }
 
 export const deleteFavoriteMetricOnUser = async ({ input }) => {
+  // First find the metric's id and then delete the relationship row
+  // between favorite metric and the user.
   const favMetric = await db.favoriteMetric.findUnique({
     where: { name: input.name },
   })

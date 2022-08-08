@@ -1,4 +1,5 @@
 export const schema = gql`
+  # Creating the favorites type so that it can be returned in the query.
   type favorite {
     id: Int!
     name: String!
