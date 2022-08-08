@@ -18,7 +18,7 @@ const UPDATE_FAVORITES = gql`
   }
 `
 const DELETE_FAVORITES = gql`
-  mutation addmetric($input: DeleteFavoriteMetricOnUser!) {
+  mutation remove($input: DeleteFavoriteMetricOnUserInput!) {
     deleteFavoriteMetricOnUser(input: $input) {
       id
     }
@@ -36,13 +36,15 @@ const VisiableButtons = [
 export const Mapping = () => {
   const { _isAuthenticated, currentUser, _logOut } = useAuth()
   const [updateFavoriteDB] = useMutation(UPDATE_FAVORITES, {
-    onCompleted: (data) => {
-      console.log(data)
+    onCompleted: (_data) => {
+      //pass
+      // Placeholder for future use
     },
   })
   const [deleteFavoriteDB] = useMutation(DELETE_FAVORITES, {
-    onCompleted: (data) => {
-      console.log(data)
+    onCompleted: (_data) => {
+      //pass
+      // Placeholder for future use
     },
   })
   const [favoriteMetrics, setFavoriteMetrics] =

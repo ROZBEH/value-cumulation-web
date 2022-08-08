@@ -25,7 +25,7 @@ export const schema = gql`
   # Adding the following type to the schema allows us to remove the relationship
   # between the FavoriteMetric and the User. Please go and check the deleteFavoriteMetricOnUser.js
   # inside the service script.
-  input DeleteFavoriteMetricOnUser {
+  input DeleteFavoriteMetricOnUserInput {
     name: String!
     userId: Int!
   }
@@ -39,7 +39,7 @@ export const schema = gql`
       input: UpdateFavoriteMetricOnUserInput!
     ): FavoriteMetricOnUser! @skipAuth
     deleteFavoriteMetricOnUser(
-      input: DeleteFavoriteMetricOnUser!
+      input: DeleteFavoriteMetricOnUserInput!
     ): FavoriteMetricOnUser! @skipAuth
   }
 `
