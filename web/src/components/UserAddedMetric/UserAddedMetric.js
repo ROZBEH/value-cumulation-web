@@ -24,7 +24,7 @@ const UPDATE_FAVORITES = gql`
   }
 `
 const DELETE_FAVORITES = gql`
-  mutation addmetric($input: DeleteFavoriteMetricOnUser!) {
+  mutation removemetric($input: DeleteFavoriteMetricOnUserInput!) {
     deleteFavoriteMetricOnUser(input: $input) {
       id
     }
@@ -32,14 +32,19 @@ const DELETE_FAVORITES = gql`
 `
 export const UserAddedMetric = () => {
   const { _isAuthenticated, currentUser, _logOut } = useAuth()
-  const [updateFavoriteDB, { loading, error }] = useMutation(UPDATE_FAVORITES, {
-    onCompleted: (data) => {
-      console.log(data)
-    },
-  })
+  const [updateFavoriteDB, { _loading, _error }] = useMutation(
+    UPDATE_FAVORITES,
+    {
+      onCompleted: (_data) => {
+        //pass
+        // Placeholder for future use
+      },
+    }
+  )
   const [deleteFavoriteDB] = useMutation(DELETE_FAVORITES, {
-    onCompleted: (data) => {
-      console.log(data)
+    onCompleted: (_data) => {
+      //pass
+      // Placeholder for future use
     },
   })
   const [metricsA, setMetrics] = useRecoilState(metricsAtom)
