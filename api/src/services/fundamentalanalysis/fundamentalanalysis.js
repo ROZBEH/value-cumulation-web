@@ -5,6 +5,8 @@ async function callApi(ticker) {
   await checklist.initialize()
   // List of available metrics. This list will get update
   // as new metrics are added to the API
+  // The following metrics correspond to the name of the functions
+  // in the Checklist class.
   var metrics = [
     'netIncome',
     'ratioCostOfRevenue',

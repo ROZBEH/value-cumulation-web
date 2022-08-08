@@ -5,6 +5,9 @@ export const users = () => {
 }
 
 export const user = async ({ id }) => {
+  // Find the user info based on the unique ID and then return the user info.
+  // Some post processing need to happen since the favorite metrics are not
+  // directly associated with the user. Rather it's a many-to-many relationship.
   const userInfo = await db.user.findUnique({
     where: { id },
     include: { favoriteMetrics: { include: { favoriteMetric: true } } },
