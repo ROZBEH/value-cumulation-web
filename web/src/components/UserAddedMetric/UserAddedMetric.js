@@ -1,10 +1,7 @@
-import TextField from '@mui/material/TextField'
 import { useAuth } from '@redwoodjs/auth'
-import Autocomplete from '@mui/material/Autocomplete'
+import { Autocomplete, TextField } from '@mui/material'
 import { Favorite, CancelRounded } from '@material-ui/icons'
-import { makeStyles } from '@material-ui/core/styles'
-import Chip from '@material-ui/core/Chip'
-import { Tooltip } from '@material-ui/core'
+import { makeStyles, Chip, Tooltip } from '@material-ui/core'
 import { toast } from '@redwoodjs/web/toast'
 import classNames from 'classnames'
 import {
