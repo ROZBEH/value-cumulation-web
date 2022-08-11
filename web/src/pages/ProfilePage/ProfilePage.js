@@ -5,7 +5,7 @@ import { Favorite, CancelRounded } from '@material-ui/icons'
 import { makeStyles, Chip, Tooltip } from '@material-ui/core'
 import classNames from 'classnames'
 import { useAuth } from '@redwoodjs/auth'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 const UPDATE_FAVORITES = gql`
   mutation addmetric($input: CreateFavoriteMetricInput!) {
@@ -35,7 +35,8 @@ const USER_INFO = gql`
   }
 `
 const ProfilePage = () => {
-  const { _isAuthenticated, currentUser, _logOut } = useAuth()
+  const [jsonResponse, setJsonResponse] = useState({})
+  const { isAuthenticated, currentUser, _logOut } = useAuth()
   const [updateFavoriteDB] = useMutation(UPDATE_FAVORITES, {
     onCompleted: (_data) => {
       //pass
@@ -51,19 +52,20 @@ const ProfilePage = () => {
   const [queryUser] = useLazyQuery(USER_INFO)
 
   useEffect(() => {
-    console.log(currentUser)
-    queryUser({ variables: { id: currentUser.id } }).then(
-      (jsonRes) => {
-        console.log(jsonRes)
-      },
-      [currentUser, queryUser]
-    )
-  })
+    if (isAuthenticated) {
+      console.log(currentUser)
+      queryUser({ variables: { id: currentUser.id } }).then((jsonRes) => {
+        console.log(jsonRes.data)
+        setJsonResponse(jsonRes)
+      })
+    }
+  }, [currentUser, queryUser, isAuthenticated])
   return (
     <>
       <MetaTags title="Profile" description="Profile page" />
-
       <h1>ProfilePage</h1>
+      {/* <h2>{currentUser.email}</h2> */}
+      <h3>{JSON.stringify(jsonResponse)}</h3>
     </>
   )
 }
