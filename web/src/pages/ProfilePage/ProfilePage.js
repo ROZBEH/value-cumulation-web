@@ -6,6 +6,8 @@ import { makeStyles, Chip, Tooltip } from '@material-ui/core'
 import classNames from 'classnames'
 import { useAuth } from '@redwoodjs/auth'
 import { useEffect, useState } from 'react'
+import { useRecoilState } from 'recoil'
+import { userFavMetrics as userFavMetricsAtom } from 'src/recoil/atoms'
 
 const UPDATE_FAVORITES = gql`
   mutation addmetric($input: CreateFavoriteMetricInput!) {
@@ -22,20 +24,21 @@ const DELETE_FAVORITES = gql`
     }
   }
 `
-const USER_INFO = gql`
-  query queryUser($id: Int!) {
-    user(id: $id) {
-      email
-      id
-      favorites {
-        id
-        name
-      }
-    }
-  }
-`
+// const USER_INFO = gql`
+//   query queryUser($id: Int!) {
+//     user(id: $id) {
+//       email
+//       id
+//       favorites {
+//         id
+//         name
+//       }
+//     }
+//   }
+// `
 const ProfilePage = () => {
-  const [jsonResponse, setJsonResponse] = useState({})
+  const [favoriteMetrics, _setFavoriteMetrics] =
+    useRecoilState(userFavMetricsAtom)
   const { isAuthenticated, currentUser, _logOut } = useAuth()
   const [updateFavoriteDB] = useMutation(UPDATE_FAVORITES, {
     onCompleted: (_data) => {
@@ -49,23 +52,14 @@ const ProfilePage = () => {
       // Placeholder for future use
     },
   })
-  const [queryUser] = useLazyQuery(USER_INFO)
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      console.log(currentUser)
-      queryUser({ variables: { id: currentUser.id } }).then((jsonRes) => {
-        console.log(jsonRes.data)
-        setJsonResponse(jsonRes)
-      })
-    }
-  }, [currentUser, queryUser, isAuthenticated])
   return (
     <>
       <MetaTags title="Profile" description="Profile page" />
       <h1>ProfilePage</h1>
-      {/* <h2>{currentUser.email}</h2> */}
-      <h3>{JSON.stringify(jsonResponse)}</h3>
+      {favoriteMetrics.map((metric, index) => {
+        return <p key={index}>{metric}</p>
+      })}
     </>
   )
 }
