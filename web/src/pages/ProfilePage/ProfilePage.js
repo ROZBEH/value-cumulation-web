@@ -8,6 +8,7 @@ import { useAuth } from '@redwoodjs/auth'
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { userFavMetrics as userFavMetricsAtom } from 'src/recoil/atoms'
+import { DataGrid } from '@mui/x-data-grid'
 
 const UPDATE_FAVORITES = gql`
   mutation addmetric($input: CreateFavoriteMetricInput!) {
@@ -39,6 +40,7 @@ const DELETE_FAVORITES = gql`
 const ProfilePage = () => {
   const [favoriteMetrics, _setFavoriteMetrics] =
     useRecoilState(userFavMetricsAtom)
+  console.log(favoriteMetrics)
   const { isAuthenticated, currentUser, _logOut } = useAuth()
   const [updateFavoriteDB] = useMutation(UPDATE_FAVORITES, {
     onCompleted: (_data) => {
@@ -57,9 +59,23 @@ const ProfilePage = () => {
     <>
       <MetaTags title="Profile" description="Profile page" />
       <h1>ProfilePage</h1>
-      {favoriteMetrics.map((metric, index) => {
-        return <p key={index}>{metric}</p>
-      })}
+
+      <div className=" overflow-hidden my-8">
+        <table className="border-collapse table-auto w-full text-sm">
+          <tr>
+            <th>Email</th>
+            <td>{currentUser.email}</td>
+          </tr>
+          <tr>
+            <th>Favorites</th>
+            <td>
+              {favoriteMetrics.map((metric, index) => {
+                return <p key={index}>{metric}</p>
+              })}
+            </td>
+          </tr>
+        </table>
+      </div>
     </>
   )
 }
