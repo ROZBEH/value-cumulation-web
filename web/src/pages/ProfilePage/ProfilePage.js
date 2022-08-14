@@ -58,23 +58,32 @@ const ProfilePage = () => {
   return (
     <>
       <MetaTags title="Profile" description="Profile page" />
-      <h1>ProfilePage</h1>
 
-      <div className=" overflow-hidden my-8">
-        <table className="border-collapse table-auto w-full text-sm">
-          <tr>
-            <th>Email</th>
-            <td>{currentUser.email}</td>
-          </tr>
-          <tr>
-            <th>Favorites</th>
-            <td>
-              {favoriteMetrics.map((metric, index) => {
-                return <p key={index}>{metric}</p>
-              })}
-            </td>
-          </tr>
-        </table>
+      <div className="relative rounded-xl overflow-auto ml-2.5 mr-14">
+        <div className="overflow-hidden my-8">
+          <table className="border-collapse table-auto w-full text-sm">
+            <tbody>
+              <tr>
+                <th className="text-center border-b dark:border-slate-600 font-medium p-4 pl-8 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                  Email
+                </th>
+                <td className="border-b dark:border-slate-600">
+                  {currentUser.email}
+                </td>
+              </tr>
+              <tr>
+                <th className="text-center border-b dark:border-slate-600 font-medium p-4 pl-8 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                  Favorites
+                </th>
+                <td className="border-b dark:border-slate-600">
+                  {favoriteMetrics.map((metric, index) => (
+                    <span key={index}>{metric}, </span>
+                  ))}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </>
   )
