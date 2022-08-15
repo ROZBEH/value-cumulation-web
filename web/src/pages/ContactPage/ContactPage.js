@@ -10,13 +10,8 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 import { toast, Toaster } from '@redwoodjs/web/toast'
-const CREATE_CONTACT = gql`
-  mutation CreateContactMutation($input: CreateContactInput!) {
-    createContact(input: $input) {
-      name
-    }
-  }
-`
+import { CREATE_CONTACT } from 'src/commons/gql'
+
 const ContactPage = () => {
   const formMethods = useForm({ mode: 'onBlur' })
   // for displaying the contact name after submission

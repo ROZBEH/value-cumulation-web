@@ -17,30 +17,11 @@ import {
   companyList as companyListAtom,
 } from 'src/recoil/atoms'
 import { useEffect } from 'react'
-
-export const QUERY = gql`
-  query ($id: Int!) {
-    searchbar {
-      symbol
-      name
-      price
-      exchange
-      exchangeShortName
-      type
-    }
-    user(id: $id) {
-      email
-      favorites {
-        id
-        name
-      }
-    }
-  }
-`
+import { STARTUP_QUERY } from 'src/commons/gql'
 
 const HomePage = () => {
   const { isAuthenticated, currentUser, _logOut } = useAuth()
-  const [getArticles, { _loading, _error, _data }] = useLazyQuery(QUERY)
+  const [getArticles, { _loading, _error, _data }] = useLazyQuery(STARTUP_QUERY)
   const calledCompanies = useRecoilValue(calledCompaniesAtom)
   const plottingData = useRecoilValue(plottingDataAtom)
   const [_companyList, setCompanyList] = useRecoilState(companyListAtom)
@@ -79,18 +60,18 @@ const HomePage = () => {
   return (
     <>
       <div className="grid grid-rows-3 grid-cols-2">
-        <div className="col-span-1 flex grid items-center mx-5">
+        <div className="col-span-1 flex grid items-center mx-2">
           <Mainsubmission />
         </div>
-        <div className="row-span-3">
+        <div className="col-span-1 row-span-3">
           <Content />
         </div>
-        <div className="row-span-1 col-span-1 flex items-center mx-5">
+        <div className="row-span-1 col-span-1 flex items-center mx-2">
           <UserAddedMetric />
         </div>
-        <div className="row-span-1 col-span-1 mx-3">
+        {/* <div className="row-span-1 col-span-1 mx-3">
           <Mapping />
-        </div>
+        </div> */}
       </div>
       {loadingFinancials && (
         <div className="loader">

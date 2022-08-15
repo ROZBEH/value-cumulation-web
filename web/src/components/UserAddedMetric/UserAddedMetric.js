@@ -1,10 +1,7 @@
-import TextField from '@mui/material/TextField'
 import { useAuth } from '@redwoodjs/auth'
-import Autocomplete from '@mui/material/Autocomplete'
+import { Autocomplete, TextField } from '@mui/material'
 import { Favorite, CancelRounded } from '@material-ui/icons'
-import { makeStyles } from '@material-ui/core/styles'
-import Chip from '@material-ui/core/Chip'
-import { Tooltip } from '@material-ui/core'
+import { makeStyles, Chip, Tooltip } from '@material-ui/core'
 import { toast } from '@redwoodjs/web/toast'
 import classNames from 'classnames'
 import {
@@ -12,88 +9,51 @@ import {
   userFavMetrics as userFavMetricsAtom,
 } from 'src/recoil/atoms'
 import { useRecoilState } from 'recoil'
-import './UserAddedMetric.css'
 import { useState } from 'react'
 import { useMutation } from '@redwoodjs/web'
-const UPDATE_FAVORITES = gql`
-  mutation addmetric($input: CreateFavoriteMetricInput!) {
-    createFavoriteMetric(input: $input) {
-      id
-      name
-    }
-  }
-`
-const DELETE_FAVORITES = gql`
-  mutation removemetric($input: DeleteFavoriteMetricOnUserInput!) {
-    deleteFavoriteMetricOnUser(input: $input) {
-      id
-    }
-  }
-`
+import { UPDATE_FAVORITES, DELETE_FAVORITES } from 'src/commons/gql'
+import { AVAILABLE_METRICS } from 'src/commons/constants'
+
 export const UserAddedMetric = () => {
   const { _isAuthenticated, currentUser, _logOut } = useAuth()
   const [updateFavoriteDB, { _loading, _error }] = useMutation(
     UPDATE_FAVORITES,
     {
       onCompleted: (_data) => {
-        //pass
-        // Placeholder for future use
+        toast.success('Successfully Added')
       },
     }
   )
+
   const [deleteFavoriteDB] = useMutation(DELETE_FAVORITES, {
     onCompleted: (_data) => {
-      //pass
-      // Placeholder for future use
+      toast.success('Successfully Removed')
     },
   })
+
+  // List of metrics that will be displayed in the form of plots to the user
   const [metricsA, setMetrics] = useRecoilState(metricsAtom)
   const [favoriteMetrics, setFavoriteMetrics] =
     useRecoilState(userFavMetricsAtom)
-  // const diableFavButton = useState(favoriteMetrics.length === 0)
-  const [defaultVisiableOptions, setdefaultVisiableOptions] = useState([])
-  // List of available metrics for now. This list will be updated as we
-  // decide on the list of metrics to be shown to the user.
-  const availableMetrics = [
-    'marketCapChangeWithRetainedEarnings',
-    'grossProfitMargin',
-    'burnRatio',
-    'priceToEarning',
-    'rAndDBudgetToRevenue',
-    'currentRatio',
-    'priceToFreeCashFlowsRatio',
-    'operatingCashFlow',
-    'freeCashFlowToNetIncome',
-    'operatingCFToCurrentLiabilities',
-    'dividendYield',
-    'incomeTaxToNetIncome',
-    'returnOnRetainedEarnings',
-    'meanNetIncomeGrowthRate',
-    'meanFCFGrowthRate',
-    'intrinsicValue',
-  ].sort()
-  const availableOptions = availableMetrics.map((item, index) => ({
-    id: index,
-    value: item,
-    // First capitalize the first letter of the metric name and
-    // then place space between capitalized section.
-    title: (item[0].toUpperCase() + item.slice(1))
-      .match(/[A-Z]+(?![a-z])|[A-Z]?[a-z]+|\d+/g)
-      .join(' '),
-  }))
+
+  // make cash flow and net income default visiable
+  const defaultVisables = AVAILABLE_METRICS.filter(
+    (item) => item.value === 'netIncome' || item.value === 'freeCashFlow'
+  )
+  const [defaultVisiableOptions, setDefaultVisiableOptions] =
+    useState(defaultVisables)
 
   const loadFavoriteMetrics = () => {
     if (favoriteMetrics.length === 0) {
-      // alert('You have no favorite metrics yet!')
       toast.error(
         'You have no favorites yet.\n Please add some by clicking on ❤️'
       )
     }
-    var tmp = availableOptions.filter((item) =>
+    var tmp = AVAILABLE_METRICS.filter((item) =>
       favoriteMetrics.includes(item.value)
     )
     setMetrics(favoriteMetrics)
-    setdefaultVisiableOptions(tmp)
+    setDefaultVisiableOptions(tmp)
   }
 
   const myChangeFunc = (event, values, reason, detail) => {
@@ -109,17 +69,17 @@ export const UserAddedMetric = () => {
       tmpMetrics.push(detail.option.value)
       setMetrics(tmpMetrics)
       tmpVisiableOptions.push(detail.option)
-      setdefaultVisiableOptions(tmpVisiableOptions)
+      setDefaultVisiableOptions(tmpVisiableOptions)
     } else if (reason === 'removeOption') {
       tmpMetrics = tmpMetrics.filter((item) => item !== detail.option.value)
       setMetrics(tmpMetrics)
       tmpVisiableOptions = tmpVisiableOptions.filter(
         (item) => item !== detail.option
       )
-      setdefaultVisiableOptions(tmpVisiableOptions)
+      setDefaultVisiableOptions(tmpVisiableOptions)
     } else if (reason === 'clear') {
       setMetrics([])
-      setdefaultVisiableOptions([])
+      setDefaultVisiableOptions([])
     }
   }
 
@@ -131,10 +91,14 @@ export const UserAddedMetric = () => {
     }
     if (!tmp.includes(option.value)) {
       tmp.push(option.value)
+      // Update the database side
       updateFavoriteDB({ variables: { input: inData } })
+      // Update the state side
       setFavoriteMetrics(tmp)
     } else {
+      // Remove the metric from the database side
       deleteFavoriteDB({ variables: { input: inData } })
+      // Remove the metric from the state side
       setFavoriteMetrics(tmp.filter((el) => el !== option.value))
     }
   }
@@ -197,7 +161,7 @@ export const UserAddedMetric = () => {
             <CancelRounded />
           </Tooltip>
         }
-        className="user-added-metric-autocomplete"
+        className="!w-4/5 !mb-5 !mt-2.5"
         renderTags={(value, getTagProps) =>
           updateUserPickedMetrics(value, getTagProps)
         }
@@ -205,7 +169,7 @@ export const UserAddedMetric = () => {
         onChange={myChangeFunc}
         id="tags-standard"
         filterSelectedOptions
-        options={availableOptions}
+        options={AVAILABLE_METRICS}
         isOptionEqualToValue={(option, value) => option.id === value.id}
         getOptionLabel={(option) => option.title}
         value={defaultVisiableOptions}
@@ -213,7 +177,7 @@ export const UserAddedMetric = () => {
           return (
             <TextField
               inputProps={{ className: buttonColor.input }}
-              className="txtBox-metric"
+              className="!w-4/5 !mb-4"
               {...params}
               variant="standard"
               placeholder="Add More Metrics"

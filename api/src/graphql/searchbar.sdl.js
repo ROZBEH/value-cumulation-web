@@ -12,6 +12,6 @@ export const schema = gql`
   }
 
   type Query {
-    searchbar: [Result!]! @requireAuth
+    searchbar: [Result!]! @skipAuth
   }
 `

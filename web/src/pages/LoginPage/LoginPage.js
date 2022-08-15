@@ -35,9 +35,7 @@ const LoginPage = () => {
     } else if (response.error) {
       toast.error(response.error)
     } else {
-      console.log(response)
       toast.success('Welcome back!')
-      console.log('isAuthenticated:', isAuthenticated)
     }
   }
 

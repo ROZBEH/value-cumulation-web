@@ -33,7 +33,7 @@ const MainLayout = ({ children }) => {
 
           {isAuthenticated ? (
             <div className="block mt-4 sm:inline-block sm:mt-0 text-base text-lime-700 mr-8">
-              {currentUser.email}{' '}
+              <Link to={routes.profile()}>{currentUser.email} </Link>
               <button
                 onClick={logOut}
                 type="button"

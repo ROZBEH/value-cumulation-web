@@ -16,6 +16,7 @@ export default async () => {
       // { name: 'alice', email: 'alice@example.com' },
       // { name: 'mark', email: 'mark@example.com' },
       // { name: 'jackie', email: 'jackie@example.com' },
+      // { id: 1 },
     ]
     console.log(
       "\nUsing the default './scripts/seed.{js,ts}' template\nEdit the file to add seed data\n"
@@ -28,6 +29,17 @@ export default async () => {
       // Change to match your data model and seeding needs
       //
       data.map(async (data) => {
+        // Delete all the relationships for a specific user
+        // const result = await db.user.update({
+        //   data: {
+        //     favoriteMetrics: {
+        //       deleteMany: {},
+        //     },
+        //   },
+        //   where: {
+        //     id: data.id,
+        //   },
+        // })
         // Query the metric, if it doesn't exist then create.
         // Unfortunately the update part is necessary.
         // const result = await db.favoriteMetric.upsert({
