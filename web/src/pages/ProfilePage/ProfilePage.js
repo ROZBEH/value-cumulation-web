@@ -24,8 +24,7 @@ const ProfilePage = () => {
     useState(defaultVisables)
   const { _isAuthenticated, currentUser, _logOut } = useAuth()
   const [updateFavoriteDB] = useMutation(UPDATE_FAVORITES, {
-    onCompleted: (data) => {
-      console.log(data)
+    onCompleted: (_data) => {
       toast.success('Successfully Added')
     },
   })
@@ -112,9 +111,6 @@ const ProfilePage = () => {
                   Favorites
                 </th>
                 <td className="border-b dark:border-slate-600">
-                  {/* {favoriteMetrics.map((metric, index) => (
-                    <span key={index}>{metric}, </span>
-                  ))} */}
                   <Autocomplete
                     clearIcon={
                       <Tooltip title="Clear all Metric">

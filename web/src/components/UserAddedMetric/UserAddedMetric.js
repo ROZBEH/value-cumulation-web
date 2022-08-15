@@ -24,11 +24,13 @@ export const UserAddedMetric = () => {
       },
     }
   )
+
   const [deleteFavoriteDB] = useMutation(DELETE_FAVORITES, {
     onCompleted: (_data) => {
       toast.success('Successfully Removed')
     },
   })
+
   // List of metrics that will be displayed in the form of plots to the user
   const [metricsA, setMetrics] = useRecoilState(metricsAtom)
   const [favoriteMetrics, setFavoriteMetrics] =
@@ -43,7 +45,6 @@ export const UserAddedMetric = () => {
 
   const loadFavoriteMetrics = () => {
     if (favoriteMetrics.length === 0) {
-      // alert('You have no favorite metrics yet!')
       toast.error(
         'You have no favorites yet.\n Please add some by clicking on ❤️'
       )
@@ -53,7 +54,6 @@ export const UserAddedMetric = () => {
     )
     setMetrics(favoriteMetrics)
     setDefaultVisiableOptions(tmp)
-    console.log('tmp: ', tmp)
   }
 
   const myChangeFunc = (event, values, reason, detail) => {
@@ -91,10 +91,14 @@ export const UserAddedMetric = () => {
     }
     if (!tmp.includes(option.value)) {
       tmp.push(option.value)
+      // Update the database side
       updateFavoriteDB({ variables: { input: inData } })
+      // Update the state side
       setFavoriteMetrics(tmp)
     } else {
+      // Remove the metric from the database side
       deleteFavoriteDB({ variables: { input: inData } })
+      // Remove the metric from the state side
       setFavoriteMetrics(tmp.filter((el) => el !== option.value))
     }
   }
