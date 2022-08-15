@@ -9,7 +9,6 @@ import {
   userFavMetrics as userFavMetricsAtom,
 } from 'src/recoil/atoms'
 import { useRecoilState } from 'recoil'
-import './UserAddedMetric.css'
 import { useState } from 'react'
 import { useMutation } from '@redwoodjs/web'
 import { UPDATE_FAVORITES, DELETE_FAVORITES } from 'src/commons/gql'
@@ -30,6 +29,7 @@ export const UserAddedMetric = () => {
       toast.success('Successfully Removed')
     },
   })
+  // List of metrics that will be displayed in the form of plots to the user
   const [metricsA, setMetrics] = useRecoilState(metricsAtom)
   const [favoriteMetrics, setFavoriteMetrics] =
     useRecoilState(userFavMetricsAtom)
@@ -157,7 +157,7 @@ export const UserAddedMetric = () => {
             <CancelRounded />
           </Tooltip>
         }
-        className="user-added-metric-autocomplete"
+        className="!w-4/5 !mb-5 !mt-2.5"
         renderTags={(value, getTagProps) =>
           updateUserPickedMetrics(value, getTagProps)
         }
@@ -173,7 +173,7 @@ export const UserAddedMetric = () => {
           return (
             <TextField
               inputProps={{ className: buttonColor.input }}
-              className="txtBox-metric"
+              className="!w-4/5 !mb-4"
               {...params}
               variant="standard"
               placeholder="Add More Metrics"

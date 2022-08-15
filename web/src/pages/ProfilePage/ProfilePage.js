@@ -121,7 +121,7 @@ const ProfilePage = () => {
                         <CancelRounded />
                       </Tooltip>
                     }
-                    className="user-added-metric-autocomplete"
+                    className="!w-4/5 !mb-5 !mt-2.5"
                     renderTags={(value, getTagProps) =>
                       updateUserPickedMetrics(value, getTagProps)
                     }
@@ -139,7 +139,7 @@ const ProfilePage = () => {
                       return (
                         <TextField
                           // inputProps={{ className: buttonColor.input }}
-                          className="txtBox-metric"
+                          className="!w-4/5 !mb-4"
                           {...params}
                           variant="standard"
                           placeholder="Add To Favorites"
