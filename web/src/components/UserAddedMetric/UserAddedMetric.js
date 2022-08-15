@@ -48,10 +48,13 @@ export const UserAddedMetric = () => {
   const [favoriteMetrics, setFavoriteMetrics] =
     useRecoilState(userFavMetricsAtom)
   // const diableFavButton = useState(favoriteMetrics.length === 0)
-  const [defaultVisiableOptions, setdefaultVisiableOptions] = useState([])
   // List of available metrics for now. This list will be updated as we
   // decide on the list of metrics to be shown to the user.
   const availableMetrics = [
+    'netProfitMargin',
+    'debtRatio',
+    'netIncome',
+    'freeCashFlow',
     'marketCapChangeWithRetainedEarnings',
     'grossProfitMargin',
     'burnRatio',
@@ -78,6 +81,12 @@ export const UserAddedMetric = () => {
       .match(/[A-Z]+(?![a-z])|[A-Z]?[a-z]+|\d+/g)
       .join(' '),
   }))
+  // make cash flow and net income default visiable
+  const defaultVisables = availableOptions.filter(
+    (item) => item.value === 'netIncome' || item.value === 'freeCashFlow'
+  )
+  const [defaultVisiableOptions, setDefaultVisiableOptions] =
+    useState(defaultVisables)
 
   const loadFavoriteMetrics = () => {
     if (favoriteMetrics.length === 0) {
@@ -90,7 +99,8 @@ export const UserAddedMetric = () => {
       favoriteMetrics.includes(item.value)
     )
     setMetrics(favoriteMetrics)
-    setdefaultVisiableOptions(tmp)
+    setDefaultVisiableOptions(tmp)
+    console.log('tmp: ', tmp)
   }
 
   const myChangeFunc = (event, values, reason, detail) => {
@@ -106,17 +116,17 @@ export const UserAddedMetric = () => {
       tmpMetrics.push(detail.option.value)
       setMetrics(tmpMetrics)
       tmpVisiableOptions.push(detail.option)
-      setdefaultVisiableOptions(tmpVisiableOptions)
+      setDefaultVisiableOptions(tmpVisiableOptions)
     } else if (reason === 'removeOption') {
       tmpMetrics = tmpMetrics.filter((item) => item !== detail.option.value)
       setMetrics(tmpMetrics)
       tmpVisiableOptions = tmpVisiableOptions.filter(
         (item) => item !== detail.option
       )
-      setdefaultVisiableOptions(tmpVisiableOptions)
+      setDefaultVisiableOptions(tmpVisiableOptions)
     } else if (reason === 'clear') {
       setMetrics([])
-      setdefaultVisiableOptions([])
+      setDefaultVisiableOptions([])
     }
   }
 

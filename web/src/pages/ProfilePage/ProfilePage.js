@@ -40,7 +40,6 @@ const DELETE_FAVORITES = gql`
 const ProfilePage = () => {
   const [favoriteMetrics, _setFavoriteMetrics] =
     useRecoilState(userFavMetricsAtom)
-  console.log(favoriteMetrics)
   const { isAuthenticated, currentUser, _logOut } = useAuth()
   const [updateFavoriteDB] = useMutation(UPDATE_FAVORITES, {
     onCompleted: (_data) => {
