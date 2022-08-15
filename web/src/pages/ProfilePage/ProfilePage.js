@@ -1,101 +1,41 @@
 import { MetaTags, useMutation } from '@redwoodjs/web'
-import { useLazyQuery } from '@apollo/react-hooks'
 import { Autocomplete, TextField } from '@mui/material'
-import { Favorite, CancelRounded } from '@material-ui/icons'
-import { makeStyles, Chip, Tooltip } from '@material-ui/core'
-import classNames from 'classnames'
+import { CancelRounded } from '@material-ui/icons'
+import { Chip, Tooltip } from '@material-ui/core'
 import { useAuth } from '@redwoodjs/auth'
-import { useEffect, useState } from 'react'
-import { useRecoilState } from 'recoil'
+import { useState } from 'react'
+import { useRecoilValue } from 'recoil'
 import { userFavMetrics as userFavMetricsAtom } from 'src/recoil/atoms'
-import { DataGrid } from '@mui/x-data-grid'
 import { toast } from '@redwoodjs/web/toast'
-
-const UPDATE_FAVORITES = gql`
-  mutation addmetric($input: CreateFavoriteMetricInput!) {
-    createFavoriteMetric(input: $input) {
-      id
-      name
-    }
-  }
-`
-const DELETE_FAVORITES = gql`
-  mutation removemetric($input: DeleteFavoriteMetricOnUserInput!) {
-    deleteFavoriteMetricOnUser(input: $input) {
-      id
-    }
-  }
-`
-
-const DELETE_ALL_FAVORITES = gql`
-  mutation removeALLmetric($id: Int!) {
-    deleteAllFavoritesUser(id: $id) {
-      id
-      email
-    }
-  }
-`
+import {
+  UPDATE_FAVORITES,
+  DELETE_FAVORITES,
+  DELETE_ALL_FAVORITES,
+} from 'src/commons/gql'
+import { AVAILABLE_METRICS } from 'src/commons/constants'
 
 const ProfilePage = () => {
-  const [favoriteMetrics, _setFavoriteMetrics] =
-    useRecoilState(userFavMetricsAtom)
-  const availableMetrics = [
-    'netProfitMargin',
-    'debtRatio',
-    'netIncome',
-    'freeCashFlow',
-    'marketCapChangeWithRetainedEarnings',
-    'grossProfitMargin',
-    'burnRatio',
-    'priceToEarning',
-    'rAndDBudgetToRevenue',
-    'currentRatio',
-    'priceToFreeCashFlowsRatio',
-    'operatingCashFlow',
-    'freeCashFlowToNetIncome',
-    'operatingCFToCurrentLiabilities',
-    'dividendYield',
-    'incomeTaxToNetIncome',
-    'returnOnRetainedEarnings',
-    'meanNetIncomeGrowthRate',
-    'meanFCFGrowthRate',
-    'intrinsicValue',
-  ].sort()
-  const availableOptions = availableMetrics.map((item, index) => ({
-    id: index,
-    value: item,
-    // First capitalize the first letter of the metric name and
-    // then place space between capitalized section.
-    title: (item[0].toUpperCase() + item.slice(1))
-      .match(/[A-Z]+(?![a-z])|[A-Z]?[a-z]+|\d+/g)
-      .join(' '),
-  }))
+  const favoriteMetrics = useRecoilValue(userFavMetricsAtom)
   // make cash flow and net income default visiable
-  const defaultVisables = availableOptions.filter((item) =>
+  const defaultVisables = AVAILABLE_METRICS.filter((item) =>
     favoriteMetrics.includes(item.value)
   )
   const [defaultVisiableOptions, setDefaultVisiableOptions] =
     useState(defaultVisables)
-  const { isAuthenticated, currentUser, _logOut } = useAuth()
+  const { _isAuthenticated, currentUser, _logOut } = useAuth()
   const [updateFavoriteDB] = useMutation(UPDATE_FAVORITES, {
     onCompleted: (data) => {
-      //pass
-      // Placeholder for future use
       console.log(data)
       toast.success('Successfully Added')
     },
   })
   const [deleteFavoriteDB] = useMutation(DELETE_FAVORITES, {
     onCompleted: (_data) => {
-      //pass
-      // Placeholder for future use
       toast.success('Successfully Removed')
     },
   })
   const [deleteFavoritesAll] = useMutation(DELETE_ALL_FAVORITES, {
     onCompleted: (_data) => {
-      //pass
-      // Placeholder for future use
       toast.success('Successfully Removed All Favorites.')
     },
   })
@@ -189,7 +129,7 @@ const ProfilePage = () => {
                     onChange={myChangeFunc}
                     id="tags-standard"
                     filterSelectedOptions
-                    options={availableOptions}
+                    options={AVAILABLE_METRICS}
                     isOptionEqualToValue={(option, value) =>
                       option.id === value.id
                     }

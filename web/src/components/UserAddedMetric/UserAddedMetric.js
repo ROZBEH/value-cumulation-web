@@ -12,77 +12,30 @@ import { useRecoilState } from 'recoil'
 import './UserAddedMetric.css'
 import { useState } from 'react'
 import { useMutation } from '@redwoodjs/web'
-const UPDATE_FAVORITES = gql`
-  mutation addmetric($input: CreateFavoriteMetricInput!) {
-    createFavoriteMetric(input: $input) {
-      id
-      name
-    }
-  }
-`
-const DELETE_FAVORITES = gql`
-  mutation removemetric($input: DeleteFavoriteMetricOnUserInput!) {
-    deleteFavoriteMetricOnUser(input: $input) {
-      id
-    }
-  }
-`
+import { UPDATE_FAVORITES, DELETE_FAVORITES } from 'src/commons/gql'
+import { AVAILABLE_METRICS } from 'src/commons/constants'
+
 export const UserAddedMetric = () => {
   const { _isAuthenticated, currentUser, _logOut } = useAuth()
   const [updateFavoriteDB, { _loading, _error }] = useMutation(
     UPDATE_FAVORITES,
     {
       onCompleted: (_data) => {
-        //pass
-        // Placeholder for future use
+        toast.success('Successfully Added')
       },
     }
   )
   const [deleteFavoriteDB] = useMutation(DELETE_FAVORITES, {
     onCompleted: (_data) => {
-      //pass
-      // Placeholder for future use
+      toast.success('Successfully Removed')
     },
   })
   const [metricsA, setMetrics] = useRecoilState(metricsAtom)
   const [favoriteMetrics, setFavoriteMetrics] =
     useRecoilState(userFavMetricsAtom)
-  // const diableFavButton = useState(favoriteMetrics.length === 0)
-  // List of available metrics for now. This list will be updated as we
-  // decide on the list of metrics to be shown to the user.
-  const availableMetrics = [
-    'netProfitMargin',
-    'debtRatio',
-    'netIncome',
-    'freeCashFlow',
-    'marketCapChangeWithRetainedEarnings',
-    'grossProfitMargin',
-    'burnRatio',
-    'priceToEarning',
-    'rAndDBudgetToRevenue',
-    'currentRatio',
-    'priceToFreeCashFlowsRatio',
-    'operatingCashFlow',
-    'freeCashFlowToNetIncome',
-    'operatingCFToCurrentLiabilities',
-    'dividendYield',
-    'incomeTaxToNetIncome',
-    'returnOnRetainedEarnings',
-    'meanNetIncomeGrowthRate',
-    'meanFCFGrowthRate',
-    'intrinsicValue',
-  ].sort()
-  const availableOptions = availableMetrics.map((item, index) => ({
-    id: index,
-    value: item,
-    // First capitalize the first letter of the metric name and
-    // then place space between capitalized section.
-    title: (item[0].toUpperCase() + item.slice(1))
-      .match(/[A-Z]+(?![a-z])|[A-Z]?[a-z]+|\d+/g)
-      .join(' '),
-  }))
+
   // make cash flow and net income default visiable
-  const defaultVisables = availableOptions.filter(
+  const defaultVisables = AVAILABLE_METRICS.filter(
     (item) => item.value === 'netIncome' || item.value === 'freeCashFlow'
   )
   const [defaultVisiableOptions, setDefaultVisiableOptions] =
@@ -95,7 +48,7 @@ export const UserAddedMetric = () => {
         'You have no favorites yet.\n Please add some by clicking on ❤️'
       )
     }
-    var tmp = availableOptions.filter((item) =>
+    var tmp = AVAILABLE_METRICS.filter((item) =>
       favoriteMetrics.includes(item.value)
     )
     setMetrics(favoriteMetrics)
@@ -212,7 +165,7 @@ export const UserAddedMetric = () => {
         onChange={myChangeFunc}
         id="tags-standard"
         filterSelectedOptions
-        options={availableOptions}
+        options={AVAILABLE_METRICS}
         isOptionEqualToValue={(option, value) => option.id === value.id}
         getOptionLabel={(option) => option.title}
         value={defaultVisiableOptions}

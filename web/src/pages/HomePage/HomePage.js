@@ -17,30 +17,11 @@ import {
   companyList as companyListAtom,
 } from 'src/recoil/atoms'
 import { useEffect } from 'react'
-
-export const QUERY = gql`
-  query ($id: Int!) {
-    searchbar {
-      symbol
-      name
-      price
-      exchange
-      exchangeShortName
-      type
-    }
-    user(id: $id) {
-      email
-      favorites {
-        id
-        name
-      }
-    }
-  }
-`
+import { STARTUP_QUERY } from 'src/commons/gql'
 
 const HomePage = () => {
   const { isAuthenticated, currentUser, _logOut } = useAuth()
-  const [getArticles, { _loading, _error, _data }] = useLazyQuery(QUERY)
+  const [getArticles, { _loading, _error, _data }] = useLazyQuery(STARTUP_QUERY)
   const calledCompanies = useRecoilValue(calledCompaniesAtom)
   const plottingData = useRecoilValue(plottingDataAtom)
   const [_companyList, setCompanyList] = useRecoilState(companyListAtom)
