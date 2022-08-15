@@ -25,21 +25,56 @@ const DELETE_FAVORITES = gql`
     }
   }
 `
-// const USER_INFO = gql`
-//   query queryUser($id: Int!) {
-//     user(id: $id) {
-//       email
-//       id
-//       favorites {
-//         id
-//         name
-//       }
-//     }
-//   }
-// `
+
+const DELETE_ALL_FAVORITES = gql`
+  mutation removeALLmetric($id: Int!) {
+    deleteAllFavoritesUser(id: $id) {
+      id
+      email
+    }
+  }
+`
+
 const ProfilePage = () => {
   const [favoriteMetrics, _setFavoriteMetrics] =
     useRecoilState(userFavMetricsAtom)
+  const availableMetrics = [
+    'netProfitMargin',
+    'debtRatio',
+    'netIncome',
+    'freeCashFlow',
+    'marketCapChangeWithRetainedEarnings',
+    'grossProfitMargin',
+    'burnRatio',
+    'priceToEarning',
+    'rAndDBudgetToRevenue',
+    'currentRatio',
+    'priceToFreeCashFlowsRatio',
+    'operatingCashFlow',
+    'freeCashFlowToNetIncome',
+    'operatingCFToCurrentLiabilities',
+    'dividendYield',
+    'incomeTaxToNetIncome',
+    'returnOnRetainedEarnings',
+    'meanNetIncomeGrowthRate',
+    'meanFCFGrowthRate',
+    'intrinsicValue',
+  ].sort()
+  const availableOptions = availableMetrics.map((item, index) => ({
+    id: index,
+    value: item,
+    // First capitalize the first letter of the metric name and
+    // then place space between capitalized section.
+    title: (item[0].toUpperCase() + item.slice(1))
+      .match(/[A-Z]+(?![a-z])|[A-Z]?[a-z]+|\d+/g)
+      .join(' '),
+  }))
+  // make cash flow and net income default visiable
+  const defaultVisables = availableOptions.filter((item) =>
+    favoriteMetrics.includes(item.value)
+  )
+  const [defaultVisiableOptions, setDefaultVisiableOptions] =
+    useState(defaultVisables)
   const { isAuthenticated, currentUser, _logOut } = useAuth()
   const [updateFavoriteDB] = useMutation(UPDATE_FAVORITES, {
     onCompleted: (_data) => {
@@ -53,12 +88,69 @@ const ProfilePage = () => {
       // Placeholder for future use
     },
   })
+  const [deleteFavoritesAll] = useMutation(DELETE_ALL_FAVORITES, {
+    onCompleted: (_data) => {
+      //pass
+      // Placeholder for future use
+    },
+  })
+  const updateUserPickedMetrics = (values, getTagProps) => {
+    {
+      return values.map((option, index) => {
+        return (
+          <Chip
+            key={option.id}
+            size="medium"
+            variant="outlined"
+            label={`${option.title}`}
+            {...getTagProps({ index })}
+            deleteIcon={
+              <Tooltip title="Remove Metric">
+                <CancelRounded />
+              </Tooltip>
+            }
+          />
+        )
+      })
+    }
+  }
+
+  const myChangeFunc = (event, values, reason, detail) => {
+    // Metrics to be loaded inside the AutoComplete text field
+    var tmpVisiableOptions = [...defaultVisiableOptions]
+    // If the user has selected a metric, then add that metric to the list of metrics
+    // that will be plotted. And if the user has removed a metric(removeOption),
+    // then remove the metric from the list of available metrics
+    let inData
+    if (reason === 'selectOption') {
+      inData = {
+        name: detail.option.value,
+        userId: currentUser.id,
+      }
+      updateFavoriteDB({ variables: { input: inData } })
+      tmpVisiableOptions.push(detail.option)
+      setDefaultVisiableOptions(tmpVisiableOptions)
+    } else if (reason === 'removeOption') {
+      inData = {
+        name: detail.option.value,
+        userId: currentUser.id,
+      }
+      deleteFavoriteDB({ variables: { input: inData } })
+      tmpVisiableOptions = tmpVisiableOptions.filter(
+        (item) => item !== detail.option
+      )
+      setDefaultVisiableOptions(tmpVisiableOptions)
+    } else if (reason === 'clear') {
+      setDefaultVisiableOptions([])
+      deleteFavoritesAll({ variables: { id: currentUser.id } })
+    }
+  }
 
   return (
     <>
       <MetaTags title="Profile" description="Profile page" />
 
-      <div className="relative rounded-xl overflow-auto ml-2.5 mr-14">
+      <div className="relative rounded-xl overflow-auto mx-12 mr-14">
         <div className="overflow-hidden my-8">
           <table className="border-collapse table-auto w-full text-sm">
             <tbody>
@@ -75,9 +167,41 @@ const ProfilePage = () => {
                   Favorites
                 </th>
                 <td className="border-b dark:border-slate-600">
-                  {favoriteMetrics.map((metric, index) => (
+                  {/* {favoriteMetrics.map((metric, index) => (
                     <span key={index}>{metric}, </span>
-                  ))}
+                  ))} */}
+                  <Autocomplete
+                    clearIcon={
+                      <Tooltip title="Clear all Metric">
+                        <CancelRounded />
+                      </Tooltip>
+                    }
+                    className="user-added-metric-autocomplete"
+                    renderTags={(value, getTagProps) =>
+                      updateUserPickedMetrics(value, getTagProps)
+                    }
+                    multiple
+                    onChange={myChangeFunc}
+                    id="tags-standard"
+                    filterSelectedOptions
+                    options={availableOptions}
+                    isOptionEqualToValue={(option, value) =>
+                      option.id === value.id
+                    }
+                    getOptionLabel={(option) => option.title}
+                    value={defaultVisiableOptions}
+                    renderInput={(params) => {
+                      return (
+                        <TextField
+                          // inputProps={{ className: buttonColor.input }}
+                          className="txtBox-metric"
+                          {...params}
+                          variant="standard"
+                          placeholder="Add To Favorites"
+                        />
+                      )
+                    }}
+                  />
                 </td>
               </tr>
             </tbody>

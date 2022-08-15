@@ -37,6 +37,7 @@ export const schema = gql`
   }
 
   type Mutation {
+    deleteAllFavoritesUser(id: Int!): User @skipAuth
     createUser(input: CreateUserInput!): User! @skipAuth
     updateUser(id: Int!, input: UpdateUserInput!): User! @skipAuth
     deleteUser(id: Int!): User! @skipAuth

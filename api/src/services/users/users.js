@@ -41,6 +41,19 @@ export const deleteUser = ({ id }) => {
   })
 }
 
+export const deleteAllFavoritesUser = ({ id }) => {
+  return db.user.update({
+    data: {
+      favoriteMetrics: {
+        deleteMany: {},
+      },
+    },
+    where: {
+      id: id,
+    },
+  })
+}
+
 export const User = {
   favoriteMetrics: (_obj, { root }) =>
     db.user.findUnique({ where: { id: root.id } }).favoriteMetrics(),
