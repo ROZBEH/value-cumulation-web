@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { userFavMetrics as userFavMetricsAtom } from 'src/recoil/atoms'
 import { DataGrid } from '@mui/x-data-grid'
+import { toast } from '@redwoodjs/web/toast'
 
 const UPDATE_FAVORITES = gql`
   mutation addmetric($input: CreateFavoriteMetricInput!) {
@@ -77,21 +78,25 @@ const ProfilePage = () => {
     useState(defaultVisables)
   const { isAuthenticated, currentUser, _logOut } = useAuth()
   const [updateFavoriteDB] = useMutation(UPDATE_FAVORITES, {
-    onCompleted: (_data) => {
+    onCompleted: (data) => {
       //pass
       // Placeholder for future use
+      console.log(data)
+      toast.success('Successfully Added')
     },
   })
   const [deleteFavoriteDB] = useMutation(DELETE_FAVORITES, {
     onCompleted: (_data) => {
       //pass
       // Placeholder for future use
+      toast.success('Successfully Removed')
     },
   })
   const [deleteFavoritesAll] = useMutation(DELETE_ALL_FAVORITES, {
     onCompleted: (_data) => {
       //pass
       // Placeholder for future use
+      toast.success('Successfully Removed All Favorites.')
     },
   })
   const updateUserPickedMetrics = (values, getTagProps) => {
