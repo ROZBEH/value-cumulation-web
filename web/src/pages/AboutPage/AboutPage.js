@@ -1,12 +1,13 @@
 import { MetaTags } from '@redwoodjs/web'
-
+import { Content } from 'src/components/Content/Content'
 const AboutPage = () => {
   return (
     <>
       <MetaTags title="About" description="About page" />
 
-      <h1>AboutPage</h1>
-      <p>To be Done</p>
+      <div className="mx-96">
+        <Content />
+      </div>
     </>
   )
 }
