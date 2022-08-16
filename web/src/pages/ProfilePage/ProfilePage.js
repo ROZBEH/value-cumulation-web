@@ -3,11 +3,16 @@ import { Autocomplete, TextField } from '@mui/material'
 import { CancelRounded } from '@material-ui/icons'
 import { Chip, Tooltip } from '@material-ui/core'
 import { useAuth } from '@redwoodjs/auth'
-import { useState } from 'react'
-import { useRecoilValue } from 'recoil'
-import { userFavMetrics as userFavMetricsAtom } from 'src/recoil/atoms'
-import { toast } from '@redwoodjs/web/toast'
+import { useState, useEffect } from 'react'
+import { useRecoilValue, useRecoilState } from 'recoil'
 import {
+  userFavMetrics as userFavMetricsAtom,
+  companyList as companyListAtom,
+} from 'src/recoil/atoms'
+import { toast } from '@redwoodjs/web/toast'
+import { useLazyQuery } from '@apollo/react-hooks'
+import {
+  STARTUP_QUERY,
   UPDATE_FAVORITES,
   DELETE_FAVORITES,
   DELETE_ALL_FAVORITES,
@@ -15,13 +20,11 @@ import {
 import { AVAILABLE_METRICS } from 'src/commons/constants'
 
 const ProfilePage = () => {
-  const favoriteMetrics = useRecoilValue(userFavMetricsAtom)
-  // make cash flow and net income default visiable
-  const defaultVisables = AVAILABLE_METRICS.filter((item) =>
-    favoriteMetrics.includes(item.value)
-  )
-  const [defaultVisiableOptions, setDefaultVisiableOptions] =
-    useState(defaultVisables)
+  const [_companyList, setCompanyList] = useRecoilState(companyListAtom)
+  const [getArticles, { _loading, _error, _data }] = useLazyQuery(STARTUP_QUERY)
+  const [favoriteMetrics, setUserFavMetrics] =
+    useRecoilState(userFavMetricsAtom)
+  const [defaultVisiableOptions, setDefaultVisiableOptions] = useState([])
   const { _isAuthenticated, currentUser, _logOut } = useAuth()
   const [updateFavoriteDB] = useMutation(UPDATE_FAVORITES, {
     onCompleted: (_data) => {
@@ -90,6 +93,22 @@ const ProfilePage = () => {
     }
   }
 
+  useEffect(() => {
+    getArticles({
+      variables: { id: currentUser.id },
+    }).then((jsonRes) => {
+      setCompanyList(jsonRes.data.searchbar)
+      var favMetrics = jsonRes.data.user.favorites.map(function (fav) {
+        return fav.name
+      })
+      setUserFavMetrics(favMetrics)
+      const defaultVisables = AVAILABLE_METRICS.filter((item) =>
+        favMetrics.includes(item.value)
+      )
+      setDefaultVisiableOptions(defaultVisables)
+    })
+  }, [getArticles, setCompanyList, currentUser, setUserFavMetrics])
+
   return (
     <>
       <MetaTags title="Profile" description="Profile page" />
@@ -111,38 +130,40 @@ const ProfilePage = () => {
                   Favorites
                 </th>
                 <td className="border-b dark:border-slate-600">
-                  <Autocomplete
-                    clearIcon={
-                      <Tooltip title="Clear all Metric">
-                        <CancelRounded />
-                      </Tooltip>
-                    }
-                    className="!w-4/5 !mb-5 !mt-2.5"
-                    renderTags={(value, getTagProps) =>
-                      updateUserPickedMetrics(value, getTagProps)
-                    }
-                    multiple
-                    onChange={myChangeFunc}
-                    id="tags-standard"
-                    filterSelectedOptions
-                    options={AVAILABLE_METRICS}
-                    isOptionEqualToValue={(option, value) =>
-                      option.id === value.id
-                    }
-                    getOptionLabel={(option) => option.title}
-                    value={defaultVisiableOptions}
-                    renderInput={(params) => {
-                      return (
-                        <TextField
-                          // inputProps={{ className: buttonColor.input }}
-                          className="!w-4/5 !mb-4"
-                          {...params}
-                          variant="standard"
-                          placeholder="Add To Favorites"
-                        />
-                      )
-                    }}
-                  />
+                  {favoriteMetrics && (
+                    <Autocomplete
+                      clearIcon={
+                        <Tooltip title="Clear all Metric">
+                          <CancelRounded />
+                        </Tooltip>
+                      }
+                      className="!w-4/5 !mb-5 !mt-2.5"
+                      renderTags={(value, getTagProps) =>
+                        updateUserPickedMetrics(value, getTagProps)
+                      }
+                      multiple
+                      onChange={myChangeFunc}
+                      id="tags-standard"
+                      filterSelectedOptions
+                      options={AVAILABLE_METRICS}
+                      isOptionEqualToValue={(option, value) =>
+                        option.id === value.id
+                      }
+                      getOptionLabel={(option) => option.title}
+                      value={defaultVisiableOptions}
+                      renderInput={(params) => {
+                        return (
+                          <TextField
+                            // inputProps={{ className: buttonColor.input }}
+                            className="!w-4/5 !mb-4"
+                            {...params}
+                            variant="standard"
+                            placeholder="Add To Favorites"
+                          />
+                        )
+                      }}
+                    />
+                  )}
                 </td>
               </tr>
             </tbody>
