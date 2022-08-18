@@ -18,7 +18,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography component={'span'}>{children}</Typography>
+          <Typography component={'div'}>{children}</Typography>
         </Box>
       )}
     </div>
@@ -31,13 +31,6 @@ TabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 }
 
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  }
-}
-
 const HomePage = () => {
   const [value, setValue] = React.useState(0)
   const { isAuthenticated, currentUser, _logOut } = useAuth()
@@ -47,22 +40,19 @@ const HomePage = () => {
   }
 
   return (
-    <Box sx={{ width: '100%', marginLeft: '5px' }}>
+    <Box sx={{ width: '100%' }}>
       <Box
         sx={{
+          width: '30%',
           borderBottom: 1,
           borderColor: 'divider',
-          borderBlockEnd: 'inherit',
+          marginLeft: '30px',
+          marginRight: '20px',
         }}
       >
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
-          <Tab label="Financials" {...a11yProps(0)} />
-          <Tab label="Item Two" {...a11yProps(1)} />
-          <Tab label="Item Three" {...a11yProps(2)} />
+        <Tabs value={value} onChange={handleChange}>
+          <Tab label="Financials" />
+          <Tab label="SEC Reports" />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -70,9 +60,6 @@ const HomePage = () => {
       </TabPanel>
       <TabPanel value={value} index={1}>
         Item Two
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        Item three
       </TabPanel>
     </Box>
   )
