@@ -5,7 +5,7 @@ const MainLayout = ({ children }) => {
   const { isAuthenticated, currentUser, logOut } = useAuth()
   return (
     <>
-      <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
+      <Toaster toastOptions={{ className: 'rw-toast', duration: 4000 }} />
       <header className="bg-slate-100 sticky top-0 z-50 rounded-b-xl">
         <nav className="flex items-center justify-between flex-wrap bg-gold-800 p-6">
           <div>
