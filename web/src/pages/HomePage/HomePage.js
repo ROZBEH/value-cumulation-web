@@ -2,6 +2,7 @@ import { useAuth } from '@redwoodjs/auth'
 import { Tabs, Tab, Box } from '@mui/material'
 import * as React from 'react'
 import { Financials } from 'src/components/Financials/Financials'
+import { SECLinks } from 'src/components/SECLinks/SECLinks'
 import PropTypes from 'prop-types'
 import Typography from '@mui/material/Typography'
 
@@ -59,7 +60,7 @@ const HomePage = () => {
         <Financials />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        <SECLinks />
       </TabPanel>
     </Box>
   )

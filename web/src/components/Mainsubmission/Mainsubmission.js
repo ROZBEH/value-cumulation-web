@@ -19,6 +19,7 @@ import {
   suggestions as suggestionsAtom,
   textPrompt as textPromptAtom,
   counterCompany as counterCompanyAtom,
+  secReports as secReportsAtom,
 } from 'src/recoil/atoms'
 import './Mainsubmission.css'
 import { popCompany, postProcess } from './utilitiesMainsubmission'
@@ -54,6 +55,7 @@ export const Mainsubmission = () => {
   const [textPrompt, setPrompt] = useRecoilState(textPromptAtom)
   const [suggestions, setSuggestion] = useRecoilState(suggestionsAtom)
   const [counterCompany, setCounterCompany] = useRecoilState(counterCompanyAtom)
+  const [_secReport, setSECReports] = useRecoilState(secReportsAtom)
   const _formCustomMethods = useForm({ mode: 'onBlur' })
   // Handling errors for user input
   let errors = ''
@@ -145,6 +147,7 @@ export const Mainsubmission = () => {
           plotData,
           index
         )
+        setSECReports(fundamentalanalysis.data.getFundamentals.secReports)
         setPltData(plotData)
       })
     } else if (reason === 'clear') {
