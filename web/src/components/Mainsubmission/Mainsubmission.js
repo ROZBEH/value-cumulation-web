@@ -31,6 +31,15 @@ export const QUERY2 = gql`
       metricNames
       fullMetricNames
       metricValues
+      secReports {
+        symbol
+        fillingDate
+        acceptedDate
+        cik
+        type
+        link
+        finalLink
+      }
       years
     }
   }
