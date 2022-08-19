@@ -55,7 +55,7 @@ export const Mainsubmission = () => {
   const [textPrompt, setPrompt] = useRecoilState(textPromptAtom)
   const [suggestions, setSuggestion] = useRecoilState(suggestionsAtom)
   const [counterCompany, setCounterCompany] = useRecoilState(counterCompanyAtom)
-  const [_secReport, setSECReports] = useRecoilState(secReportsAtom)
+  const [secReport, setSECReports] = useRecoilState(secReportsAtom)
   const _formCustomMethods = useForm({ mode: 'onBlur' })
   // Handling errors for user input
   let errors = ''
@@ -147,7 +147,11 @@ export const Mainsubmission = () => {
           plotData,
           index
         )
-        setSECReports(fundamentalanalysis.data.getFundamentals.secReports)
+        setSECReports((secReport) => ({
+          ...secReport,
+          [plotData['netIncome']['nameCompany'].slice(-1)]:
+            fundamentalanalysis.data.getFundamentals.secReports,
+        }))
         setPltData(plotData)
       })
     } else if (reason === 'clear') {

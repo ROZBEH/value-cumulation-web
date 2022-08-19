@@ -79,5 +79,5 @@ export const userFavMetrics = atom({
 
 export const secReports = atom({
   key: 'secReports',
-  default: [],
+  default: {},
 })
