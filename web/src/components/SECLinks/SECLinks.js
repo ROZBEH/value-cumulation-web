@@ -35,11 +35,10 @@ export const SECLinks = () => {
               return (
                 <TextField
                   className="text-field-searchbar"
-                  // onChange={(e) => onChangeTextField(e.target.value)}
                   {...params}
                   variant="standard"
                   fullWidth
-                  placeholder="Type Company Name"
+                  placeholder="Enter Company Name"
                 />
               )
             }}

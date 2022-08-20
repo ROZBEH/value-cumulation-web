@@ -238,7 +238,7 @@ export const Mainsubmission = () => {
                   {...params}
                   variant="standard"
                   fullWidth
-                  placeholder="Type Company Name"
+                  placeholder="Enter Company Name"
                   error={errors ? true : false}
                   helperText={errors}
                 />
