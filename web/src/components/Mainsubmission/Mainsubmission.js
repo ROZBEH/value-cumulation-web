@@ -147,6 +147,27 @@ export const Mainsubmission = () => {
           plotData,
           index
         )
+        // Clean up the SEC report data and save it as an object
+        // The format of the report will be
+        /*
+        {
+          'APPLE': {'10K': { 'link':[l1, l2, ...],
+                              'fillingDate': [d1, d2, ...]
+                            },
+                    '10Q': { 'link':[l1, l2, ...],
+                              'fillingDate': [d1, d2, ...],
+                          },
+                    },
+          'GOOGLE': {'10K': { 'link':[l1, l2, ...]
+                              'fillingDate': [d1, d2, ...]
+                            },
+                    '10Q': { 'link':[l1, l2, ...],
+                              'fillingDate': [d1, d2, ...],
+                          },
+                    },
+
+        }
+        */
         const tmpSECReports =
           fundamentalanalysis.data.getFundamentals.secReports
         const secReportCompany = {}
