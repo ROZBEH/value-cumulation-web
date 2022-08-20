@@ -51,6 +51,7 @@ const HomePage = () => {
           marginRight: '20px',
         }}
       >
+        <div style={{ position: 'fixed', zIndex: '-1' }}> </div>
         <Tabs value={value} onChange={handleChange}>
           <Tab label="Financials" />
           <Tab label="SEC Reports" />
