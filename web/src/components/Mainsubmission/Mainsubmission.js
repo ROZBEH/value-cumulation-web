@@ -147,10 +147,27 @@ export const Mainsubmission = () => {
           plotData,
           index
         )
+        const tmpSECReports =
+          fundamentalanalysis.data.getFundamentals.secReports
+        const secReportCompany = {}
+        for (let i = 0; i < tmpSECReports.length; i++) {
+          if (tmpSECReports[i].type in secReportCompany) {
+            secReportCompany[tmpSECReports[i].type]['link'].push(
+              tmpSECReports[i]['finalLink']
+            )
+            secReportCompany[tmpSECReports[i].type]['fillingDate'].push(
+              tmpSECReports[i]['fillingDate']
+            )
+          } else {
+            secReportCompany[tmpSECReports[i].type] = {
+              link: [tmpSECReports[i]['finalLink']],
+              fillingDate: [tmpSECReports[i]['fillingDate']],
+            }
+          }
+        }
         setSECReports((secReport) => ({
           ...secReport,
-          [plotData['netIncome']['nameCompany'].slice(-1)]:
-            fundamentalanalysis.data.getFundamentals.secReports,
+          [plotData['netIncome']['nameCompany'].slice(-1)]: secReportCompany,
         }))
         setPltData(plotData)
       })
