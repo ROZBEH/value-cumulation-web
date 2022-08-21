@@ -172,17 +172,17 @@ export const Mainsubmission = () => {
         const secReportCompany = {}
         for (let i = 0; i < tmpSECReports.length; i++) {
           if (tmpSECReports[i].type in secReportCompany) {
-            secReportCompany[tmpSECReports[i].type]['link'].push(
-              tmpSECReports[i]['finalLink']
-            )
-            secReportCompany[tmpSECReports[i].type]['fillingDate'].push(
-              tmpSECReports[i]['fillingDate']
-            )
+            secReportCompany[tmpSECReports[i].type].push({
+              link: tmpSECReports[i]['finalLink'],
+              fillingDate: tmpSECReports[i]['fillingDate'],
+            })
           } else {
-            secReportCompany[tmpSECReports[i].type] = {
-              link: [tmpSECReports[i]['finalLink']],
-              fillingDate: [tmpSECReports[i]['fillingDate']],
-            }
+            secReportCompany[tmpSECReports[i].type] = [
+              {
+                link: tmpSECReports[i]['finalLink'],
+                fillingDate: tmpSECReports[i]['fillingDate'],
+              },
+            ]
           }
         }
         setSECReports((secReport) => ({
