@@ -1,20 +1,45 @@
-import { useState } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import Autocomplete from '@mui/material/Autocomplete'
-import { Tooltip, TextField, Button } from '@material-ui/core'
+import { Tooltip, TextField } from '@material-ui/core'
 import {
   secReports as secReportsAtom,
   calledCompanies as calledCompaniesAtom,
 } from 'src/recoil/atoms'
+import {
+  reportNameArrays as reportNameArraysAtom,
+  allReportArrays as allReportArraysAtom,
+  pickedReportArrays as pickedReportArraysAtom,
+  reportLink as reportLinkAtom,
+  valueCompany as valueAtom,
+  inputValueCompany as inputValueAtom,
+  valueReport as valueReportAtom,
+  inputValueReport as inputValueReportAtom,
+  valueDate as valueDateAtom,
+  inputValueDate as inputValueDateAtom,
+} from 'src/recoil/secLinks'
 export const SECLinks = () => {
   const calledCompanies = useRecoilValue(calledCompaniesAtom)
+
   const secReport = useRecoilValue(secReportsAtom)
-  const [reportNameArrays, setReportNameArrays] = useState([])
-  const [allReportArrays, setAllReportArrays] = useState([])
-  const [pickedReportArrays, setPickedReportArrays] = useState([])
-  const [reportLink, setReportLink] = useState('')
+  const [reportNameArrays, setReportNameArrays] =
+    useRecoilState(reportNameArraysAtom)
+  const [allReportArrays, setAllReportArrays] =
+    useRecoilState(allReportArraysAtom)
+  const [pickedReportArrays, setPickedReportArrays] = useRecoilState(
+    pickedReportArraysAtom
+  )
+  const [reportLink, setReportLink] = useRecoilState(reportLinkAtom)
+  const [valueCompany, setValueCompany] = useRecoilState(valueAtom)
+  const [inputValueCompany, setInputValueCompany] =
+    useRecoilState(inputValueAtom)
+  const [valueReport, setValueReport] = useRecoilState(valueReportAtom)
+  const [inputValueReport, setInputValueReport] =
+    useRecoilState(inputValueReportAtom)
+  const [valueDate, setValueDate] = useRecoilState(valueDateAtom)
+  const [inputValueDate, setInputValueDate] = useRecoilState(inputValueDateAtom)
 
   const onSelectCompany = async (_event, values, reason, _details) => {
+    setValueCompany(values)
     if (reason === 'selectOption') {
       const selectedCompanyReport = secReport[values.name]
       setAllReportArrays(selectedCompanyReport)
@@ -27,6 +52,7 @@ export const SECLinks = () => {
   }
 
   const onSelectReport = async (_event, values, reason, _details) => {
+    setValueReport(values)
     if (reason === 'selectOption') {
       setPickedReportArrays(allReportArrays[values])
     } else if (reason === 'clear') {
@@ -36,6 +62,7 @@ export const SECLinks = () => {
   }
 
   const onSelectDate = async (_event, values, reason, _details) => {
+    setValueDate(values)
     if (reason === 'selectOption') {
       setReportLink(values.link)
     } else if (reason === 'clear') {
@@ -53,69 +80,84 @@ export const SECLinks = () => {
                 onBlur={() => {
                   setTimeout(() => {}, 100)
                 }}
+                value={valueCompany || null}
                 onChange={(event, values, reason, details) =>
                   onSelectCompany(event, values, reason, details)
                 }
-                isOptionEqualToValue={(option, value) => option.id === value.id}
-                options={calledCompanies}
-                getOptionLabel={(option) => `${option.name} (${option.symbol})`}
-                renderInput={(params) => {
-                  return (
-                    <TextField
-                      className="text-field-searchbar"
-                      {...params}
-                      variant="standard"
-                      fullWidth
-                      placeholder="Enter Company Name"
-                    />
-                  )
+                inputValue={inputValueCompany}
+                onInputChange={(_e, newInputValue) => {
+                  setInputValueCompany(newInputValue)
                 }}
+                id="company-select"
+                options={calledCompanies}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                getOptionLabel={(option) => `${option.name} (${option.symbol})`}
+                // sx={{ width: 300 }}
+                renderInput={(params) => (
+                  <TextField
+                    className="text-field-searchbar"
+                    variant="standard"
+                    fullWidth
+                    {...params}
+                    label="Pick a Company"
+                  />
+                )}
               />
               {/* Pick Report */}
               <Autocomplete
                 onBlur={() => {
                   setTimeout(() => {}, 100)
                 }}
+                value={valueReport || null}
                 onChange={(event, values, reason, details) =>
                   onSelectReport(event, values, reason, details)
                 }
-                isOptionEqualToValue={(option, value) => option.id === value.id}
-                options={reportNameArrays}
-                getOptionLabel={(option) => option}
-                renderInput={(params) => {
-                  return (
-                    <TextField
-                      className="text-field-searchbar"
-                      {...params}
-                      variant="standard"
-                      fullWidth
-                      placeholder="Enter Report Name"
-                    />
-                  )
+                inputValue={inputValueReport}
+                onInputChange={(_e, newInputValue) => {
+                  setInputValueReport(newInputValue)
                 }}
+                id="report-select"
+                options={reportNameArrays}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                getOptionLabel={(option) => option}
+                // sx={{ width: 300 }}
+                renderInput={(params) => (
+                  <TextField
+                    className="text-field-searchbar"
+                    variant="standard"
+                    fullWidth
+                    {...params}
+                    label="Pick a Report"
+                  />
+                )}
               />
               {/* Pick Date */}
               <Autocomplete
                 onBlur={() => {
                   setTimeout(() => {}, 100)
                 }}
+                value={valueDate || null}
                 onChange={(event, values, reason, details) =>
                   onSelectDate(event, values, reason, details)
                 }
-                isOptionEqualToValue={(option, value) => option.id === value.id}
-                options={pickedReportArrays}
-                getOptionLabel={(option) => option.fillingDate}
-                renderInput={(params) => {
-                  return (
-                    <TextField
-                      className="text-field-searchbar"
-                      {...params}
-                      variant="standard"
-                      fullWidth
-                      placeholder="Pick a Report Date"
-                    />
-                  )
+                inputValue={inputValueDate}
+                onInputChange={(_e, newInputValue) => {
+                  setInputValueDate(newInputValue)
                 }}
+                id="date-select"
+                options={pickedReportArrays}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                getOptionLabel={(option) => option.fillingDate}
+                // sx={{ width: 300 }}
+                renderInput={(params) => (
+                  <TextField
+                    className="text-field-searchbar"
+                    variant="standard"
+                    fullWidth
+                    {...params}
+                    label="Pick a Date"
+                  />
+                )}
               />
             </div>
           )}
