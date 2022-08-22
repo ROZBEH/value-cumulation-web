@@ -54,7 +54,7 @@ export const Mainsubmission = () => {
   const [textPrompt, setPrompt] = useRecoilState(textPromptAtom)
   const [suggestions, setSuggestion] = useRecoilState(suggestionsAtom)
   const [counterCompany, setCounterCompany] = useRecoilState(counterCompanyAtom)
-  const [secReport, setSECReports] = useRecoilState(secReportsAtom)
+  const [_secReport, setSECReports] = useRecoilState(secReportsAtom)
   const _formCustomMethods = useForm({ mode: 'onBlur' })
   // Handling errors for user input
   let errors = ''
@@ -227,6 +227,7 @@ export const Mainsubmission = () => {
             onChange={(event, values, reason, details) =>
               myChangeFunc(event, values, reason, details, index)
             }
+            sx={{ width: 1200 }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
             options={suggestions}
             getOptionLabel={(option) => `${option.name} (${option.symbol})`}
@@ -251,13 +252,6 @@ export const Mainsubmission = () => {
 
         <Tooltip title="Add Company">
           <button
-            //     marginLeft: '5px',
-            // borderRadius: '8px',
-            // border: 'none',
-            // padding: '6px 15px',
-            // cursor: 'pointer',
-            // fontSize: '0.8rem',
-            // title="Add Company"
             className="rounded-lg w-8 h-8 bg-lightsky-blue border border-gray-300 text-white text-xs cursor-pointer ml-1"
             name="comparisonMode"
             onClick={increaseCounter}
