@@ -5,7 +5,6 @@ import {
   // TextField
   // TextField as RwTextField,
 } from '@redwoodjs/forms'
-import { Button } from '@mui/material'
 import { Tooltip, TextField } from '@material-ui/core'
 import Autocomplete from '@mui/material/Autocomplete'
 import { useLazyQuery } from '@apollo/client'
@@ -19,6 +18,8 @@ import {
   textPrompt as textPromptAtom,
   counterCompany as counterCompanyAtom,
   secReports as secReportsAtom,
+  valueTicker as valueTickerAtom,
+  inputValueTicker as inputValueTickerAtom,
 } from 'src/recoil/atoms'
 import './Mainsubmission.css'
 import { popCompany, postProcess } from './utilitiesMainsubmission'
@@ -55,6 +56,9 @@ export const Mainsubmission = () => {
   const [suggestions, setSuggestion] = useRecoilState(suggestionsAtom)
   const [counterCompany, setCounterCompany] = useRecoilState(counterCompanyAtom)
   const [_secReport, setSECReports] = useRecoilState(secReportsAtom)
+  const [valueTicker, setValueTicker] = useRecoilState(valueTickerAtom)
+  const [inputValueTicker, setInputValueTicker] =
+    useRecoilState(inputValueTickerAtom)
   const _formCustomMethods = useForm({ mode: 'onBlur' })
   // Handling errors for user input
   let errors = ''
@@ -126,6 +130,7 @@ export const Mainsubmission = () => {
     // If the user has selected a company(selectOption), then query the API
     // for the financial data. And if the user has removed the company(clear),
     // then remove the company from the plotData
+    setValueTicker(values)
     let plotData
     if (reason === 'selectOption') {
       if (
@@ -224,9 +229,14 @@ export const Mainsubmission = () => {
                 setSuggestion([])
               }, 100)
             }}
+            value={valueTicker || null}
+            inputValue={inputValueTicker}
             onChange={(event, values, reason, details) =>
               myChangeFunc(event, values, reason, details, index)
             }
+            onInputChange={(_e, newInputValue) => {
+              setInputValueTicker(newInputValue)
+            }}
             sx={{ width: 1200 }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
             options={suggestions}
