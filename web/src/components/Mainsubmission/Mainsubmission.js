@@ -6,6 +6,8 @@ import {
   // TextField as RwTextField,
 } from '@redwoodjs/forms'
 import { Tooltip, TextField } from '@material-ui/core'
+import CircularProgress from '@mui/material/CircularProgress'
+import * as React from 'react'
 import Autocomplete from '@mui/material/Autocomplete'
 import { useLazyQuery } from '@apollo/client'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -57,6 +59,7 @@ export const Mainsubmission = () => {
   const [counterCompany, setCounterCompany] = useRecoilState(counterCompanyAtom)
   const [_secReport, setSECReports] = useRecoilState(secReportsAtom)
   const [valueTicker, setValueTicker] = useRecoilState(valueTickerAtom)
+  const loadingSuggestion = companyList.length === 0
   const [inputValueTicker, setInputValueTicker] =
     useRecoilState(inputValueTickerAtom)
   const _formCustomMethods = useForm({ mode: 'onBlur' })
@@ -266,6 +269,17 @@ export const Mainsubmission = () => {
                   label="Type Company Name"
                   error={errors ? true : false}
                   helperText={errors}
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <React.Fragment>
+                        {loadingSuggestion ? (
+                          <CircularProgress color="inherit" size={20} />
+                        ) : null}
+                        {params.InputProps.endAdornment}
+                      </React.Fragment>
+                    ),
+                  }}
                 />
               )
             }}
