@@ -16,7 +16,7 @@ import {
   inputValueReport as inputValueReportAtom,
   valueDate as valueDateAtom,
   inputValueDate as inputValueDateAtom,
-} from 'src/recoil/secLinks'
+} from 'src/recoil/secAtom'
 export const SECLinks = () => {
   const calledCompanies = useRecoilValue(calledCompaniesAtom)
 
@@ -48,6 +48,7 @@ export const SECLinks = () => {
       setAllReportArrays([])
       setReportNameArrays([])
       setPickedReportArrays([])
+      setReportLink('')
     }
   }
 
