@@ -71,6 +71,8 @@ export const Mainsubmission = () => {
 
   const increaseCounter = () => {
     if (counterCompany < 5) {
+      setValueTicker((currentState) => [...currentState, ''])
+      setInputValueTicker((currentState) => [...currentState, ''])
       setCounterCompany(counterCompany + 1)
       counterArr = new Array(counterCompany).fill('').map((_, i) => i + 1)
     }
@@ -78,6 +80,10 @@ export const Mainsubmission = () => {
 
   const decreaseCounter = () => {
     if (counterCompany > 1) {
+      // remove the last item from the array
+      setCalledCompanies((currentState) => currentState.slice(0, -1))
+      setValueTicker(valueTicker.slice(0, -1))
+      setInputValueTicker(inputValueTicker.slice(0, -1))
       setCounterCompany(counterCompany - 1)
       counterArr = new Array(counterCompany).fill('').map((_, i) => i + 1)
       var plotData = JSON.parse(JSON.stringify(pltData))
@@ -130,7 +136,9 @@ export const Mainsubmission = () => {
     // If the user has selected a company(selectOption), then query the API
     // for the financial data. And if the user has removed the company(clear),
     // then remove the company from the plotData
-    setValueTicker(values)
+    var tmpValue = [...valueTicker]
+    tmpValue[index] = values
+    setValueTicker(tmpValue)
     let plotData
     if (reason === 'selectOption') {
       if (
@@ -229,15 +237,17 @@ export const Mainsubmission = () => {
                 setSuggestion([])
               }, 100)
             }}
-            value={valueTicker || null}
-            inputValue={inputValueTicker}
+            value={valueTicker[index] || null}
+            inputValue={inputValueTicker[index]}
             onChange={(event, values, reason, details) =>
               myChangeFunc(event, values, reason, details, index)
             }
             onInputChange={(_e, newInputValue) => {
-              setInputValueTicker(newInputValue)
+              var tmpInputValue = [...inputValueTicker]
+              tmpInputValue[index] = newInputValue
+              setInputValueTicker(tmpInputValue)
             }}
-            sx={{ width: 1200 }}
+            sx={{ width: 1000 }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
             options={suggestions}
             getOptionLabel={(option) => `${option.name} (${option.symbol})`}
