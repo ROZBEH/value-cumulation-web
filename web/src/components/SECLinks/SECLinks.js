@@ -1,4 +1,4 @@
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
 import Autocomplete from '@mui/material/Autocomplete'
 import { Tooltip, TextField } from '@material-ui/core'
 import {
@@ -17,6 +17,7 @@ import {
   valueDate as valueDateAtom,
   inputValueDate as inputValueDateAtom,
 } from 'src/recoil/secAtom'
+import { useEffect } from 'react'
 export const SECLinks = () => {
   const calledCompanies = useRecoilValue(calledCompaniesAtom)
 
@@ -37,6 +38,13 @@ export const SECLinks = () => {
     useRecoilState(inputValueReportAtom)
   const [valueDate, setValueDate] = useRecoilState(valueDateAtom)
   const [inputValueDate, setInputValueDate] = useRecoilState(inputValueDateAtom)
+  // Reset input fields
+  const resetValueCompany = useResetRecoilState(valueAtom)
+  const resetInputValueCompany = useResetRecoilState(inputValueAtom)
+  const resetValueReport = useResetRecoilState(valueReportAtom)
+  const resetInputValueReport = useResetRecoilState(inputValueReportAtom)
+  const resetValueDate = useResetRecoilState(valueDateAtom)
+  const resetInputValueDate = useResetRecoilState(inputValueDateAtom)
 
   const onSelectCompany = async (_event, values, reason, _details) => {
     setValueCompany(values)
@@ -70,12 +78,24 @@ export const SECLinks = () => {
       setReportLink('')
     }
   }
+
+  // Reset input fields when there is no comapny left
+  useEffect(() => {
+    if (calledCompanies.length == 0 && valueCompany != '') {
+      resetValueCompany()
+      resetInputValueCompany()
+      resetValueReport()
+      resetInputValueReport()
+      resetValueDate()
+      resetInputValueDate()
+    }
+  })
   return (
     <>
       <div>
         <div>
           {calledCompanies.length > 0 && (
-            <div>
+            <div className="ml-1">
               {/* Pick Company */}
               <Autocomplete
                 onBlur={() => {
@@ -93,12 +113,12 @@ export const SECLinks = () => {
                 options={calledCompanies}
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 getOptionLabel={(option) => `${option.name} (${option.symbol})`}
-                // sx={{ width: 300 }}
+                sx={{ width: 1100 }}
                 renderInput={(params) => (
                   <TextField
                     className="text-field-searchbar"
                     variant="standard"
-                    fullWidth
+                    // fullWidth
                     {...params}
                     label="Pick a Company"
                   />
@@ -121,12 +141,13 @@ export const SECLinks = () => {
                 options={reportNameArrays}
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 getOptionLabel={(option) => option}
-                // sx={{ width: 300 }}
+                sx={{ width: 1100 }}
                 renderInput={(params) => (
                   <TextField
-                    className="text-field-searchbar"
+                    className="text-field-searchbar ml-12"
+                    style={{ marginLeft: '15px' }}
                     variant="standard"
-                    fullWidth
+                    // fullWidth
                     {...params}
                     label="Pick a Report"
                   />
@@ -149,12 +170,13 @@ export const SECLinks = () => {
                 options={pickedReportArrays}
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 getOptionLabel={(option) => option.fillingDate}
-                // sx={{ width: 300 }}
+                sx={{ width: 1100 }}
                 renderInput={(params) => (
                   <TextField
                     className="text-field-searchbar"
                     variant="standard"
-                    fullWidth
+                    // fullWidth
+                    style={{ marginLeft: '15px' }}
                     {...params}
                     label="Pick a Date"
                   />
@@ -162,22 +184,25 @@ export const SECLinks = () => {
               />
             </div>
           )}
+          {calledCompanies.length == 0 && (
+            <div>Please first pick a company on the FINANCIALS tab</div>
+          )}
         </div>
-
-        {reportLink && (
-          <div className="clear-both">
-            <Tooltip title="Report Link">
-              <button
-                className="rounded-lg w-20 h-8 bg-lightsky-blue border border-gray-300 text-white text-xs cursor-pointer ml-1"
-                name="comparisonMode"
-                onClick={() => window.open(reportLink)}
-              >
-                Report Link
-              </button>
-            </Tooltip>
-          </div>
-        )}
       </div>
+      <div className="clear-left my-1"></div>
+      {calledCompanies.length > 0 && reportLink && (
+        <div className="clear-left my-10">
+          <Tooltip title="Report Link">
+            <button
+              className="rounded-lg w-20 h-8 bg-lightsky-blue border border-gray-300 text-white text-xs cursor-pointer ml-1"
+              name="comparisonMode"
+              onClick={() => window.open(reportLink)}
+            >
+              Report Link
+            </button>
+          </Tooltip>
+        </div>
+      )}
     </>
   )
 }
