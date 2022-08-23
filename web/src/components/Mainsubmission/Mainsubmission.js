@@ -5,9 +5,7 @@ import {
   // TextField
   // TextField as RwTextField,
 } from '@redwoodjs/forms'
-import { Button } from '@mui/material'
-import { Tooltip } from '@material-ui/core'
-import { TextField } from '@material-ui/core'
+import { Tooltip, TextField } from '@material-ui/core'
 import Autocomplete from '@mui/material/Autocomplete'
 import { useLazyQuery } from '@apollo/client'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -19,6 +17,9 @@ import {
   suggestions as suggestionsAtom,
   textPrompt as textPromptAtom,
   counterCompany as counterCompanyAtom,
+  secReports as secReportsAtom,
+  valueTicker as valueTickerAtom,
+  inputValueTicker as inputValueTickerAtom,
 } from 'src/recoil/atoms'
 import './Mainsubmission.css'
 import { popCompany, postProcess } from './utilitiesMainsubmission'
@@ -31,6 +32,15 @@ export const QUERY2 = gql`
       metricNames
       fullMetricNames
       metricValues
+      secReports {
+        symbol
+        fillingDate
+        acceptedDate
+        cik
+        type
+        link
+        finalLink
+      }
       years
     }
   }
@@ -45,6 +55,10 @@ export const Mainsubmission = () => {
   const [textPrompt, setPrompt] = useRecoilState(textPromptAtom)
   const [suggestions, setSuggestion] = useRecoilState(suggestionsAtom)
   const [counterCompany, setCounterCompany] = useRecoilState(counterCompanyAtom)
+  const [_secReport, setSECReports] = useRecoilState(secReportsAtom)
+  const [valueTicker, setValueTicker] = useRecoilState(valueTickerAtom)
+  const [inputValueTicker, setInputValueTicker] =
+    useRecoilState(inputValueTickerAtom)
   const _formCustomMethods = useForm({ mode: 'onBlur' })
   // Handling errors for user input
   let errors = ''
@@ -57,6 +71,8 @@ export const Mainsubmission = () => {
 
   const increaseCounter = () => {
     if (counterCompany < 5) {
+      setValueTicker((currentState) => [...currentState, ''])
+      setInputValueTicker((currentState) => [...currentState, ''])
       setCounterCompany(counterCompany + 1)
       counterArr = new Array(counterCompany).fill('').map((_, i) => i + 1)
     }
@@ -64,6 +80,10 @@ export const Mainsubmission = () => {
 
   const decreaseCounter = () => {
     if (counterCompany > 1) {
+      // remove the last item from the array
+      setCalledCompanies((currentState) => currentState.slice(0, -1))
+      setValueTicker(valueTicker.slice(0, -1))
+      setInputValueTicker(inputValueTicker.slice(0, -1))
       setCounterCompany(counterCompany - 1)
       counterArr = new Array(counterCompany).fill('').map((_, i) => i + 1)
       var plotData = JSON.parse(JSON.stringify(pltData))
@@ -74,6 +94,9 @@ export const Mainsubmission = () => {
         setPltData(plotData)
       }
     } else if (counterCompany === 1) {
+      setCalledCompanies([])
+      setValueTicker([''])
+      setInputValueTicker([''])
       plotData = JSON.parse(JSON.stringify(pltData))
       if (plotData['netIncome']) {
         // passing (counterCompany - 1) since js array starts at index 0
@@ -116,6 +139,9 @@ export const Mainsubmission = () => {
     // If the user has selected a company(selectOption), then query the API
     // for the financial data. And if the user has removed the company(clear),
     // then remove the company from the plotData
+    var tmpValue = [...valueTicker]
+    tmpValue[index] = values
+    setValueTicker(tmpValue)
     let plotData
     if (reason === 'selectOption') {
       if (
@@ -136,6 +162,49 @@ export const Mainsubmission = () => {
           plotData,
           index
         )
+        // Clean up the SEC report data and save it as an object
+        // The format of the report will be
+        /*
+        {
+          'APPLE': {'10K': { 'link':[l1, l2, ...],
+                              'fillingDate': [d1, d2, ...]
+                            },
+                    '10Q': { 'link':[l1, l2, ...],
+                              'fillingDate': [d1, d2, ...],
+                          },
+                    },
+          'GOOGLE': {'10K': { 'link':[l1, l2, ...]
+                              'fillingDate': [d1, d2, ...]
+                            },
+                    '10Q': { 'link':[l1, l2, ...],
+                              'fillingDate': [d1, d2, ...],
+                          },
+                    },
+
+        }
+        */
+        const tmpSECReports =
+          fundamentalanalysis.data.getFundamentals.secReports
+        const secReportCompany = {}
+        for (let i = 0; i < tmpSECReports.length; i++) {
+          if (tmpSECReports[i].type in secReportCompany) {
+            secReportCompany[tmpSECReports[i].type].push({
+              link: tmpSECReports[i]['finalLink'],
+              fillingDate: tmpSECReports[i]['fillingDate'],
+            })
+          } else {
+            secReportCompany[tmpSECReports[i].type] = [
+              {
+                link: tmpSECReports[i]['finalLink'],
+                fillingDate: tmpSECReports[i]['fillingDate'],
+              },
+            ]
+          }
+        }
+        setSECReports((secReport) => ({
+          ...secReport,
+          [plotData['netIncome']['nameCompany'].slice(-1)]: secReportCompany,
+        }))
         setPltData(plotData)
       })
     } else if (reason === 'clear') {
@@ -171,9 +240,17 @@ export const Mainsubmission = () => {
                 setSuggestion([])
               }, 100)
             }}
+            value={valueTicker[index] || null}
+            inputValue={inputValueTicker[index]}
             onChange={(event, values, reason, details) =>
               myChangeFunc(event, values, reason, details, index)
             }
+            onInputChange={(_e, newInputValue) => {
+              var tmpInputValue = [...inputValueTicker]
+              tmpInputValue[index] = newInputValue
+              setInputValueTicker(tmpInputValue)
+            }}
+            sx={{ width: 1000 }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
             options={suggestions}
             getOptionLabel={(option) => `${option.name} (${option.symbol})`}
@@ -185,7 +262,8 @@ export const Mainsubmission = () => {
                   {...params}
                   variant="standard"
                   fullWidth
-                  placeholder="Type Company Name"
+                  // placeholder="Enter Company Name"
+                  label="Type Company Name"
                   error={errors ? true : false}
                   helperText={errors}
                 />
@@ -198,14 +276,7 @@ export const Mainsubmission = () => {
 
         <Tooltip title="Add Company">
           <button
-            //     marginLeft: '5px',
-            // borderRadius: '8px',
-            // border: 'none',
-            // padding: '6px 15px',
-            // cursor: 'pointer',
-            // fontSize: '0.8rem',
-            // title="Add Company"
-            className="rounded-lg w-8 h-8 bg-lightsky-blue border border-gray-300 text-white text-xs cursor-pointer ml-1"
+            className="rounded-lg w-8 h-8 bg-lightsky-blue border border-gray-300 text-white text-xs cursor-pointer ml-1 mt-4"
             name="comparisonMode"
             onClick={increaseCounter}
           >

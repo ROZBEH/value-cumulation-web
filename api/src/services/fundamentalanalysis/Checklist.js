@@ -11,6 +11,14 @@ export class Checklist {
   constructor(ticker) {
     this.ticker = ticker
   }
+
+  async getSECReports(ticker) {
+    const responseSEC = await fetch(
+      `https://financialmodelingprep.com/api/v3/sec_filings/${ticker}?pages=0-20&apikey=${process.env.API_KEY}`
+    )
+    const jsonSECReports = await responseSEC.json()
+    return jsonSECReports
+  }
   async getFinancials(ticker, statementType) {
     const responseFinancial = await fetch(
       `https://financialmodelingprep.com/api/v3/${statementType}/${ticker}?apikey=${process.env.API_KEY}`
@@ -26,39 +34,26 @@ export class Checklist {
   }
 
   async initialize() {
-    // Company Profile Information
-
-    this.companyProfile = await this.getFinancials(this.ticker, 'profile')
-
-    // Income Statement
-    this.dfIncomeStatement = await this.getFinancials(
-      this.ticker,
-      'income-statement'
-    )
-
-    // Balance Sheet
-    this.dfBalanceSheetStatement = await this.getFinancials(
-      this.ticker,
-      'balance-sheet-statement'
-    )
-
-    // Cash Flow Statement
-    this.dfCashFlowStatement = await this.getFinancials(
-      this.ticker,
-      'cash-flow-statement'
-    )
-
-    //Financial Ratios
-    this.dfFinancialRatios = await this.getFinancials(this.ticker, 'ratios')
-
-    // Key Metrics
-    this.dfKeyMetrics = await this.getFinancials(this.ticker, 'key-metrics')
-
-    // Historical Dividends
-    this.dfDividend = await this.getFinancials(
-      this.ticker,
-      'historical-price-full/stock_dividend'
-    )
+    // make all the call asyncronously to save time
+    ;[
+      this.secReports,
+      this.companyProfile,
+      this.dfIncomeStatement,
+      this.dfBalanceSheetStatement,
+      this.dfCashFlowStatement,
+      this.dfFinancialRatios,
+      this.dfKeyMetrics,
+      this.dfDividend,
+    ] = await Promise.all([
+      this.getSECReports(this.ticker),
+      this.getFinancials(this.ticker, 'profile'),
+      this.getFinancials(this.ticker, 'income-statement'),
+      this.getFinancials(this.ticker, 'balance-sheet-statement'),
+      this.getFinancials(this.ticker, 'cash-flow-statement'),
+      this.getFinancials(this.ticker, 'ratios'),
+      this.getFinancials(this.ticker, 'key-metrics'),
+      this.getFinancials(this.ticker, 'historical-price-full/stock_dividend'),
+    ])
   }
 
   companyName = () => {

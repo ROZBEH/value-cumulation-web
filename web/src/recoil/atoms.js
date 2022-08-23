@@ -18,6 +18,17 @@ export const textPrompt = atom({
   default: '',
 })
 
+// Value and inputValue for mainSubmission autocomplete searchbar
+export const valueTicker = atom({
+  key: 'valueTicker',
+  default: [''],
+})
+
+export const inputValueTicker = atom({
+  key: 'inputValueTicker',
+  default: [''],
+})
+
 // List of companies to be suggested to the user based
 // on the text they type in the searchbar
 export const suggestions = atom({
@@ -75,4 +86,9 @@ export const calledCompanies = atom({
 export const userFavMetrics = atom({
   key: 'userFavMetrics',
   default: [],
+})
+
+export const secReports = atom({
+  key: 'secReports',
+  default: {},
 })

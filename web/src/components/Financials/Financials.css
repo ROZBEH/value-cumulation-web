@@ -1,0 +1,30 @@
+body {
+  color:#241716;
+  font: 67.5% "Lucida Sans Unicode", "Bitstream Vera Sans", "Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica, sans-serif;
+  font-size: 18px;
+  margin: 0;
+  padding: 0;
+  background-color: rgb(255 255 255);
+  
+}
+.loader {
+  background-color: #ffffff;
+  bottom: 0;
+  left: 0;
+  opacity: 0.8;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.loader,
+.loader-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-message {
+  font-size: 1.1em;
+  margin-top: 1em;
+} 

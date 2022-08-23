@@ -41,12 +41,10 @@ async function callApi(ticker) {
   let years = []
   let metricNames = []
   for (const metric of metrics) {
-    console.log('metric: ', metric)
     var result = checklist[metric]().reverse()
     // floating point rounding up to 2 decimal places
     result = result.map((item) => Math.round(item * 100) / 100)
     // Format the numbers into Millions of Dollars
-    console.log('result = ', result)
     // if (Math.abs(result[result.length - 1]) > 1000000) {
     //   result = result.map((item) => {
     //     return numFormatter(item)
@@ -92,7 +90,10 @@ async function callApi(ticker) {
     metricNames.push(metricName.charAt(0).toUpperCase() + metricName.slice(1))
   }
 
-  return { companyName, metrics, metricNames, results, years }
+  const secReports = checklist.secReports
+  console.log('secReports[0]: ', secReports[0])
+
+  return { companyName, metrics, metricNames, results, secReports, years }
 }
 
 export const getFundamentals = async ({ ticker }) => {
@@ -103,6 +104,7 @@ export const getFundamentals = async ({ ticker }) => {
     metricNames: apiResult.metrics,
     fullMetricNames: apiResult.metricNames,
     metricValues: apiResult.results,
+    secReports: apiResult.secReports,
     years: apiResult.years,
   }
 }
