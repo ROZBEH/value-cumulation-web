@@ -94,6 +94,9 @@ export const Mainsubmission = () => {
         setPltData(plotData)
       }
     } else if (counterCompany === 1) {
+      setCalledCompanies([])
+      setValueTicker([''])
+      setInputValueTicker([''])
       plotData = JSON.parse(JSON.stringify(pltData))
       if (plotData['netIncome']) {
         // passing (counterCompany - 1) since js array starts at index 0
@@ -259,7 +262,8 @@ export const Mainsubmission = () => {
                   {...params}
                   variant="standard"
                   fullWidth
-                  placeholder="Enter Company Name"
+                  // placeholder="Enter Company Name"
+                  label="Type Company Name"
                   error={errors ? true : false}
                   helperText={errors}
                 />
@@ -272,7 +276,7 @@ export const Mainsubmission = () => {
 
         <Tooltip title="Add Company">
           <button
-            className="rounded-lg w-8 h-8 bg-lightsky-blue border border-gray-300 text-white text-xs cursor-pointer ml-1"
+            className="rounded-lg w-8 h-8 bg-lightsky-blue border border-gray-300 text-white text-xs cursor-pointer ml-1 mt-4"
             name="comparisonMode"
             onClick={increaseCounter}
           >
