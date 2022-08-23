@@ -44,7 +44,7 @@ const HomePage = () => {
     <Box sx={{ width: '100%' }}>
       <Box
         sx={{
-          width: '30%',
+          width: '25%',
           borderBottom: 1,
           borderColor: 'divider',
           marginLeft: '30px',
