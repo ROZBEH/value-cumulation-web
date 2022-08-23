@@ -21,12 +21,12 @@ export const textPrompt = atom({
 // Value and inputValue for mainSubmission autocomplete searchbar
 export const valueTicker = atom({
   key: 'valueTicker',
-  default: '',
+  default: [''],
 })
 
 export const inputValueTicker = atom({
   key: 'inputValueTicker',
-  default: '',
+  default: [''],
 })
 
 // List of companies to be suggested to the user based
