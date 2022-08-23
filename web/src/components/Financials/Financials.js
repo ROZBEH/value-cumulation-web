@@ -59,7 +59,7 @@ export const Financials = () => {
   return (
     <>
       <div className="grid grid-rows-3 grid-cols-2">
-        <div className="col-span-1 flex grid items-center mx-2">
+        <div className="col-span-1 flex grid  mx-2">
           <Mainsubmission />
         </div>
         <div className="col-span-1 row-span-3">
