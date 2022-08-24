@@ -24,7 +24,10 @@ import {
   inputValueTicker as inputValueTickerAtom,
 } from 'src/recoil/atoms'
 import './Mainsubmission.css'
-import { popCompany, postProcess } from './utilitiesMainsubmission'
+import {
+  popCompany,
+  postProcess,
+} from 'src/components/Mainsubmission/utilitiesMainsubmission'
 import { useEffect } from 'react'
 
 export const QUERY2 = gql`
