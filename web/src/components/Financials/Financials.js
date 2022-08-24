@@ -3,7 +3,7 @@ import { useAuth } from '@redwoodjs/auth'
 import { UserAddedMetric } from 'src/components/UserAddedMetric'
 import { Mainsubmission } from 'src/components/Mainsubmission/Mainsubmission'
 import { Content } from 'src/components/Content/Content'
-import './Financials.css'
+import 'src/components/Financials/Financials.css'
 import { useRecoilValue, useRecoilState } from 'recoil'
 import { PlotFundamentals } from 'src/components/PlotFundamentals/PlotFundamentals'
 import { useLazyQuery } from '@apollo/react-hooks'
@@ -20,34 +20,36 @@ import { STARTUP_QUERY } from 'src/commons/gql'
 
 export const Financials = () => {
   const { isAuthenticated, currentUser, _logOut } = useAuth()
-  const [getArticles, { _loading, _error, _data }] = useLazyQuery(STARTUP_QUERY)
+  const [_, setUserFavMetrics] = useRecoilState(userFavMetricsAtom)
+  const [getCompanies, { _loading, _error, _data }] = useLazyQuery(
+    STARTUP_QUERY,
+    {
+      onCompleted: (data) => {
+        setCompanyList(data.searchbar)
+        var favMetrics = data.user.favorites.map(function (fav) {
+          return fav.name
+        })
+        setUserFavMetrics(favMetrics)
+      },
+    }
+  )
+  // const { _loading, _error, data } = useQuery(STARTUP_QUERY, {
+  //   variables: { id: currentUser.id },
+  // })
   const calledCompanies = useRecoilValue(calledCompaniesAtom)
   const plottingData = useRecoilValue(plottingDataAtom)
   const [_companyList, setCompanyList] = useRecoilState(companyListAtom)
   const [metrics, _setMetrics] = useRecoilState(metricsAtom)
   const loadingFinancials = useRecoilValue(loadingFinancialsAtom)
-  const [_, setUserFavMetrics] = useRecoilState(userFavMetricsAtom)
 
   // Get the list of available companies on startup
   useEffect(() => {
     if (isAuthenticated) {
-      getArticles({
+      getCompanies({
         variables: { id: currentUser.id },
-      }).then((jsonRes) => {
-        setCompanyList(jsonRes.data.searchbar)
-        var favMetrics = jsonRes.data.user.favorites.map(function (fav) {
-          return fav.name
-        })
-        setUserFavMetrics(favMetrics)
       })
     }
-  }, [
-    getArticles,
-    setCompanyList,
-    isAuthenticated,
-    currentUser,
-    setUserFavMetrics,
-  ])
+  }, [getCompanies, isAuthenticated, currentUser])
   if (!isAuthenticated) {
     return (
       <div className="mx-96">
