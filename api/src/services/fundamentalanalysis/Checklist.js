@@ -14,14 +14,14 @@ export class Checklist {
 
   async getSECReports(ticker) {
     const responseSEC = await fetch(
-      `https://financialmodelingprep.com/api/v3/sec_filings/${ticker}?pages=0-20&apikey=${process.env.API_KEY}`
+      `https://financialmodelingprep.com/api/v3/sec_filings/${ticker}?pages=0-20&apikey=${process.env.FINANCIAL_API_KEY}`
     )
     const jsonSECReports = await responseSEC.json()
     return jsonSECReports
   }
   async getFinancials(ticker, statementType) {
     const responseFinancial = await fetch(
-      `https://financialmodelingprep.com/api/v3/${statementType}/${ticker}?apikey=${process.env.API_KEY}`
+      `https://financialmodelingprep.com/api/v3/${statementType}/${ticker}?apikey=${process.env.FINANCIAL_API_KEY}`
     )
     const jsonFinancial = await responseFinancial.json()
     var dfFinancial
