@@ -51,3 +51,12 @@ export const CREATE_CONTACT = gql`
     }
   }
 `
+
+export const GPT_QUERY = gql`
+  query ($query: String!) {
+    gptIntelligence(query: $query) {
+      query
+      response
+    }
+  }
+`

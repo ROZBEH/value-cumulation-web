@@ -7,6 +7,6 @@ export const schema = gql`
   }
 
   type Query {
-    gptIntelligence: [Result!]! @skipAuth
+    gptIntelligence(query: String!): Result! @skipAuth
   }
 `
