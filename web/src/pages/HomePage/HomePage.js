@@ -3,6 +3,7 @@ import { Tabs, Tab, Box } from '@mui/material'
 import * as React from 'react'
 import { Financials } from 'src/components/Financials/Financials'
 import { SECLinks } from 'src/components/SECLinks/SECLinks'
+import { Sector } from 'src/components/Sector/Sector'
 import PropTypes from 'prop-types'
 import Typography from '@mui/material/Typography'
 
@@ -44,7 +45,7 @@ const HomePage = () => {
     <Box sx={{ width: '100%' }}>
       <Box
         sx={{
-          width: '25%',
+          width: '38%',
           borderBottom: 1,
           borderColor: 'divider',
           marginLeft: '30px',
@@ -52,9 +53,15 @@ const HomePage = () => {
         }}
       >
         <div style={{ position: 'fixed', zIndex: '-1' }}> </div>
-        <Tabs value={value} onChange={handleChange}>
+        <Tabs
+          variant="scrollable"
+          scrollButtons="auto"
+          value={value}
+          onChange={handleChange}
+        >
           <Tab label="Financials" />
           <Tab label="SEC Reports" />
+          <Tab label="Sector Comparison" />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -62,6 +69,9 @@ const HomePage = () => {
       </TabPanel>
       <TabPanel value={value} index={1}>
         <SECLinks />
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <Sector />
       </TabPanel>
     </Box>
   )
