@@ -3,7 +3,7 @@ export const schema = gql`
   # response provided by the API
   type Result {
     query: String!
-    response: String!
+    response: [String!]!
   }
 
   type Query {
