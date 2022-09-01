@@ -36,7 +36,7 @@ export const UserAddedMetric = () => {
   const [favoriteMetrics, setFavoriteMetrics] =
     useRecoilState(userFavMetricsAtom)
 
-  // make cash flow and net income default visiable
+  // make cash flow and net income default visible
   const defaultVisables = AVAILABLE_METRICS.filter(
     (item) => item.value === 'netIncome' || item.value === 'freeCashFlow'
   )
