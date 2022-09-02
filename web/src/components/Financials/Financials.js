@@ -34,11 +34,6 @@ export const Financials = () => {
     }
   )
 
-  const [getGPTResponse] = useLazyQuery(GPT_QUERY, {
-    onCompleted: (data) => {
-      console.log('data gpt:', data)
-    },
-  })
   // const { _loading, _error, data } = useQuery(STARTUP_QUERY, {
   //   variables: { id: currentUser.id },
   // })
@@ -54,11 +49,8 @@ export const Financials = () => {
       getCompanies({
         variables: { id: currentUser.id },
       })
-      getGPTResponse({
-        variables: { query: 'This is a sample query' },
-      })
     }
-  }, [getCompanies, isAuthenticated, currentUser, getGPTResponse])
+  }, [getCompanies, isAuthenticated, currentUser])
   if (!isAuthenticated) {
     return (
       <div className="mx-96">
