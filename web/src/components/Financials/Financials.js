@@ -14,6 +14,7 @@ import {
   loadingFinancials as loadingFinancialsAtom,
   metrics as metricsAtom,
   companyList as companyListAtom,
+  sectorCompanies as sectorCompaniesAtom,
 } from 'src/recoil/atoms'
 import { useEffect } from 'react'
 import { STARTUP_QUERY, GPT_QUERY } from 'src/commons/gql'
@@ -21,6 +22,8 @@ import { STARTUP_QUERY, GPT_QUERY } from 'src/commons/gql'
 export const Financials = () => {
   const { isAuthenticated, currentUser, _logOut } = useAuth()
   const [_, setUserFavMetrics] = useRecoilState(userFavMetricsAtom)
+  const [_sectorCompanies, setSectorCompanies] =
+    useRecoilState(sectorCompaniesAtom)
   const [getCompanies, { _loading, _error, _data }] = useLazyQuery(
     STARTUP_QUERY,
     {
@@ -33,6 +36,12 @@ export const Financials = () => {
       },
     }
   )
+
+  const [getGPTResponse] = useLazyQuery(GPT_QUERY, {
+    onCompleted: (data) => {
+      setSectorCompanies(data.gptIntelligence.response)
+    },
+  })
 
   // const { _loading, _error, data } = useQuery(STARTUP_QUERY, {
   //   variables: { id: currentUser.id },
@@ -49,8 +58,12 @@ export const Financials = () => {
       getCompanies({
         variables: { id: currentUser.id },
       })
+
+      getGPTResponse({
+        variables: { query: 'hello' },
+      })
     }
-  }, [getCompanies, isAuthenticated, currentUser])
+  }, [getCompanies, isAuthenticated, currentUser, getGPTResponse])
   if (!isAuthenticated) {
     return (
       <div className="mx-96">

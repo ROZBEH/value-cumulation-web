@@ -1,18 +1,9 @@
-import { useLazyQuery } from '@apollo/react-hooks'
-import { useEffect, useState } from 'react'
-import { GPT_QUERY } from 'src/commons/gql'
+import { useRecoilValue } from 'recoil'
+import { sectorCompanies as sectorCompaniesAtom } from 'src/recoil/sectorAtom'
+
 export const Sector = () => {
-  const [sectorCompanies, setSectorCompanies] = useState([])
-  const [getGPTResponse] = useLazyQuery(GPT_QUERY, {
-    onCompleted: (data) => {
-      setSectorCompanies(data.gptIntelligence.response)
-    },
-  })
-  useEffect(() => {
-    getGPTResponse({
-      variables: { query: 'hello' },
-    })
-  }, [getGPTResponse])
+  const sectorCompanies = useRecoilValue(sectorCompaniesAtom)
+
   return (
     <div>
       {sectorCompanies.map((company, index) => (
