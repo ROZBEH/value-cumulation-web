@@ -34,7 +34,7 @@ export class Checklist {
   }
 
   async initialize() {
-    // make all the call asyncronously to save time
+    // make all the call asynchronously to save time
     ;[
       this.secReports,
       this.companyProfile,
