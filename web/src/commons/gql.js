@@ -18,6 +18,27 @@ export const STARTUP_QUERY = gql`
   }
 `
 
+export const COMPANY_QUERY = gql`
+  query GetFundamentalQuery($ticker: String!) {
+    getFundamentals(ticker: $ticker) {
+      companyName
+      metricNames
+      fullMetricNames
+      metricValues
+      secReports {
+        symbol
+        fillingDate
+        acceptedDate
+        cik
+        type
+        link
+        finalLink
+      }
+      years
+    }
+  }
+`
+
 export const UPDATE_FAVORITES = gql`
   mutation addmetric($input: CreateFavoriteMetricInput!) {
     createFavoriteMetric(input: $input) {
@@ -48,6 +69,15 @@ export const CREATE_CONTACT = gql`
   mutation CreateContactMutation($input: CreateContactInput!) {
     createContact(input: $input) {
       name
+    }
+  }
+`
+
+export const GPT_QUERY = gql`
+  query ($query: String!) {
+    gptIntelligence(query: $query) {
+      query
+      response
     }
   }
 `

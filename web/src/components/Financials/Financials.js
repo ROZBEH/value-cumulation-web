@@ -21,6 +21,7 @@ import { STARTUP_QUERY } from 'src/commons/gql'
 export const Financials = () => {
   const { isAuthenticated, currentUser, _logOut } = useAuth()
   const [_, setUserFavMetrics] = useRecoilState(userFavMetricsAtom)
+
   const [getCompanies, { _loading, _error, _data }] = useLazyQuery(
     STARTUP_QUERY,
     {
@@ -33,6 +34,7 @@ export const Financials = () => {
       },
     }
   )
+
   // const { _loading, _error, data } = useQuery(STARTUP_QUERY, {
   //   variables: { id: currentUser.id },
   // })

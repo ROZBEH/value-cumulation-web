@@ -10,6 +10,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import * as React from 'react'
 import Autocomplete from '@mui/material/Autocomplete'
 import { useLazyQuery } from '@apollo/client'
+import { COMPANY_QUERY, GPT_QUERY } from 'src/commons/gql'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import {
   calledCompanies as calledCompaniesAtom,
@@ -23,33 +24,13 @@ import {
   valueTicker as valueTickerAtom,
   inputValueTicker as inputValueTickerAtom,
 } from 'src/recoil/atoms'
+import { sectorCompanies as sectorCompaniesAtom } from 'src/recoil/sectorAtom'
 import './Mainsubmission.css'
 import {
   popCompany,
   postProcess,
 } from 'src/components/Mainsubmission/utilitiesMainsubmission'
 import { useEffect } from 'react'
-
-export const QUERY2 = gql`
-  query GetFundamentalQuery($ticker: String!) {
-    getFundamentals(ticker: $ticker) {
-      companyName
-      metricNames
-      fullMetricNames
-      metricValues
-      secReports {
-        symbol
-        fillingDate
-        acceptedDate
-        cik
-        type
-        link
-        finalLink
-      }
-      years
-    }
-  }
-`
 
 export const Mainsubmission = () => {
   const [_calledCompanies, setCalledCompanies] =
@@ -62,10 +43,17 @@ export const Mainsubmission = () => {
   const [counterCompany, setCounterCompany] = useRecoilState(counterCompanyAtom)
   const [_secReport, setSECReports] = useRecoilState(secReportsAtom)
   const [valueTicker, setValueTicker] = useRecoilState(valueTickerAtom)
+  const [_sectorCompanies, setSectorCompanies] =
+    useRecoilState(sectorCompaniesAtom)
   const loadingSuggestion = companyList.length === 0
   const [inputValueTicker, setInputValueTicker] =
     useRecoilState(inputValueTickerAtom)
   const _formCustomMethods = useForm({ mode: 'onBlur' })
+  const [getGPTResponse] = useLazyQuery(GPT_QUERY, {
+    onCompleted: (data) => {
+      setSectorCompanies(data.gptIntelligence.response)
+    },
+  })
   // Handling errors for user input
   let errors = ''
 
@@ -139,7 +127,8 @@ export const Mainsubmission = () => {
   }
 
   // Query the API for financial data of a company that the user has selected
-  const [getFunamentals, { _called, loading, _data }] = useLazyQuery(QUERY2)
+  const [getFunamentals, { _called, loading, _data }] =
+    useLazyQuery(COMPANY_QUERY)
 
   const myChangeFunc = async (_event, values, reason, _details, index) => {
     // If the user has selected a company(selectOption), then query the API
@@ -168,6 +157,9 @@ export const Mainsubmission = () => {
           plotData,
           index
         )
+        getGPTResponse({
+          variables: { query: 'hello' },
+        })
         // Clean up the SEC report data and save it as an object
         // The format of the report will be
         /*
