@@ -51,7 +51,12 @@ export const Mainsubmission = () => {
   const _formCustomMethods = useForm({ mode: 'onBlur' })
   const [getGPTResponse] = useLazyQuery(GPT_QUERY, {
     onCompleted: (data) => {
-      setSectorCompanies(data.gptIntelligence.response)
+      // First filter the list of available companies for GPT suggestions
+      const tmpSectorComp = companyList.filter((company) =>
+        data.gptIntelligence.response.some((res) => res === company.symbol)
+      )
+      // Now set the list of sector companies
+      setSectorCompanies(tmpSectorComp)
     },
   })
   // Handling errors for user input

@@ -7,7 +7,9 @@ export const Sector = () => {
   return (
     <div>
       {sectorCompanies.map((company, index) => (
-        <div key={index}>{company}</div>
+        <div key={index}>
+          {company.symbol}: {company.name}
+        </div>
       ))}
     </div>
   )
