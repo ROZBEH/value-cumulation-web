@@ -16,7 +16,6 @@ export const gptIntelligence = async (inputQuery) => {
   })
   const aiRes = gptResponse.data.choices[0].text
   const aiResArrStr = aiRes.split('A: ')[1]
-  console.log('aiResArrStr:', aiResArrStr)
   var aiResArr = JSON.parse('[' + aiResArrStr + ']')[0]
 
   return {
