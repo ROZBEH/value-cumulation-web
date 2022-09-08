@@ -1,5 +1,5 @@
 import { Checklist } from './Checklist'
-
+import { metricsDefinition } from './metricsDefinition'
 async function callApi(ticker) {
   const checklist = new Checklist(ticker.toUpperCase())
   await checklist.initialize()
@@ -40,7 +40,9 @@ async function callApi(ticker) {
   let results = []
   let years = []
   let metricNames = []
+  let metricsDescription = []
   for (const metric of metrics) {
+    metricsDescription.push(metricsDefinition[metric])
     var result = checklist[metric]().reverse()
     // floating point rounding up to 2 decimal places
     result = result.map((item) => Math.round(item * 100) / 100)
@@ -81,7 +83,6 @@ async function callApi(ticker) {
       }
       // yearArray.reverse()
     }
-    console.log('yearArray: ', yearArray)
 
     // only get the years that data exists in the result array for that year
     years.push(yearArray.reverse().slice(0, result.length))
@@ -91,9 +92,16 @@ async function callApi(ticker) {
   }
 
   const secReports = checklist.secReports
-  console.log('secReports[0]: ', secReports[0])
 
-  return { companyName, metrics, metricNames, results, secReports, years }
+  return {
+    companyName,
+    metrics,
+    metricNames,
+    results,
+    metricsDescription,
+    secReports,
+    years,
+  }
 }
 
 export const getFundamentals = async ({ ticker }) => {
@@ -104,6 +112,7 @@ export const getFundamentals = async ({ ticker }) => {
     metricNames: apiResult.metrics,
     fullMetricNames: apiResult.metricNames,
     metricValues: apiResult.results,
+    metricsDescription: apiResult.metricsDescription,
     secReports: apiResult.secReports,
     years: apiResult.years,
   }
