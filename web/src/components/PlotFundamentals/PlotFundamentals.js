@@ -60,7 +60,7 @@ export const PlotFundamentals = (props) => {
     <div className="main-div-linechart">
       <section>
         <div className="ml-80 text-sm">
-          {plotData.metricName} <Infopop text={plotData.metricName} />
+          {plotData.metricName} <Infopop text={plotData.description} />
         </div>
         <LineChart
           intractive={true}
