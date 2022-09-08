@@ -16,6 +16,7 @@ export const schema = gql`
     metricNames: [String!]!
     fullMetricNames: [String!]!
     metricValues: [[Float]!]!
+    metricsDescription: [String!]!
     secReports: [secReport!]!
     years: [[String!]!]!
   }
