@@ -14,7 +14,7 @@ export const Infopop = (inputText) => {
         </Button>
       </PopoverHandler>
       <PopoverContent toggle="popover" className="arrow border-2 rounded-md">
-        <div className="font-bold border-b-2">Title</div>
+        <div className="font-bold border-b-2">{inputText.title}</div>
         <div className="max-w-200px max-h-100px overflow-scroll">
           {inputText.text}
         </div>
