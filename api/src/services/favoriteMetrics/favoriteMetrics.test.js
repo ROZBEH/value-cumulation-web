@@ -42,12 +42,10 @@ describe('favoriteMetrics', () => {
     const resultUser = await createUser({
       input: { email: 'String4674023' },
     })
-    console.log('resultUser > ', resultUser)
     const result = await updateFavoriteMetric({
       id: original.id,
       input: { name: 'String28936102', users: { connect: { id: 1 } } },
     })
-    console.log('result > ', result)
 
     expect(result.name).toEqual('String28936102')
   })

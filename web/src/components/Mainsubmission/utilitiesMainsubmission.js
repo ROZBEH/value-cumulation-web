@@ -52,6 +52,7 @@ export function postProcess(data, plotData, index) {
   const metricsArrays = data.metricValues
   const fullMetricNames = data.fullMetricNames
   const metricNames = data.metricNames
+  const metricsDescription = data.metricsDescription
   const yearsArray = data.years
 
   for (var i = 0; i < metricsArrays.length; i++) {
@@ -59,6 +60,7 @@ export function postProcess(data, plotData, index) {
       plotData[metricNames[i]] = {}
       plotData[metricNames[i]]['metricName'] = fullMetricNames[i]
       plotData[metricNames[i]]['nameCompany'] = [nameCompany]
+      plotData[metricNames[i]]['description'] = metricsDescription[i]
       // companyOrder is an Object that keeps track of the order that companies have been
       // added to the plotData. companyOrder will never get removed from the array until
       // we delete the last company. It contains both key:value and value:key pairs.

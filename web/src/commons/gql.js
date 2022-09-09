@@ -25,6 +25,7 @@ export const COMPANY_QUERY = gql`
       metricNames
       fullMetricNames
       metricValues
+      metricsDescription
       secReports {
         symbol
         fillingDate
