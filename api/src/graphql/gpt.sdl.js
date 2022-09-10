@@ -5,8 +5,13 @@ export const schema = gql`
     query: String!
     response: [String!]!
   }
+  type Sentiment {
+    query: String!
+    sentiment: String!
+  }
 
   type Query {
     gptIntelligence(query: String!): Result! @skipAuth
+    gptSentiment(query: String!): Sentiment! @skipAuth
   }
 `
