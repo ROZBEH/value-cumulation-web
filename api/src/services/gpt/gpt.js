@@ -8,7 +8,7 @@ export const gptIntelligence = async (inputQuery) => {
   const openai = new OpenAI(OPENAI_API_KEY)
 
   const gptResponse = await openai.complete({
-    engine: 'davinci',
+    engine: 'text-davinci-002',
     prompt: fineTuneData + query + '\n',
     max_tokens: 100,
     temperature: 0.4,
@@ -26,10 +26,8 @@ export const gptIntelligence = async (inputQuery) => {
 
 export const gptSentiment = async (inputQuery) => {
   const query = inputQuery.query
-  console.log('query:', query)
   const OPENAI_API_KEY = process.env.OPENAI_API_KEY
   const openai = new OpenAI(OPENAI_API_KEY)
-  console.log('here')
   const gptResponse = await openai.complete({
     engine: 'text-davinci-002',
     prompt:
