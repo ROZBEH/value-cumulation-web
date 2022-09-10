@@ -10,7 +10,11 @@ import CircularProgress from '@mui/material/CircularProgress'
 import * as React from 'react'
 import Autocomplete from '@mui/material/Autocomplete'
 import { useLazyQuery } from '@apollo/client'
-import { COMPANY_QUERY, GPT_QUERY } from 'src/commons/gql'
+import {
+  COMPANY_QUERY,
+  GPT_QUERY_SECTOR,
+  GPT_QUERY_SENTIMENT,
+} from 'src/commons/gql'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import {
   calledCompanies as calledCompaniesAtom,
@@ -49,7 +53,7 @@ export const Mainsubmission = () => {
   const [inputValueTicker, setInputValueTicker] =
     useRecoilState(inputValueTickerAtom)
   const _formCustomMethods = useForm({ mode: 'onBlur' })
-  const [getGPTResponse] = useLazyQuery(GPT_QUERY, {
+  const [getGPTResSector] = useLazyQuery(GPT_QUERY_SECTOR, {
     onCompleted: (data) => {
       // First filter the list of available companies for GPT suggestions
       const tmpSectorComp = companyList.filter((company) =>
@@ -57,6 +61,12 @@ export const Mainsubmission = () => {
       )
       // Now set the list of sector companies
       setSectorCompanies(tmpSectorComp)
+    },
+  })
+
+  const [getGPTResSentiment] = useLazyQuery(GPT_QUERY_SENTIMENT, {
+    onCompleted: (data) => {
+      console.log('data: ', data)
     },
   })
   // Handling errors for user input
@@ -162,9 +172,14 @@ export const Mainsubmission = () => {
           plotData,
           index
         )
-        getGPTResponse({
-          variables: { query: 'hello' },
+        getGPTResSector({
+          variables: { query: values.symbol },
         })
+
+        getGPTResSentiment({
+          variables: { query: `I  didn't liked last years result` },
+        })
+
         // Clean up the SEC report data and save it as an object
         // The format of the report will be
         /*

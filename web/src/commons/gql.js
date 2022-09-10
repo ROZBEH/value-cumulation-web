@@ -74,11 +74,20 @@ export const CREATE_CONTACT = gql`
   }
 `
 
-export const GPT_QUERY = gql`
+export const GPT_QUERY_SECTOR = gql`
   query ($query: String!) {
     gptIntelligence(query: $query) {
       query
       response
+    }
+  }
+`
+
+export const GPT_QUERY_SENTIMENT = gql`
+  query ($query: String!) {
+    gptSentiment(query: $query) {
+      query
+      sentiment
     }
   }
 `
