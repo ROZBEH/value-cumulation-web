@@ -1,12 +1,19 @@
 import { TailSpin } from 'react-loader-spinner'
+
 import { useAuth } from '@redwoodjs/auth'
-import { UserAddedMetric } from 'src/components/UserAddedMetric'
-import { Mainsubmission } from 'src/components/Mainsubmission/Mainsubmission'
+
+import { STARTUP_QUERY } from 'src/commons/gql'
 import { Content } from 'src/components/Content/Content'
+import { Mainsubmission } from 'src/components/Mainsubmission/Mainsubmission'
+import { UserAddedMetric } from 'src/components/UserAddedMetric'
+
 import 'src/components/Financials/Financials.css'
 import { useRecoilValue, useRecoilState } from 'recoil'
+
 import { PlotFundamentals } from 'src/components/PlotFundamentals/PlotFundamentals'
+
 import { useLazyQuery } from '@apollo/react-hooks'
+
 import {
   userFavMetrics as userFavMetricsAtom,
   calledCompanies as calledCompaniesAtom,
@@ -15,8 +22,8 @@ import {
   metrics as metricsAtom,
   companyList as companyListAtom,
 } from 'src/recoil/atoms'
+
 import { useEffect } from 'react'
-import { STARTUP_QUERY } from 'src/commons/gql'
 
 export const Financials = () => {
   const { isAuthenticated, currentUser, _logOut } = useAuth()
@@ -26,7 +33,7 @@ export const Financials = () => {
     STARTUP_QUERY,
     {
       onCompleted: (data) => {
-        setCompanyList(data.searchbar)
+        setCompanyList(data.companyslist)
         var favMetrics = data.user.favorites.map(function (fav) {
           return fav.name
         })

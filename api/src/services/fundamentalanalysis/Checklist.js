@@ -1,9 +1,10 @@
 import { fetch } from 'cross-undici-fetch'
 import { DataFrame, toCSV } from 'danfojs-node'
+
 import {
   discountedCashFlowModelCalculator,
   terminalValueCalculator,
-} from './utilities'
+} from './utilities.js'
 
 export class Checklist {
   ticker

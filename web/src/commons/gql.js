@@ -1,6 +1,6 @@
 export const STARTUP_QUERY = gql`
   query ($id: Int!) {
-    searchbar {
+    companyslist {
       symbol
       name
       price
