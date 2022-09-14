@@ -1,3 +1,12 @@
+import * as React from 'react'
+import { useEffect } from 'react'
+
+import { useLazyQuery } from '@apollo/client'
+import { Tooltip, TextField } from '@material-ui/core'
+import Autocomplete from '@mui/material/Autocomplete'
+import CircularProgress from '@mui/material/CircularProgress'
+import { useRecoilState, useRecoilValue } from 'recoil'
+
 import {
   // Form,
   // Submit,
@@ -5,17 +14,16 @@ import {
   // TextField
   // TextField as RwTextField,
 } from '@redwoodjs/forms'
-import { Tooltip, TextField } from '@material-ui/core'
-import CircularProgress from '@mui/material/CircularProgress'
-import * as React from 'react'
-import Autocomplete from '@mui/material/Autocomplete'
-import { useLazyQuery } from '@apollo/client'
+
 import {
   COMPANY_QUERY,
   GPT_QUERY_SECTOR,
   GPT_QUERY_SENTIMENT,
 } from 'src/commons/gql'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import {
+  popCompany,
+  postProcess,
+} from 'src/components/Mainsubmission/utilitiesMainsubmission'
 import {
   calledCompanies as calledCompaniesAtom,
   loadingFinancials as loadingFinancialsAtom,
@@ -30,11 +38,6 @@ import {
 } from 'src/recoil/atoms'
 import { sectorCompanies as sectorCompaniesAtom } from 'src/recoil/sectorAtom'
 import './Mainsubmission.css'
-import {
-  popCompany,
-  postProcess,
-} from 'src/components/Mainsubmission/utilitiesMainsubmission'
-import { useEffect } from 'react'
 
 export const Mainsubmission = () => {
   const [_calledCompanies, setCalledCompanies] =
