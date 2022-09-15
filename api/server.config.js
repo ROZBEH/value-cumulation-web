@@ -1,4 +1,12 @@
 /**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
+
+/**
  * This file allows you to configure the Fastify Server settings
  * used by the RedwoodJS dev server.
  *

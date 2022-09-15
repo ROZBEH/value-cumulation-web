@@ -1,3 +1,11 @@
+/**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
+
 export const metricsDefinition = {
   netIncome: `The net income of a company is its total revenue minus its total expenses.`,
   ratioCostOfRevenue: `Ratio of cost of revenue to revenue. This shows how much the company needs to spend in order to increase $1 in the revenue.`,

@@ -1,5 +1,14 @@
-import { db } from 'src/lib/db'
+/**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
+
 import { DbAuthHandler } from '@redwoodjs/api'
+
+import { db } from 'src/lib/db'
 
 export const handler = async (event, context) => {
   const forgotPasswordOptions = {

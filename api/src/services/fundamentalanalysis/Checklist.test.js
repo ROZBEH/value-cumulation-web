@@ -1,6 +1,15 @@
-import { Checklist } from './Checklist'
+/**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
+
 import { readCSV } from 'danfojs-node'
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to'
+
+import { Checklist } from './Checklist'
 expect.extend({ toBeDeepCloseTo })
 
 // Example of saving a fixture to a file

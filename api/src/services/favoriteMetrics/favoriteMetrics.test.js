@@ -1,3 +1,13 @@
+/**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
+
+import { users, user, createUser, updateUser, deleteUser } from '../users/users'
+
 import {
   favoriteMetrics,
   favoriteMetric,
@@ -5,7 +15,6 @@ import {
   updateFavoriteMetric,
   deleteFavoriteMetric,
 } from './favoriteMetrics'
-import { users, user, createUser, updateUser, deleteUser } from '../users/users'
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float and DateTime types.
 //           Please refer to the RedwoodJS Testing Docs:
