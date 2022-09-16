@@ -1,6 +1,17 @@
-import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
-import Autocomplete from '@mui/material/Autocomplete'
+/**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
+
+import { useEffect } from 'react'
+
 import { Tooltip, TextField } from '@material-ui/core'
+import Autocomplete from '@mui/material/Autocomplete'
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
+
 import {
   secReports as secReportsAtom,
   calledCompanies as calledCompaniesAtom,
@@ -17,7 +28,7 @@ import {
   valueDate as valueDateAtom,
   inputValueDate as inputValueDateAtom,
 } from 'src/recoil/secAtom'
-import { useEffect } from 'react'
+
 export const SECLinks = () => {
   const calledCompanies = useRecoilValue(calledCompaniesAtom)
 

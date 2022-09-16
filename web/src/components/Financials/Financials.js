@@ -1,19 +1,25 @@
+/**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
+
+import { useEffect } from 'react'
+
+import { useLazyQuery } from '@apollo/react-hooks'
 import { TailSpin } from 'react-loader-spinner'
+import { useRecoilValue, useRecoilState } from 'recoil'
 
 import { useAuth } from '@redwoodjs/auth'
 
 import { STARTUP_QUERY } from 'src/commons/gql'
 import { Content } from 'src/components/Content/Content'
 import { Mainsubmission } from 'src/components/Mainsubmission/Mainsubmission'
-import { UserAddedMetric } from 'src/components/UserAddedMetric'
-
-import 'src/components/Financials/Financials.css'
-import { useRecoilValue, useRecoilState } from 'recoil'
-
 import { PlotFundamentals } from 'src/components/PlotFundamentals/PlotFundamentals'
-
-import { useLazyQuery } from '@apollo/react-hooks'
-
+import { UserAddedMetric } from 'src/components/UserAddedMetric'
+import 'src/components/Financials/Financials.css'
 import {
   userFavMetrics as userFavMetricsAtom,
   calledCompanies as calledCompaniesAtom,
@@ -22,8 +28,6 @@ import {
   metrics as metricsAtom,
   companyList as companyListAtom,
 } from 'src/recoil/atoms'
-
-import { useEffect } from 'react'
 
 export const Financials = () => {
   const { isAuthenticated, currentUser, _logOut } = useAuth()

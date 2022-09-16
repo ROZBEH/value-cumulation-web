@@ -1,12 +1,22 @@
+/**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
+
+import { Tooltip } from '@material-ui/core'
+import { Favorite } from '@material-ui/icons'
 import { useRecoilState } from 'recoil'
+
+import { useAuth } from '@redwoodjs/auth'
+import { useMutation } from '@redwoodjs/web'
+
 import {
   metrics as metricsAtom,
   userFavMetrics as userFavMetricsAtom,
 } from 'src/recoil/atoms'
-import { useAuth } from '@redwoodjs/auth'
-import { Tooltip } from '@material-ui/core'
-import { Favorite } from '@material-ui/icons'
-import { useMutation } from '@redwoodjs/web'
 import './Buttons.css'
 
 const UPDATE_FAVORITES = gql`

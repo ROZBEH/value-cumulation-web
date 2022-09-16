@@ -1,3 +1,11 @@
+/**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
+
 import {
   LineChart,
   Legend,
@@ -9,9 +17,10 @@ import {
   Brush,
 } from 'recharts'
 import { useRecoilValue } from 'recoil'
+
+import { Infopop } from 'src/components/Infopop/Infopop'
 import { plottingData as plottingDataAtom } from 'src/recoil/atoms'
 import './PlotFundamentals.css'
-import { Infopop } from 'src/components/Infopop/Infopop'
 
 export const PlotFundamentals = (props) => {
   const plottingData = useRecoilValue(plottingDataAtom)

@@ -1,3 +1,11 @@
+/**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
+
 export function popCompany(plotData, index) {
   // If there is no data in the plotData, then return.
   if (Object.keys(plotData).length === 0) {

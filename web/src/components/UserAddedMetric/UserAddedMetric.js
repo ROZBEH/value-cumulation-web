@@ -1,18 +1,29 @@
-import { useAuth } from '@redwoodjs/auth'
-import { Autocomplete, TextField } from '@mui/material'
-import { Favorite, CancelRounded } from '@material-ui/icons'
+/**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
+
+import { useState } from 'react'
+
 import { makeStyles, Chip, Tooltip } from '@material-ui/core'
-import { toast } from '@redwoodjs/web/toast'
+import { Favorite, CancelRounded } from '@material-ui/icons'
+import { Autocomplete, TextField } from '@mui/material'
 import classNames from 'classnames'
+import { useRecoilState } from 'recoil'
+
+import { useAuth } from '@redwoodjs/auth'
+import { useMutation } from '@redwoodjs/web'
+import { toast } from '@redwoodjs/web/toast'
+
+import { AVAILABLE_METRICS } from 'src/commons/constants'
+import { UPDATE_FAVORITES, DELETE_FAVORITES } from 'src/commons/gql'
 import {
   metrics as metricsAtom,
   userFavMetrics as userFavMetricsAtom,
 } from 'src/recoil/atoms'
-import { useRecoilState } from 'recoil'
-import { useState } from 'react'
-import { useMutation } from '@redwoodjs/web'
-import { UPDATE_FAVORITES, DELETE_FAVORITES } from 'src/commons/gql'
-import { AVAILABLE_METRICS } from 'src/commons/constants'
 
 export const UserAddedMetric = () => {
   const { _isAuthenticated, currentUser, _logOut } = useAuth()
