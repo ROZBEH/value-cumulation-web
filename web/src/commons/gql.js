@@ -1,6 +1,14 @@
+/**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
+
 export const STARTUP_QUERY = gql`
   query ($id: Int!) {
-    searchbar {
+    companyslist {
       symbol
       name
       price
@@ -74,11 +82,20 @@ export const CREATE_CONTACT = gql`
   }
 `
 
-export const GPT_QUERY = gql`
+export const GPT_QUERY_SECTOR = gql`
   query ($query: String!) {
     gptIntelligence(query: $query) {
       query
       response
+    }
+  }
+`
+
+export const GPT_QUERY_SENTIMENT = gql`
+  query ($query: String!) {
+    gptSentiment(query: $query) {
+      query
+      sentiment
     }
   }
 `

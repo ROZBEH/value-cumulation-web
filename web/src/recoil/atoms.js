@@ -1,3 +1,11 @@
+/**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
+
 import { atom } from 'recoil'
 
 // Create an atom for the list of metrics to be added to the plot

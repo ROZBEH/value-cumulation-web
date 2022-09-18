@@ -1,23 +1,34 @@
-import { MetaTags, useMutation } from '@redwoodjs/web'
-import { Autocomplete, TextField } from '@mui/material'
-import { CancelRounded } from '@material-ui/icons'
-import { Chip, Tooltip } from '@material-ui/core'
-import { useAuth } from '@redwoodjs/auth'
+/**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
+
 import { useState, useEffect } from 'react'
-import { useRecoilValue, useRecoilState } from 'recoil'
-import {
-  userFavMetrics as userFavMetricsAtom,
-  companyList as companyListAtom,
-} from 'src/recoil/atoms'
-import { toast } from '@redwoodjs/web/toast'
+
 import { useLazyQuery } from '@apollo/react-hooks'
+import { Chip, Tooltip } from '@material-ui/core'
+import { CancelRounded } from '@material-ui/icons'
+import { Autocomplete, TextField } from '@mui/material'
+import { useRecoilValue, useRecoilState } from 'recoil'
+
+import { useAuth } from '@redwoodjs/auth'
+import { MetaTags, useMutation } from '@redwoodjs/web'
+import { toast } from '@redwoodjs/web/toast'
+
+import { AVAILABLE_METRICS } from 'src/commons/constants'
 import {
   STARTUP_QUERY,
   UPDATE_FAVORITES,
   DELETE_FAVORITES,
   DELETE_ALL_FAVORITES,
 } from 'src/commons/gql'
-import { AVAILABLE_METRICS } from 'src/commons/constants'
+import {
+  userFavMetrics as userFavMetricsAtom,
+  companyList as companyListAtom,
+} from 'src/recoil/atoms'
 
 const ProfilePage = () => {
   const [_companyList, setCompanyList] = useRecoilState(companyListAtom)
@@ -97,7 +108,7 @@ const ProfilePage = () => {
     getArticles({
       variables: { id: currentUser.id },
     }).then((jsonRes) => {
-      setCompanyList(jsonRes.data.searchbar)
+      setCompanyList(jsonRes.data.companyslist)
       var favMetrics = jsonRes.data.user.favorites.map(function (fav) {
         return fav.name
       })

@@ -1,12 +1,25 @@
-import { TailSpin } from 'react-loader-spinner'
-import { useAuth } from '@redwoodjs/auth'
-import { UserAddedMetric } from 'src/components/UserAddedMetric'
-import { Mainsubmission } from 'src/components/Mainsubmission/Mainsubmission'
-import { Content } from 'src/components/Content/Content'
-import 'src/components/Financials/Financials.css'
-import { useRecoilValue, useRecoilState } from 'recoil'
-import { PlotFundamentals } from 'src/components/PlotFundamentals/PlotFundamentals'
+/**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
+
+import { useEffect } from 'react'
+
 import { useLazyQuery } from '@apollo/react-hooks'
+import { TailSpin } from 'react-loader-spinner'
+import { useRecoilValue, useRecoilState } from 'recoil'
+
+import { useAuth } from '@redwoodjs/auth'
+
+import { STARTUP_QUERY } from 'src/commons/gql'
+import { Content } from 'src/components/Content/Content'
+import { Mainsubmission } from 'src/components/Mainsubmission/Mainsubmission'
+import { PlotFundamentals } from 'src/components/PlotFundamentals/PlotFundamentals'
+import { UserAddedMetric } from 'src/components/UserAddedMetric'
+import 'src/components/Financials/Financials.css'
 import {
   userFavMetrics as userFavMetricsAtom,
   calledCompanies as calledCompaniesAtom,
@@ -15,8 +28,6 @@ import {
   metrics as metricsAtom,
   companyList as companyListAtom,
 } from 'src/recoil/atoms'
-import { useEffect } from 'react'
-import { STARTUP_QUERY } from 'src/commons/gql'
 
 export const Financials = () => {
   const { isAuthenticated, currentUser, _logOut } = useAuth()
@@ -26,7 +37,7 @@ export const Financials = () => {
     STARTUP_QUERY,
     {
       onCompleted: (data) => {
-        setCompanyList(data.searchbar)
+        setCompanyList(data.companyslist)
         var favMetrics = data.user.favorites.map(function (fav) {
           return fav.name
         })

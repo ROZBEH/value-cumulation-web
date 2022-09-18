@@ -1,4 +1,11 @@
-import { MetaTags, useMutation } from '@redwoodjs/web'
+/**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
+
 import {
   FieldError,
   FormError,
@@ -9,7 +16,9 @@ import {
   TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
+import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
 import { CREATE_CONTACT } from 'src/commons/gql'
 
 const ContactPage = () => {

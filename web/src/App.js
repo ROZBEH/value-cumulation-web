@@ -1,5 +1,14 @@
-import { AuthProvider } from '@redwoodjs/auth'
+/**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
 
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
+
+import { RecoilRoot } from 'recoil'
+
+import { AuthProvider } from '@redwoodjs/auth'
 import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
@@ -8,7 +17,7 @@ import Routes from 'src/Routes'
 
 import './scaffold.css'
 import './index.css'
-import { RecoilRoot } from 'recoil'
+
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodProvider titleTemplate="%PageTitle">
