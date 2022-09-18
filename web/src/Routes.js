@@ -1,3 +1,11 @@
+/**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
+
 // In this file, all Page components from 'src/pages` are auto-imported. Nested
 // directories are supported, and should be uppercase. Each subdirectory will be
 // prepended onto the component name.
@@ -8,6 +16,7 @@
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
 import { Router, Private, Route, Set } from '@redwoodjs/router'
+
 import MainLayout from 'src/layouts/MainLayout'
 const Routes = () => {
   return (

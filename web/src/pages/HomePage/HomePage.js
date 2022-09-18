@@ -1,11 +1,22 @@
-import { useAuth } from '@redwoodjs/auth'
-import { Tabs, Tab, Box } from '@mui/material'
+/**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
+
 import * as React from 'react'
+
+import { Tabs, Tab, Box } from '@mui/material'
+import Typography from '@mui/material/Typography'
+import PropTypes from 'prop-types'
+
+import { useAuth } from '@redwoodjs/auth'
+
 import { Financials } from 'src/components/Financials/Financials'
 import { SECLinks } from 'src/components/SECLinks/SECLinks'
 import { Sector } from 'src/components/Sector/Sector'
-import PropTypes from 'prop-types'
-import Typography from '@mui/material/Typography'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props

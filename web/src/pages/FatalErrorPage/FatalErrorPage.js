@@ -1,3 +1,11 @@
+/**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
+
 // This page will be rendered when an error makes it all the way to the top of the
 // application without being handled by a Javascript catch statement or React error
 // boundary.
