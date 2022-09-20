@@ -74,7 +74,7 @@ export default async () => {
 
   console.log('Done')
   console.log(
-    'Remember to add the images in the web/public/img directory to the products in the Stripe dashboard'
+    'Remember to add the images in the web/public/img directory to the products in the Stripe dashboard. https://dashboard.stripe.com/test/products'
   )
 
   const { shouldOpenDashboard } = await prompt({
