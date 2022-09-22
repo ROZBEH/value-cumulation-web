@@ -95,7 +95,6 @@ export default async () => {
         //     (item) => item.favoriteMetric
         //   ),
         // }
-        // console.log('resultFavMetric = ', result)
       })
     )
   } catch (error) {
