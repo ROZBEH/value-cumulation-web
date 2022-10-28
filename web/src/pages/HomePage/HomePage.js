@@ -15,6 +15,7 @@ import PropTypes from 'prop-types'
 import { useAuth } from '@redwoodjs/auth'
 
 import { Financials } from 'src/components/Financials/Financials'
+import ProductsCell from 'src/components/ProductsCell'
 import { SECLinks } from 'src/components/SECLinks/SECLinks'
 import { Sector } from 'src/components/Sector/Sector'
 
@@ -84,6 +85,7 @@ const HomePage = () => {
       <TabPanel value={value} index={1}>
         <SECLinks />
       </TabPanel>
+      <ProductsCell type={'recurring'} />
     </Box>
   )
 }
