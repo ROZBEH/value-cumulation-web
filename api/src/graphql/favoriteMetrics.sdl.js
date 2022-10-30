@@ -8,18 +8,18 @@ You are strictly prohibited from distributing or using this repository unless ot
 
 export const schema = gql`
   type FavoriteMetric {
-    id: Int!
+    id: String!
     name: String!
   }
 
   type Query {
     favoriteMetrics: [FavoriteMetric!]! @skipAuth
-    favoriteMetric(id: Int!): FavoriteMetric @skipAuth
+    favoriteMetric(id: String!): FavoriteMetric @skipAuth
   }
 
   input CreateFavoriteMetricInput {
     name: String!
-    userId: Int!
+    userId: String!
   }
 
   input UpdateFavoriteMetricInput {
@@ -30,9 +30,9 @@ export const schema = gql`
     createFavoriteMetric(input: CreateFavoriteMetricInput!): FavoriteMetric!
       @skipAuth
     updateFavoriteMetric(
-      id: Int!
+      id: String!
       input: UpdateFavoriteMetricInput!
     ): FavoriteMetric! @skipAuth
-    deleteFavoriteMetric(id: Int!): FavoriteMetric! @skipAuth
+    deleteFavoriteMetric(id: String!): FavoriteMetric! @skipAuth
   }
 `

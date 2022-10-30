@@ -7,7 +7,7 @@ You are strictly prohibited from distributing or using this repository unless ot
  */
 
 export const STARTUP_QUERY = gql`
-  query ($id: Int!) {
+  query ($id: String!) {
     companyslist {
       symbol
       name

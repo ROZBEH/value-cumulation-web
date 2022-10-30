@@ -12,8 +12,9 @@ generator client {
 // to create migrations for them and apply to your dev DB.
 
 model User {
-  id                  Int                    @id @default(autoincrement())
+  id                  String                 @id
   email               String                 @unique
+  name                String?
   hashedPassword      String                 @default("")
   salt                String                 @default("")
   resetToken          String?
@@ -22,16 +23,16 @@ model User {
 }
 
 model FavoriteMetric {
-  id    Int                    @id @default(autoincrement())
+  id    String                 @id @default(cuid())
   name  String                 @unique
   users FavoriteMetricOnUser[]
 }
 
 model FavoriteMetricOnUser {
-  id               Int            @id @default(autoincrement())
-  favoriteMetricId Int
+  id               String         @id @default(cuid())
+  favoriteMetricId String
   favoriteMetric   FavoriteMetric @relation(fields: [favoriteMetricId], references: [id])
-  userId           Int
+  userId           String
   user             User           @relation(fields: [userId], references: [id])
 
   @@unique([userId, favoriteMetricId])
