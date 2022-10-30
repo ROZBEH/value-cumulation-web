@@ -55,7 +55,6 @@ export const Failure = ({ error }) => {
 export const Success = ({ products }) => {
   return (
     <div>
-      <p>Hello Testing</p>
       <List items={products} Component={Product} />
     </div>
   )
