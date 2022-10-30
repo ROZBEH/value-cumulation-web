@@ -21,7 +21,10 @@ export const checkout = async ({ mode, cart, customerId }, { context }) => {
   return stripe.checkout.sessions.create({
     // See https://stripe.com/docs/payments/checkout/custom-success-page#modify-success-url.
     success_url: `${context.event.headers.referer}success?sessionId={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${context.event.headers.referer}failure`,
+    // For cancelling the checkout, we'll just redirect back to the mainpage
+    // In order to redirect to a different page, simply change the URL below to something
+    // else, like /canceled `${context.event.headers.referer}faiure`
+    cancel_url: `${context.event.headers.referer}`,
     // eslint-disable-next-line camelcase
     line_items,
     mode,
