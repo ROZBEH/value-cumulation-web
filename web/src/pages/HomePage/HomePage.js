@@ -85,7 +85,6 @@ const HomePage = () => {
       <TabPanel value={value} index={1}>
         <SECLinks />
       </TabPanel>
-      <ProductsCell type={'recurring'} />
     </Box>
   )
 }
