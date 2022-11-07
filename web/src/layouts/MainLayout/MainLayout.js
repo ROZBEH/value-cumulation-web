@@ -9,7 +9,6 @@ import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
 import { Toaster } from '@redwoodjs/web/toast'
 
-import Cart from 'src/components/Cart'
 const MainLayout = ({ children }) => {
   const { isAuthenticated, currentUser, logOut } = useAuth()
   return (
@@ -39,7 +38,6 @@ const MainLayout = ({ children }) => {
               <Link to={routes.contact()}>Contact us</Link>
             </div>
           </div>
-          <Cart />
           {isAuthenticated ? (
             <div className="block mt-4 sm:inline-block sm:mt-0 text-base text-lime-700 mr-8">
               <Link to={routes.profile()}>{currentUser.email} </Link>
