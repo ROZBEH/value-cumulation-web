@@ -13,20 +13,20 @@ import { stripe } from 'src/lib/stripe'
  */
 export const checkout = async ({ mode, cart, customerId }, { context }) => {
   // eslint-disable-next-line camelcase
-  const line_items = cart.map((product) => ({
+  const lineItems = cart.map((product) => ({
     price: product.id,
     quantity: product.quantity,
   }))
 
   return stripe.checkout.sessions.create({
     // See https://stripe.com/docs/payments/checkout/custom-success-page#modify-success-url.
-    success_url: `${context.event.headers.referer}success?sessionId={CHECKOUT_SESSION_ID}`,
+    success_url: `${context.event.headers.referer}`,
     // For cancelling the checkout, we'll just redirect back to the mainpage
     // In order to redirect to a different page, simply change the URL below to something
     // else, like /canceled `${context.event.headers.referer}faiure`
     cancel_url: `${context.event.headers.referer}`,
     // eslint-disable-next-line camelcase
-    line_items,
+    lineItems,
     mode,
     payment_method_types: ['card'],
     customer: customerId,
