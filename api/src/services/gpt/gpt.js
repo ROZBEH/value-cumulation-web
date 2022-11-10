@@ -34,6 +34,7 @@ export const gptIntelligence = async (inputQuery) => {
 
 export const gptSentiment = async (inputQuery) => {
   // Place holder for fetching financial data
+  // link for the financial data
   // fetch(
   //   `https://www.sec.gov/Archives/edgar/data/320193/000032019322000059/aapl-20220326.htm`
   // )

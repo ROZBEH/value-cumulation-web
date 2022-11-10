@@ -12,7 +12,7 @@ import { useLazyQuery } from '@apollo/react-hooks'
 import { Chip, Tooltip } from '@material-ui/core'
 import { CancelRounded } from '@material-ui/icons'
 import { Autocomplete, TextField } from '@mui/material'
-import { useRecoilValue, useRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 
 import { useAuth } from '@redwoodjs/auth'
 import { MetaTags, useMutation } from '@redwoodjs/web'
@@ -25,6 +25,7 @@ import {
   DELETE_FAVORITES,
   DELETE_ALL_FAVORITES,
 } from 'src/commons/gql'
+import SubscriptionCell from 'src/components/SubscriptionCell'
 import {
   userFavMetrics as userFavMetricsAtom,
   companyList as companyListAtom,
@@ -175,6 +176,14 @@ const ProfilePage = () => {
                       }}
                     />
                   )}
+                </td>
+              </tr>
+              <tr>
+                <th className="text-center border-b dark:border-slate-600 font-medium p-4 pl-8 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                  Subscription
+                </th>
+                <td className="border-b dark:border-slate-600">
+                  <SubscriptionCell userId={currentUser.id} />
                 </td>
               </tr>
             </tbody>

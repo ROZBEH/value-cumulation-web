@@ -12,9 +12,10 @@ import { Tabs, Tab, Box } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import PropTypes from 'prop-types'
 
-import { useAuth } from '@redwoodjs/auth'
+// import { useAuth } from '@redwoodjs/auth'
 
 import { Financials } from 'src/components/Financials/Financials'
+// import ProductsCell from 'src/components/ProductsCell'
 import { SECLinks } from 'src/components/SECLinks/SECLinks'
 import { Sector } from 'src/components/Sector/Sector'
 
@@ -46,7 +47,7 @@ TabPanel.propTypes = {
 
 const HomePage = () => {
   const [value, setValue] = React.useState(0)
-  const { isAuthenticated, currentUser, _logOut } = useAuth()
+  // const { isAuthenticated, currentUser, _logOut } = useAuth()
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -84,6 +85,7 @@ const HomePage = () => {
       <TabPanel value={value} index={1}>
         <SECLinks />
       </TabPanel>
+      {/* <ProductsCell type={'recurring'} /> */}
     </Box>
   )
 }

@@ -9,6 +9,7 @@ You are strictly prohibited from distributing or using this repository unless ot
 import { DbAuthHandler } from '@redwoodjs/api'
 
 import { db } from 'src/lib/db'
+import { stripe } from 'src/lib/stripe'
 
 export const handler = async (event, context) => {
   const forgotPasswordOptions = {
@@ -110,12 +111,33 @@ export const handler = async (event, context) => {
     //
     // If this returns anything else, it will be returned by the
     // `signUp()` function in the form of: `{ message: 'String here' }`.
-    handler: ({ username, hashedPassword, salt, userAttributes }) => {
+    handler: async ({
+      username: email,
+      hashedPassword,
+      salt,
+      userAttributes,
+    }) => {
+      // get customerID from Stripe using email
+      const customerList = await stripe.customers.list({ email })
+      let customerId = ''
+      let customerName = userAttributes.name
+      if (customerList.data.length > 0) {
+        customerId = customerList.data[0].id
+        customerName = customerList.data[0].name
+      } else {
+        const newCustomer = await stripe.customers.create({
+          email,
+          name: customerName,
+        })
+        customerId = newCustomer.id
+      }
       return db.user.create({
         data: {
-          email: username,
+          id: customerId,
+          email,
           hashedPassword: hashedPassword,
           salt: salt,
+          name: customerName,
           // name: userAttributes.name
         },
       })

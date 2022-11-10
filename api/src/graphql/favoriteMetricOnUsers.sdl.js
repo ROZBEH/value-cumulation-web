@@ -8,26 +8,26 @@ You are strictly prohibited from distributing or using this repository unless ot
 
 export const schema = gql`
   type FavoriteMetricOnUser {
-    id: Int!
-    favoriteMetricId: Int!
+    id: String!
+    favoriteMetricId: String!
     favoriteMetric: FavoriteMetric!
-    userId: Int!
+    userId: String!
     user: User!
   }
 
   type Query {
     favoriteMetricOnUsers: [FavoriteMetricOnUser!]! @skipAuth
-    favoriteMetricOnUser(id: Int!): FavoriteMetricOnUser @skipAuth
+    favoriteMetricOnUser(id: String!): FavoriteMetricOnUser @skipAuth
   }
 
   input CreateFavoriteMetricOnUserInput {
-    favoriteMetricId: Int!
-    userId: Int!
+    favoriteMetricId: String!
+    userId: String!
   }
 
   input UpdateFavoriteMetricOnUserInput {
-    favoriteMetricId: Int
-    userId: Int
+    favoriteMetricId: String
+    userId: String
   }
 
   # Adding the following type to the schema allows us to remove the relationship
@@ -35,7 +35,7 @@ export const schema = gql`
   # inside the service script.
   input DeleteFavoriteMetricOnUserInput {
     name: String!
-    userId: Int!
+    userId: String!
   }
 
   type Mutation {
@@ -43,7 +43,7 @@ export const schema = gql`
       input: CreateFavoriteMetricOnUserInput!
     ): FavoriteMetricOnUser! @skipAuth
     updateFavoriteMetricOnUser(
-      id: Int!
+      id: String!
       input: UpdateFavoriteMetricOnUserInput!
     ): FavoriteMetricOnUser! @skipAuth
     deleteFavoriteMetricOnUser(

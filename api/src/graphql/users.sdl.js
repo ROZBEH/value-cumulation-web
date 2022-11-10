@@ -9,12 +9,12 @@ You are strictly prohibited from distributing or using this repository unless ot
 export const schema = gql`
   # Creating the favorites type so that it can be returned in the query.
   type favorite {
-    id: Int!
+    id: String!
     name: String!
   }
 
   type User {
-    id: Int!
+    id: String!
     email: String!
     hashedPassword: String!
     salt: String!
@@ -25,7 +25,11 @@ export const schema = gql`
 
   type Query {
     users: [User!]! @skipAuth
-    user(id: Int!): User @skipAuth
+    user(id: String!): User @skipAuth
+  }
+
+  type Query {
+    getCustomerId(id: ID!): String! @skipAuth
   }
 
   input CreateUserInput {
@@ -45,9 +49,9 @@ export const schema = gql`
   }
 
   type Mutation {
-    deleteAllFavoritesUser(id: Int!): User @skipAuth
+    deleteAllFavoritesUser(id: String!): User @skipAuth
     createUser(input: CreateUserInput!): User! @skipAuth
-    updateUser(id: Int!, input: UpdateUserInput!): User! @skipAuth
-    deleteUser(id: Int!): User! @skipAuth
+    updateUser(id: String!, input: UpdateUserInput!): User! @skipAuth
+    deleteUser(id: String!): User! @skipAuth
   }
 `

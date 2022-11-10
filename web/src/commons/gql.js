@@ -7,7 +7,7 @@ You are strictly prohibited from distributing or using this repository unless ot
  */
 
 export const STARTUP_QUERY = gql`
-  query ($id: Int!) {
+  query ($id: String!) {
     companyslist {
       symbol
       name
@@ -96,6 +96,19 @@ export const GPT_QUERY_SENTIMENT = gql`
     gptSentiment(query: $query) {
       query
       sentiment
+    }
+  }
+`
+
+export const PRODUCTS_QUERY = gql`
+  query Products($type: ProductType) {
+    products(type: $type) {
+      id
+      name
+      description
+      image
+      price
+      type
     }
   }
 `
