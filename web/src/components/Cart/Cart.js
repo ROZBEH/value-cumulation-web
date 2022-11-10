@@ -39,10 +39,10 @@ const Cart = (props) => {
         ))}
         {!canCheckout && <CenteredText>Your cart is empty</CenteredText>}
         <Row style={{ '--gap': 'var(--size-1)' }}>
-          <Button onClick={checkout} disabled={!canCheckout}>
+          <Button className="mx-1" onClick={checkout} disabled={!canCheckout}>
             Checkout
           </Button>
-          <Button variant="secondary" onClick={clearCart}>
+          <Button className="mx-1" variant="secondary" onClick={clearCart}>
             Clear
           </Button>
         </Row>
