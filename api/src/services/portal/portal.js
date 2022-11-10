@@ -14,10 +14,6 @@ export const portal = async ({ userId }) => {
 }
 
 export const subscriptionHistory = async ({ userId }) => {
-  // const userInfo = await db.user.findUnique({
-  //   where: { id },
-  //   include: { favoriteMetrics: { include: { favoriteMetric: true } } },
-  // })
   // Take the user information and see whether the user has subscribed to any plans
   const customerSubscription = await stripe.subscriptions.list({
     customer: userId,
