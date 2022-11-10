@@ -30,7 +30,7 @@ const Product = () => {
   return (
     <div>
       <Button className="mx-1" onClick={onCheckout}>
-        Checkout
+        Manage Subscription
       </Button>
     </div>
     // <Wrapper
