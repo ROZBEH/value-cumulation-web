@@ -1,3 +1,13 @@
+/**
+ * *************************************************
+ * THIS SCRIPT IS NOT USED IN THE APP AT THE MOMENT*
+ * *************************************************
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
 import { AlertTriangle } from 'react-feather'
 import styled from 'styled-components'
 
@@ -23,12 +33,6 @@ export const Loading = () => (
     <Background>
       <Spinner />
     </Background>
-    <Background>
-      <Spinner />
-    </Background>
-    <Background>
-      <Spinner />
-    </Background>
   </Wrapper>
 )
 
@@ -39,12 +43,6 @@ export const Failure = ({ error }) => {
 
   return (
     <Wrapper>
-      <Background>
-        <AlertTriangle />
-      </Background>
-      <Background>
-        <AlertTriangle />
-      </Background>
       <Background>
         <AlertTriangle />
       </Background>
