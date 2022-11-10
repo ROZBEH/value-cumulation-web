@@ -1,5 +1,7 @@
-import { User } from 'react-feather'
+import { Tooltip } from '@material-ui/core'
+import { Subscriptions } from '@material-ui/icons'
 
+// import { User } from 'react-feather'
 import { useAuth } from '@redwoodjs/auth'
 import { routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
@@ -47,14 +49,21 @@ const BillingPortal = (props) => {
 
   return (
     <>
-      <Button
+      {/* <Button
         aria-label="Start billing portal session"
         variant="icon"
         onClick={onUserButtonClick}
         {...props}
       >
         <User style={{ color: 'var(--primary)' }} />
-      </Button>
+      </Button> */}
+      <Tooltip title="Manage Subscription">
+        <Subscriptions
+          className="cursor-pointer"
+          onClick={onUserButtonClick}
+          fontSize="medium"
+        />
+      </Tooltip>
     </>
   )
 }

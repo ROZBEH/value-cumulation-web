@@ -1,8 +1,11 @@
 import { useLazyQuery } from '@apollo/client'
 // import styled from 'styled-components'
+// import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
+import { Tooltip } from '@material-ui/core'
+import { Subscriptions } from '@material-ui/icons'
 
 import { PRODUCTS_QUERY } from 'src/commons/gql'
-import Button from 'src/components/Button'
+// import Button from 'src/components/Button'
 import {
   useAddToCart,
   useCheckout,
@@ -29,9 +32,17 @@ const Product = () => {
 
   return (
     <div>
-      <Button className="mx-1" onClick={onCheckout}>
+      {/* <Button className="mx-1" onClick={onCheckout}>
+        <Subscriptions />
         Manage Subscription
-      </Button>
+      </Button> */}
+      <Tooltip title="Manage Subscription">
+        <Subscriptions
+          className="cursor-pointer"
+          onClick={onCheckout}
+          fontSize="medium"
+        />
+      </Tooltip>
     </div>
     // <Wrapper
     //   onClick={() => onCheckout({ id, name, description, price, image, type })}
