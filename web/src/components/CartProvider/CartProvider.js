@@ -41,9 +41,10 @@ const cartMachine = createMachine(
               () => toast.success('Removed from cart'),
             ],
           },
-          'Clear cart': {
-            actions: ['Clear cart', () => toast.success('Cleared cart')],
-          },
+          // Removing this for now
+          // 'Clear cart': {
+          //   actions: ['Clear cart', () => toast.success('Cleared cart')],
+          // },
           Checkout: 'Redirecting to Stripe Checkout',
         },
       },
