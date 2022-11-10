@@ -99,3 +99,16 @@ export const GPT_QUERY_SENTIMENT = gql`
     }
   }
 `
+
+export const PRODUCTS_QUERY = gql`
+  query Products($type: ProductType) {
+    products(type: $type) {
+      id
+      name
+      description
+      image
+      price
+      type
+    }
+  }
+`
