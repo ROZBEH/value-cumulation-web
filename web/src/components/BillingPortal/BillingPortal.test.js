@@ -1,14 +1,14 @@
 import { render } from '@redwoodjs/testing/web'
 
-import BillingPortalButton from './BillingPortalButton'
+import BillingPortal from './BillingPortal'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
 
-describe('BillingPortalButton', () => {
+describe('BillingPortal', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<BillingPortalButton />)
+      render(<BillingPortal />)
     }).not.toThrow()
   })
 })

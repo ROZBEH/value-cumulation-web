@@ -1,4 +1,4 @@
-import PortalButton from 'src/components/PortalButton'
+import BillingPortal from 'src/components/BillingPortal'
 import Product from 'src/components/Product'
 export const QUERY = gql`
   query SubscriptionHistory($userId: ID!) {
@@ -19,7 +19,7 @@ export const Failure = ({ error }) => (
 export const Success = ({ subscriptionHistory }) => {
   // If already had subscription, show them the Portal otherwise show them the checkout
   if (subscriptionHistory.hadSubscription) {
-    return <PortalButton />
+    return <BillingPortal />
   } else {
     return <Product />
   }

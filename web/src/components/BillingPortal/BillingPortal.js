@@ -7,7 +7,7 @@ import { toast } from '@redwoodjs/web/toast'
 
 import Button from 'src/components/Button'
 
-const BillingPortalButton = (props) => {
+const BillingPortal = (props) => {
   const { isAuthenticated, _logOut, currentUser } = useAuth()
 
   const [portal] = useMutation(
@@ -59,4 +59,4 @@ const BillingPortalButton = (props) => {
   )
 }
 
-export default BillingPortalButton
+export default BillingPortal
