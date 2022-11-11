@@ -1,3 +1,13 @@
+/**
+ * *************************************************
+ * THIS SCRIPT IS NOT USED IN THE APP AT THE MOMENT*
+ * *************************************************
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
 import styled from 'styled-components'
 
 import { Link } from '@redwoodjs/router'

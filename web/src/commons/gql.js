@@ -66,7 +66,7 @@ export const DELETE_FAVORITES = gql`
 `
 
 export const DELETE_ALL_FAVORITES = gql`
-  mutation removeALLmetric($id: Int!) {
+  mutation removeALLmetric($id: String!) {
     deleteAllFavoritesUser(id: $id) {
       id
       email

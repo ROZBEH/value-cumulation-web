@@ -1,3 +1,10 @@
+/**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
 import BillingPortal from 'src/components/BillingPortal'
 import Product from 'src/components/Product'
 export const QUERY = gql`
@@ -17,7 +24,7 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ subscriptionHistory }) => {
-  // If already had subscription, show them the Portal otherwise show them the checkout
+  // If already had subscription, show them the Portal otherwise show them the checkout page
   if (subscriptionHistory.hadSubscription) {
     return <BillingPortal />
   } else {

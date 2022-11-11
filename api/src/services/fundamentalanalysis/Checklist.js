@@ -7,7 +7,7 @@ You are strictly prohibited from distributing or using this repository unless ot
  */
 
 import { fetch } from 'cross-undici-fetch'
-import { DataFrame, toCSV } from 'danfojs-node'
+import { DataFrame } from 'danfojs-node'
 
 import {
   discountedCashFlowModelCalculator,

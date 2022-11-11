@@ -1,6 +1,8 @@
 /**
  * *************************************************
  * THIS SCRIPT IS NOT USED IN THE APP AT THE MOMENT*
+ * Use this script to give customers the ability to*
+ * pick a product from a list of products          *
  * *************************************************
 Value Cumulation
 Copyright (c) 2022 Value Cumulation

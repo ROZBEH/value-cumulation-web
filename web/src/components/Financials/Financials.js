@@ -83,9 +83,6 @@ export const Financials = () => {
         <div className="row-span-1 col-span-1 flex items-center mx-2">
           <UserAddedMetric />
         </div>
-        {/* <div className="row-span-1 col-span-1 mx-3">
-          <Mapping />
-        </div> */}
       </div>
       {loadingFinancials && (
         <div className="loader">
