@@ -24,12 +24,12 @@ export const schema = gql`
   }
 
   type Query {
-    users: [User!]! @skipAuth
-    user(id: String!): User @skipAuth
+    users: [User!]! @requireAuth
+    user(id: String!): User @requireAuth
   }
 
   type Query {
-    getCustomerId(id: ID!): String! @skipAuth
+    getCustomerId(id: ID!): String! @requireAuth
   }
 
   input CreateUserInput {
@@ -49,9 +49,9 @@ export const schema = gql`
   }
 
   type Mutation {
-    deleteAllFavoritesUser(id: String!): User @skipAuth
-    createUser(input: CreateUserInput!): User! @skipAuth
-    updateUser(id: String!, input: UpdateUserInput!): User! @skipAuth
-    deleteUser(id: String!): User! @skipAuth
+    deleteAllFavoritesUser(id: String!): User @requireAuth
+    createUser(input: CreateUserInput!): User! @requireAuth
+    updateUser(id: String!, input: UpdateUserInput!): User! @requireAuth
+    deleteUser(id: String!): User! @requireAuth
   }
 `

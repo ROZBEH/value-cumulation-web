@@ -79,11 +79,11 @@ const HomePage = () => {
       <TabPanel value={value} index={0}>
         <Financials />
       </TabPanel>
-      <TabPanel value={value} index={2}>
-        <Sector />
-      </TabPanel>
       <TabPanel value={value} index={1}>
         <SECLinks />
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <Sector />
       </TabPanel>
       {/* <ProductsCell type={'recurring'} /> */}
     </Box>

@@ -9,7 +9,7 @@ export const schema = gql`
   }
 
   type Query {
-    subscriptionHistory(userId: ID!): SubHistory! @skipAuth
+    subscriptionHistory(userId: ID!): SubHistory! @requireAuth
   }
 
   type Mutation {

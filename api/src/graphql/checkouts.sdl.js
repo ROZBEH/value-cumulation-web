@@ -18,13 +18,13 @@ export const schema = gql`
   }
 
   type Query {
-    getSession(id: ID!): Session! @skipAuth
+    getSession(id: ID!): Session! @requireAuth
   }
 
   type Mutation {
     # In GraphQL, we can't reuse types as mutation inputs
     # (otherwise we'd just type "cart" as "[Product!]!")
     checkout(mode: Mode!, cart: [ProductInput!]!, customerId: String): Session!
-      @skipAuth
+      @requireAuth
   }
 `
