@@ -19,7 +19,7 @@ export const schema = gql`
   }
 
   type Query {
-    gptIntelligence(query: String!): Result! @skipAuth
-    gptSentiment(query: String!): Sentiment! @skipAuth
+    gptIntelligence(query: String!): Result! @requireAuth
+    gptSentiment(query: String!): Sentiment! @requireAuth
   }
 `

@@ -13,8 +13,8 @@ export const schema = gql`
   }
 
   type Query {
-    favoriteMetrics: [FavoriteMetric!]! @skipAuth
-    favoriteMetric(id: String!): FavoriteMetric @skipAuth
+    favoriteMetrics: [FavoriteMetric!]! @requireAuth
+    favoriteMetric(id: String!): FavoriteMetric @requireAuth
   }
 
   input CreateFavoriteMetricInput {
@@ -28,11 +28,11 @@ export const schema = gql`
 
   type Mutation {
     createFavoriteMetric(input: CreateFavoriteMetricInput!): FavoriteMetric!
-      @skipAuth
+      @requireAuth
     updateFavoriteMetric(
       id: String!
       input: UpdateFavoriteMetricInput!
-    ): FavoriteMetric! @skipAuth
-    deleteFavoriteMetric(id: String!): FavoriteMetric! @skipAuth
+    ): FavoriteMetric! @requireAuth
+    deleteFavoriteMetric(id: String!): FavoriteMetric! @requireAuth
   }
 `

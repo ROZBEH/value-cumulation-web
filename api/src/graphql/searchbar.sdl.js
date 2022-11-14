@@ -20,6 +20,6 @@ export const schema = gql`
   }
 
   type Query {
-    companyslist: [Result!]! @skipAuth
+    companyslist: [Result!]! @requireAuth
   }
 `
