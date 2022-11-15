@@ -14838,6 +14838,13 @@ nested-error-stacks@^2.0.0, nested-error-stacks@^2.1.0:
   resolved "https://registry.yarnpkg.com/nested-error-stacks/-/nested-error-stacks-2.1.1.tgz#26c8a3cee6cc05fbcf1e333cd2fc3e003326c0b5"
   integrity sha512-9iN1ka/9zmX1ZvLV9ewJYEk9h7RyRRtqdK0woXcqohu8EWIerfPUjYJPg0ULy0UqP7cslmdGc8xKDJcojlKiaw==
 
+netlify-plugin-prisma-provider@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/netlify-plugin-prisma-provider/-/netlify-plugin-prisma-provider-0.3.0.tgz#8b56ddf35c350583b6265a5579fe7921a5e13843"
+  integrity sha512-o4rnxWNHDg1yJGnpKAtMX5eGgazkuKru+Qa13+t/SIxg2wmMXvnMvkzXB5kd5LnAov0bODT7DIQrHA2k5wiMCQ==
+  dependencies:
+    glob "^7.1.6"
+
 new-github-issue-url@0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/new-github-issue-url/-/new-github-issue-url-0.2.1.tgz#e17be1f665a92de465926603e44b9f8685630c1d"
