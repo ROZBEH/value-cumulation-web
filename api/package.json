@@ -10,7 +10,7 @@
     "await-spawn": "^4.0.2",
     "child_process": "^1.0.2",
     "cross-undici-fetch": "^0.3.6",
-    "danfojs-node": "^1.1.1",
+    // "danfojs-node": "^1.1.1",
     "express": "^4.18.1",
     "filereader": "^0.10.3",
     "jest-matcher-deep-close-to": "^3.0.2",
