@@ -1,5 +1,5 @@
 [build]
-command = "yarn cache clean --all && YARN_CHECKSUM_BEHAVIOR=update yarn && yarn rw deploy netlify"
+command = "yarn rw deploy netlify"
 publish = "web/dist"
 functions = "api/dist/functions"
 
