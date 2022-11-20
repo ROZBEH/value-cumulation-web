@@ -7,7 +7,7 @@ You are strictly prohibited from distributing or using this repository unless ot
  */
 
 import { fetch } from 'cross-undici-fetch'
-import { DataFrame } from 'danfojs-node'
+import { DataFrame } from 'data-forge'
 
 import {
   discountedCashFlowModelCalculator,
@@ -67,12 +67,12 @@ export class Checklist {
 
   companyName = () => {
     /* Returns the company name */
-    return this.companyProfile['companyName'].values[0]
+    return this.companyProfile.getSeries('companyName').toArray()[0]
   }
 
   netIncome = (years = 10) => {
     /* Net Income of the company for a given number of years */
-    return this.dfIncomeStatement['netIncome'].values.slice(0, years)
+    return this.dfIncomeStatement.getSeries('netIncome').toArray().slice(0, years)
   }
 
   metricDelta = (statement, metric, years = 10) => {
@@ -80,8 +80,8 @@ export class Checklist {
     change in the metric of interest over the years. For example if the net income over the years is
     20, 15, 12, 14, 10 this will return 5, 3, -2, 4
     */
-    const period1 = statement[metric].values.slice(0, -1)
-    const period2 = statement[metric].values.slice(1)
+    const period1 = statement.getSeries(metric).toArray().slice(0, -1)
+    const period2 = statement.getSeries(metric).toArray().slice(1)
     var diff = period1.map(function (item, index) {
       return item - period2[index]
     })
@@ -130,10 +130,8 @@ export class Checklist {
 
   rAndDBudgetToRevenue = (years = 10) => {
     /* Ratio of R&D budget to revenue */
-    const researchAndDevelopmentExpenses = this.dfIncomeStatement[
-      'researchAndDevelopmentExpenses'
-    ].values.slice(0, years)
-    const revenue = this.dfIncomeStatement['revenue'].values.slice(0, years)
+    const researchAndDevelopmentExpenses = this.dfIncomeStatement.getSeries('researchAndDevelopmentExpenses').toArray().slice(0, years)
+    const revenue = this.dfIncomeStatement.getSeries('revenue').toArray().slice(0, years)
     return researchAndDevelopmentExpenses.map(function (n, i) {
       return n / revenue[i]
     })
@@ -142,39 +140,38 @@ export class Checklist {
   grossProfitMargin = (years = 10) => {
     /* Gross Profit Margin over the years: It's ratio of gross profit to revenue
      which is the (Revenue -cost of goods sold)/Revenue */
-
-    return this.dfFinancialRatios['grossProfitMargin'].values.slice(0, years)
+    return this.dfFinancialRatios.getSeries('grossProfitMargin').toArray().slice(0, years)
   }
 
   latestYear = (years = 10) => {
     /* Returns the latest year of the financial data */
-    return this.dfIncomeStatement['date'].values.slice(0, years)
+    return this.dfIncomeStatement.getSeries('date').toArray().slice(0, years)
   }
 
   netProfitMargin = (years = 10) => {
     /* Net Profit Margin over the years: It's ratio of net profit to revenue
      which is the (Net Income)/Revenue */
-    return this.dfFinancialRatios['netProfitMargin'].values.slice(0, years)
+    return this.dfFinancialRatios.getSeries('netProfitMargin').toArray().slice(0, years)
   }
 
   priceToEarning = (years = 10) => {
     /* Price to Earning over the years: It's ratio of price to earning */
-    return this.dfFinancialRatios['priceEarningsRatio'].values.slice(0, years)
+    return this.dfFinancialRatios.getSeries('priceEarningsRatio').toArray().slice(0, years)
   }
 
   debtRatio = (years = 10) => {
     /* Debt Ratio: Total Liability / Total Assets */
-    return this.dfFinancialRatios['debtRatio'].values.slice(0, years)
+    return this.dfFinancialRatios.getSeries('debtRatio').toArray().slice(0, years)
   }
 
   currentRatio = (years = 10) => {
     /* Current Ratio: Current Assets / Current Liabilities */
-    return this.dfFinancialRatios['currentRatio'].values.slice(0, years)
+    return this.dfFinancialRatios.getSeries('currentRatio').toArray().slice(0, years)
   }
 
   priceToFreeCashFlowsRatio = (years = 10) => {
     /* priceToFreeCashFlowsRatio: Price of Share over Free Cashflow per share */
-    return this.dfFinancialRatios['priceToFreeCashFlowsRatio'].values.slice(
+    return this.dfFinancialRatios.getSeries('priceToFreeCashFlowsRatio').toArray().slice(
       0,
       years
     )
@@ -186,13 +183,13 @@ export class Checklist {
      operations and maintain its capital assets
      https://www.investopedia.com/ask/answers/033015/what-formula-calculating-free-cash-flow.asp
     */
-    return this.dfCashFlowStatement['freeCashFlow'].values.slice(0, years)
+    return this.dfCashFlowStatement.getSeries('freeCashFlow').toArray().slice(0, years)
   }
 
   operatingCashFlow = (years = 10) => {
     /* Operating cash flow over the years. Cash Flow from Operating Activities.
      Does the company generate enough cash after taking into account it's operations.*/
-    return this.dfCashFlowStatement['operatingCashFlow'].values.slice(0, years)
+    return this.dfCashFlowStatement.getSeries('operatingCashFlow').toArray().slice(0, years)
   }
 
   freeCashFlowToNetIncome = (years = 10) => {
@@ -209,9 +206,9 @@ export class Checklist {
     /* Ratio of Operating Cash Flow to Current Liabilities. It's a good indicator of
      whether the company is able to pay off it's current liabilities. */
     const operatingCashFlow = this.operatingCashFlow(years)
-    const totalCurrentLiabilities = this.dfBalanceSheetStatement[
+    const totalCurrentLiabilities = this.dfBalanceSheetStatement.getSeries(
       'totalCurrentLiabilities'
-    ].values.slice(0, years)
+    ).toArray().slice(0, years)
     return operatingCashFlow.map(function (n, i) {
       return n / totalCurrentLiabilities[i]
     })
@@ -220,15 +217,15 @@ export class Checklist {
   dividendYield = (years = 10) => {
     /* Dividend Yield: dividend per share divided by the price per share. It's a
      good indicator whether the company is dividend payer or price compounder.*/
-    return this.dfFinancialRatios['dividendYield'].values.slice(0, years)
+    return this.dfFinancialRatios.getSeries('dividendYield').toArray().slice(0, years)
   }
 
   incomeTaxToNetIncome = (years = 10) => {
     /* Ratio of Income Tax to Net Income. It's a good indicator of whether the paid
      income tax grows as the net income increases. */
-    const incomeTaxExpense = this.dfIncomeStatement[
+    const incomeTaxExpense = this.dfIncomeStatement.getSeries(
       'incomeTaxExpense'
-    ].values.slice(0, years)
+    ).toArray().slice(0, years)
     const netIncome = this.netIncome(years)
     return incomeTaxExpense.map(function (n, i) {
       return n / netIncome[i]
@@ -241,8 +238,8 @@ export class Checklist {
      (most recent EPS - first period EPS) / (cumulative EPS for the period - cumulative dividends paid for the period)
     */
     let cumulativeDividend
-    if (this.dfDividend && this.dfDividend['adjDividend']) {
-      cumulativeDividend = this.dfDividend['adjDividend'].values
+    if (this.dfDividend && this.dfDividend.getSeries('adjDividend').toArray().length > 0) {
+      cumulativeDividend = this.dfDividend.getSeries('adjDividend').toArray()
         .slice(0, years)
         .reduce((a, b) => a + b, 0)
     } else {
@@ -250,12 +247,12 @@ export class Checklist {
     }
 
     const epsDilutedDeltaSinceStart =
-      this.dfIncomeStatement['epsdiluted'].values[0] -
-      this.dfIncomeStatement['epsdiluted'].values[
-        Math.min(years, this.dfIncomeStatement['epsdiluted'].values.length - 1)
+      this.dfIncomeStatement.getSeries('epsdiluted').toArray()[0] -
+      this.dfIncomeStatement.getSeries('epsdiluted').toArray()[
+        Math.min(years, this.dfIncomeStatement.getSeries('epsdiluted').toArray().length - 1)
       ]
 
-    const epsDivDelta = this.dfIncomeStatement['epsdiluted'].values
+    const epsDivDelta = this.dfIncomeStatement.getSeries('epsdiluted').toArray()
       .slice(0, years)
       .reduce((a, b) => a + b, 0)
 
@@ -271,9 +268,9 @@ export class Checklist {
       'marketCap',
       years
     )
-    const retainedEarnings = this.dfBalanceSheetStatement[
+    const retainedEarnings = this.dfBalanceSheetStatement.getSeries(
       'retainedEarnings'
-    ].values.slice(1, years + 1)
+    ).toArray().slice(1, years + 1)
     return marketCapDelta.map(function (n, i) {
       return n / retainedEarnings[i]
     })
@@ -286,7 +283,7 @@ export class Checklist {
       'netIncome',
       years
     )
-    const netIncome = this.dfIncomeStatement['netIncome'].values
+    const netIncome = this.dfIncomeStatement.getSeries('netIncome').toArray()
     const growthRate = netIncomeDelta.map(function (n, i) {
       return n / netIncome[1 + i]
     })
