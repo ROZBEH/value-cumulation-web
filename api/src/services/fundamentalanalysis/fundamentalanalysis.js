@@ -53,8 +53,6 @@ async function callApi(ticker) {
     metricsDescription.push(metricsDefinition[metric])
     var result = checklist[metric]().reverse()
     // floating point rounding up to 2 decimal places
-    console.log('metric:', metric)
-    console.log('result:', result)
     result = result.map((item) => Math.round(item * 100) / 100)
     // Format the numbers into Millions of Dollars
     // if (Math.abs(result[result.length - 1]) > 1000000) {
