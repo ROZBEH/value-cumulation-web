@@ -11,7 +11,7 @@ import { Toaster } from '@redwoodjs/web/toast'
 
 // import Cart from 'src/components/Cart'
 const MainLayout = ({ children }) => {
-  const { isAuthenticated, currentUser, logOut } = useAuth()
+  const { isAuthenticated, currentUser, logOut, loading } = useAuth()
   return (
     <>
       <Toaster toastOptions={{ className: 'rw-toast', duration: 4000 }} />
@@ -51,7 +51,7 @@ const MainLayout = ({ children }) => {
                 Logout
               </button>
             </div>
-          ) : (
+          ) : !loading? (
             <div className="block mt-4 sm:inline-block sm:mt-0 text-base text-lime-700 mr-8">
               <button
                 type="button"
@@ -60,7 +60,7 @@ const MainLayout = ({ children }) => {
                 <Link to={routes.login()}>Login</Link>
               </button>
             </div>
-          )}
+          ): null}
         </nav>
       </header>
       <main>{children}</main>
