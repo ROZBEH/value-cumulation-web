@@ -18,6 +18,7 @@ import { Financials } from 'src/components/Financials/Financials'
 // import ProductsCell from 'src/components/ProductsCell'
 import { SECLinks } from 'src/components/SECLinks/SECLinks'
 import { Sector } from 'src/components/Sector/Sector'
+import { Userformula } from 'src/components/Userformula/Userformula'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -57,7 +58,7 @@ const HomePage = () => {
     <Box sx={{ width: '100%' }}>
       <Box
         sx={{
-          width: '38%',
+          width: '50%',
           borderBottom: 1,
           borderColor: 'divider',
           marginLeft: '30px',
@@ -73,6 +74,7 @@ const HomePage = () => {
         >
           <Tab label="Financials" />
           <Tab label="SEC Reports" />
+          <Tab label="Your Own Formula" />
           <Tab label="Sector Comparison" />
         </Tabs>
       </Box>
@@ -83,6 +85,9 @@ const HomePage = () => {
         <SECLinks />
       </TabPanel>
       <TabPanel value={value} index={2}>
+        <Userformula />
+      </TabPanel>
+      <TabPanel value={value} index={3}>
         <Sector />
       </TabPanel>
       {/* <ProductsCell type={'recurring'} /> */}
