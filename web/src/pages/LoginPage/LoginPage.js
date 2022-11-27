@@ -37,7 +37,11 @@ const LoginPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
+    toast.loading('Logging You in...',{
+      duration: Infinity,
+    })
     const response = await logIn({ ...data })
+    toast.dismiss()
 
     if (response.message) {
       toast(response.message)
