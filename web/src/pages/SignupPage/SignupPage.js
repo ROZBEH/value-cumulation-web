@@ -38,7 +38,11 @@ const SignupPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
+    toast.loading('Signing You Up...',{
+      duration: Infinity,
+    })
     const response = await signUp({ ...data })
+    toast.dismiss()
 
     if (response.message) {
       toast(response.message)
