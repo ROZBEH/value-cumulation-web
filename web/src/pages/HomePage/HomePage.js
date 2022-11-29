@@ -84,9 +84,11 @@ const HomePage = () => {
       <TabPanel value={value} index={1}>
         <SECLinks />
       </TabPanel>
-      <TabPanel value={value} index={2}>
-        <Userformula />
-      </TabPanel>
+      <Box sx={{ width: '200%' }}>
+        <TabPanel value={value} index={2}>
+          <Userformula />
+        </TabPanel>
+      </Box>
       <TabPanel value={value} index={3}>
         <Sector />
       </TabPanel>
