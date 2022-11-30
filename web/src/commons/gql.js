@@ -112,3 +112,11 @@ export const PRODUCTS_QUERY = gql`
     }
   }
 `
+
+export const FILTERED_COMPANIES = gql`
+  query getFilteredCompaniesQuery($input: [inputMetric!]!) {
+    getFilteredCompanies(input: $input) {
+      names
+    }
+  }
+`
