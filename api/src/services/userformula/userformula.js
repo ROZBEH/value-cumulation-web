@@ -33,19 +33,29 @@ function csvToJson(csv) {
   return result
 }
 
-export const getFilteredCompanies = async ({ inputMetrics }) => {
-  const request = await fetch(
-    `https://financialmodelingprep.com/api/v4/income-statement-bulk?year=2020&period=annual&apikey=${process.env.FINANCIAL_API_KEY}`
+export const getFilteredCompanies = async ({ input }) => {
+  const allCompanyList = await fetch(
+    `https://financialmodelingprep.com/api/v4/cash-flow-statement-bulk?year=2020&period=annual&apikey=${process.env.FINANCIAL_API_KEY}`
   )
     .then((res) => res.blob())
     .then((blob) => blob.text())
     // Convert the String(CSV format) to JSON
     .then((text) => csvToJson(text))
 
-  console.log('request[0] = ', request[0])
-  console.log('request[1] = ', request[1])
-  console.log('request[2] = ', request[2])
-  console.log('request[-1] = ', request[request.length - 1])
+  const filteredCompanies = allCompanyList.filter((company) => {
+    // Check if the company has all the required metrics
+    for (const metric of input) {
+      if (
+        company.reportedCurrency === 'USD' &&
+        company[metric.name] > metric.value
+      ) {
+        // pass
+      } else {
+        return false
+      }
+    }
+    return true
+  })
 
   return { names: ['Test 1', 'Test 2'] }
 }
