@@ -35,10 +35,7 @@ function csvToJson(csv) {
 
 export const getFilteredCompanies = async ({ inputMetrics }) => {
   const request = await fetch(
-    `https://financialmodelingprep.com/api/v4/income-statement-bulk?year=2020&period=annual&apikey=${process.env.FINANCIAL_API_KEY}`,
-    {
-      json: true,
-    }
+    `https://financialmodelingprep.com/api/v4/income-statement-bulk?year=2020&period=annual&apikey=${process.env.FINANCIAL_API_KEY}`
   )
     .then((res) => res.blob())
     .then((blob) => blob.text())
