@@ -13,24 +13,26 @@ export const Userformula = () => {
   })
 
   const onSubmit = (event) => {
-    var input = []
+    var inputMetrics = []
     for (let i = 0; i < event.target.length; i++) {
       if (event.target[i].tagName === 'INPUT') {
         let currentMetric = AVAILABLE_METRICS.find(
           (item) => item.title === event.target[i].value
         )
         if (currentMetric) {
-          input.push({
+          inputMetrics.push({
             name: currentMetric.value,
           })
         } else {
-          input[input.length - 1].value = parseFloat(event.target[i].value)
+          inputMetrics[inputMetrics.length - 1].value = parseFloat(
+            event.target[i].value
+          )
         }
         event.preventDefault()
       }
     }
     filteredCompanyList({
-      variables: { input: input },
+      variables: { input: inputMetrics },
     })
   }
 
