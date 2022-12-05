@@ -33,7 +33,28 @@ function csvToJson(csv) {
   return result
 }
 
-export const getFilteredCompanies = async ({ input }) => {
+async function getExchangeRate() {
+  const exchangeRate = await fetch(
+    `https://financialmodelingprep.com/api/v3/forex?apikey=${process.env.FINANCIAL_API_KEY}`
+  ).then((res) => res.json())
+
+  return exchangeRate
+}
+
+function computeExchangeRate(company, exchangeRates) {
+  const exchangeRate = exchangeRates.find((item) => {
+    if (item.ticker === company.reportedCurrency + '/USD') {
+      return (item.bid + item.ask) / 2
+    } else if (item.ticker === 'USD/' + company.reportedCurrency) {
+      return 1 / ((item.bid + item.ask) / 2)
+    } else {
+      return false
+    }
+  })
+  return exchangeRate
+}
+
+async function getBulkStatement() {
   const allCompanyList = await fetch(
     `https://financialmodelingprep.com/api/v4/cash-flow-statement-bulk?year=2020&period=annual&apikey=${process.env.FINANCIAL_API_KEY}`
   )
@@ -42,13 +63,29 @@ export const getFilteredCompanies = async ({ input }) => {
     // Convert the String(CSV format) to JSON
     .then((text) => csvToJson(text))
 
+  return allCompanyList
+}
+
+export const getFilteredCompanies = async ({ input }) => {
+  // Wait for both exchange rate and bulk statement to be fetched
+  const [exchangeRates, allCompanyList] = await Promise.all([
+    getExchangeRate(),
+    getBulkStatement(),
+  ])
+
+  const forexRates = exchangeRates.forexList
+
   const filteredCompanies = allCompanyList.filter((company) => {
     // Check if the company has all the required metrics
+    var exchangeRate
+    if (company.reportedCurrency === 'USD') {
+      exchangeRate = 1
+    } else {
+      exchangeRate = computeExchangeRate(company, forexRates)
+    }
+
     for (const metric of input) {
-      if (
-        company.reportedCurrency === 'USD' &&
-        company[metric.name] > metric.value
-      ) {
+      if (company[metric.name] * exchangeRate > metric.value) {
         // pass
       } else {
         return false
@@ -56,6 +93,8 @@ export const getFilteredCompanies = async ({ input }) => {
     }
     return true
   })
+
+  console.log('filteredCompanies: ', filteredCompanies)
 
   return { names: ['Test 1', 'Test 2'] }
 }
