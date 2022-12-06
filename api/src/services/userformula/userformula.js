@@ -7,6 +7,7 @@ You are strictly prohibited from distributing or using this repository unless ot
  */
 import { fetch } from 'cross-undici-fetch'
 
+import { companyslist } from 'src/services/searchbar/searchbar'
 function csvToJson(csv) {
   // \n or \r\n depending on the EOL sequence
   const lines = csv.split('\r\n').filter((line) => line.length != 0)
@@ -55,7 +56,7 @@ function computeExchangeRate(company, exchangeRates) {
 }
 
 async function getBulkStatement() {
-  const allCompanyList = await fetch(
+  const allCompanyStatements = await fetch(
     `https://financialmodelingprep.com/api/v4/cash-flow-statement-bulk?year=2020&period=annual&apikey=${process.env.FINANCIAL_API_KEY}`
   )
     .then((res) => res.blob())
@@ -63,19 +64,27 @@ async function getBulkStatement() {
     // Convert the String(CSV format) to JSON
     .then((text) => csvToJson(text))
 
-  return allCompanyList
+  return allCompanyStatements
 }
 
 export const getFilteredCompanies = async ({ input }) => {
   // Wait for both exchange rate and bulk statement to be fetched
-  const [exchangeRates, allCompanyList] = await Promise.all([
-    getExchangeRate(),
-    getBulkStatement(),
-  ])
+  const [exchangeRates, allCompanyStatements, allcompanyList] =
+    await Promise.all([getExchangeRate(), getBulkStatement(), companyslist()])
 
   const forexRates = exchangeRates.forexList
 
-  const filteredCompanies = allCompanyList.filter((company) => {
+  // Change allcompanyList to an object for faster lookup
+  const companyList = {}
+  for (const company of allcompanyList) {
+    companyList[company.symbol] = true
+  }
+
+  const filteredCompanies = allCompanyStatements.filter((company) => {
+    // Check whether the company is listed on NASDAQ or NYSE
+    if (!companyList[company.symbol]) {
+      return false
+    }
     // Check if the company has all the required metrics
     var exchangeRate
     if (company.reportedCurrency === 'USD') {
