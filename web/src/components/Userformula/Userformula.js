@@ -7,15 +7,22 @@ You are strictly prohibited from distributing or using this repository unless ot
  */
 import { useLazyQuery } from '@apollo/client'
 import FormLabel from '@mui/material/FormLabel'
+import { useRecoilState } from 'recoil'
 
 import { AVAILABLE_METRICS } from 'src/commons/constants'
 import { FILTERED_COMPANIES } from 'src/commons/gql'
 import { Metricsearch } from 'src/components/Metricsearch/Metricsearch'
+import { filteredCompanyList as filteredCompanyListAtom } from 'src/recoil/atoms'
 
 export const Userformula = () => {
-  const [filteredCompanyList] = useLazyQuery(FILTERED_COMPANIES, {
+  const [filteredCompanyList, setFilteredCompanyList] = useRecoilState(
+    filteredCompanyListAtom
+  )
+  console.log('filteredCompanyList = ', filteredCompanyList)
+  const [getFilteredCompanyList] = useLazyQuery(FILTERED_COMPANIES, {
     onCompleted: (data) => {
-      console.log('data: ', data)
+      console.log(data)
+      setFilteredCompanyList(data.getFilteredCompanies)
     },
   })
 
@@ -38,7 +45,7 @@ export const Userformula = () => {
         event.preventDefault()
       }
     }
-    filteredCompanyList({
+    getFilteredCompanyList({
       variables: { input: inputMetrics },
     })
   }
@@ -61,6 +68,20 @@ export const Userformula = () => {
           {' '}
           Submit
         </button>
+        {filteredCompanyList.length !== 0 && (
+          <div className="mt-5">
+            <FormLabel>Results</FormLabel>
+            <div className="flex flex-col">
+              {filteredCompanyList.map((company, key) => (
+                <div key={key} className="flex flex-row">
+                  <div className="w-1/2">{company.name}</div>
+                  <div className="w-1/2">{company.values}</div>
+                  <div className="w-1/2">{company.metrics}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </form>
     </div>
   )
