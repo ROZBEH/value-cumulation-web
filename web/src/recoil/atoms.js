@@ -100,3 +100,8 @@ export const secReports = atom({
   key: 'secReports',
   default: {},
 })
+
+export const filteredCompanyList = atom({
+  key: 'filteredCompanyList',
+  default: [],
+})
