@@ -3,11 +3,14 @@ export const schema = gql`
     name: String!
     value: Float!
   }
-  type CompanyNames {
-    names: [String!]!
+  type CompanyData {
+    name: String!
+    ticker: String!
+    metrics: [String!]!
+    values: [Float!]!
   }
 
   type Query {
-    getFilteredCompanies(input: [inputMetric!]!): CompanyNames! @skipAuth
+    getFilteredCompanies(input: [inputMetric!]!): [CompanyData!]! @skipAuth
   }
 `

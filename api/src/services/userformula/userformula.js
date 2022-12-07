@@ -77,12 +77,13 @@ export const getFilteredCompanies = async ({ input }) => {
   // Change allcompanyList to an object for faster lookup
   const companyList = {}
   for (const company of allcompanyList) {
-    companyList[company.symbol] = true
+    companyList[company.symbol] = [true, company.name, company.symbol]
   }
 
-  const filteredCompanies = allCompanyStatements.filter((company) => {
+  var filteredCompaniesData = []
+  allCompanyStatements.filter((company) => {
     // Check whether the company is listed on NASDAQ or NYSE
-    if (!companyList[company.symbol]) {
+    if (!companyList[company.symbol] || !companyList[company.symbol][0]) {
       return false
     }
     // Check if the company has all the required metrics
@@ -100,10 +101,20 @@ export const getFilteredCompanies = async ({ input }) => {
         return false
       }
     }
+
+    // All the tests passed, time to save their data
+    filteredCompaniesData.push({
+      ticker: company.symbol,
+      name: companyList[company.symbol][1],
+      metrics: input.map((metric) => metric.name),
+      values: input.map((metric) => {
+        return company[metric.name] * exchangeRate
+      }),
+    })
     return true
   })
 
-  console.log('filteredCompanies: ', filteredCompanies)
+  console.log('filteredCompaniesData = ', filteredCompaniesData)
 
-  return { names: ['Test 1', 'Test 2'] }
+  return filteredCompaniesData
 }
