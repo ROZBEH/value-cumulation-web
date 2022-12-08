@@ -101,7 +101,12 @@ export const secReports = atom({
   default: {},
 })
 
-export const filteredCompanyList = atom({
-  key: 'filteredCompanyList',
+export const filteredCompanyRows = atom({
+  key: 'filteredCompanyRows',
+  default: [],
+})
+
+export const filteredCompanyCols = atom({
+  key: 'filteredCompanyCols',
   default: [],
 })
