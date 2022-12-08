@@ -7,22 +7,53 @@ You are strictly prohibited from distributing or using this repository unless ot
  */
 import { useLazyQuery } from '@apollo/client'
 import FormLabel from '@mui/material/FormLabel'
+import { DataGrid } from '@mui/x-data-grid'
 import { useRecoilState } from 'recoil'
 
 import { AVAILABLE_METRICS } from 'src/commons/constants'
 import { FILTERED_COMPANIES } from 'src/commons/gql'
 import { Metricsearch } from 'src/components/Metricsearch/Metricsearch'
-import { filteredCompanyList as filteredCompanyListAtom } from 'src/recoil/atoms'
+import {
+  filteredCompanyRows as filteredCompanyRowsAtom,
+  filteredCompanyCols as filteredCompanyColsAtom,
+} from 'src/recoil/atoms'
 
 export const Userformula = () => {
-  const [filteredCompanyList, setFilteredCompanyList] = useRecoilState(
-    filteredCompanyListAtom
+  const [filteredCompanyRows, setFilteredCompanyRows] = useRecoilState(
+    filteredCompanyRowsAtom
   )
-  console.log('filteredCompanyList = ', filteredCompanyList)
+  const [filteredCompanyCols, setFilteredCompanyCols] = useRecoilState(
+    filteredCompanyColsAtom
+  )
   const [getFilteredCompanyList] = useLazyQuery(FILTERED_COMPANIES, {
     onCompleted: (data) => {
-      console.log(data)
-      setFilteredCompanyList(data.getFilteredCompanies)
+      console.log('data = ', data)
+      const columns = [
+        { field: 'id', headerName: 'ID', width: 50 },
+        { field: 'company', headerName: 'Company', width: 250 },
+      ]
+      columns.push(
+        ...data.getFilteredCompanies[0].metrics.map((metric) => ({
+          field: metric,
+          headerName: metric,
+          width: 200,
+        }))
+      )
+      setFilteredCompanyCols(columns)
+      const metricsValue = data.getFilteredCompanies.map((company) => {
+        const obj = {}
+        company.metrics.map((metric, idx) => {
+          obj[metric] = company.values[idx]
+        })
+        return obj
+      })
+      const rows = data.getFilteredCompanies.map((company, idx) => ({
+        id: idx,
+        company: company.name,
+        ...metricsValue[idx],
+      }))
+      console.log('rows = ', rows)
+      setFilteredCompanyRows(rows)
     },
   })
 
@@ -68,18 +99,14 @@ export const Userformula = () => {
           {' '}
           Submit
         </button>
-        {filteredCompanyList.length !== 0 && (
-          <div className="mt-5">
-            <FormLabel>Results</FormLabel>
-            <div className="flex flex-col">
-              {filteredCompanyList.map((company, key) => (
-                <div key={key} className="flex flex-row">
-                  <div className="w-1/2">{company.name}</div>
-                  <div className="w-1/2">{company.values}</div>
-                  <div className="w-1/2">{company.metrics}</div>
-                </div>
-              ))}
-            </div>
+        {filteredCompanyRows.length !== 0 && (
+          <div style={{ height: 400, width: '100%' }}>
+            <DataGrid
+              rows={filteredCompanyRows}
+              columns={filteredCompanyCols}
+              pageSize={5}
+              rowsPerPageOptions={[5]}
+            />
           </div>
         )}
       </form>
