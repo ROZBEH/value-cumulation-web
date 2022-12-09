@@ -8,6 +8,7 @@ You are strictly prohibited from distributing or using this repository unless ot
 import { useLazyQuery } from '@apollo/client'
 import FormLabel from '@mui/material/FormLabel'
 import { DataGrid } from '@mui/x-data-grid'
+import { TailSpin } from 'react-loader-spinner'
 import { useRecoilState } from 'recoil'
 
 import { AVAILABLE_METRICS } from 'src/commons/constants'
@@ -25,9 +26,8 @@ export const Userformula = () => {
   const [filteredCompanyCols, setFilteredCompanyCols] = useRecoilState(
     filteredCompanyColsAtom
   )
-  const [getFilteredCompanyList] = useLazyQuery(FILTERED_COMPANIES, {
+  const [getFilteredCompanyList, loading] = useLazyQuery(FILTERED_COMPANIES, {
     onCompleted: (data) => {
-      console.log('data = ', data)
       const columns = [
         { field: 'id', headerName: 'ID', width: 50 },
         { field: 'company', headerName: 'Company', width: 250 },
@@ -52,7 +52,6 @@ export const Userformula = () => {
         company: company.name,
         ...metricsValue[idx],
       }))
-      console.log('rows = ', rows)
       setFilteredCompanyRows(rows)
     },
   })
@@ -78,6 +77,7 @@ export const Userformula = () => {
     }
     getFilteredCompanyList({
       variables: { input: inputMetrics },
+      loading: true,
     })
   }
 
@@ -99,6 +99,21 @@ export const Userformula = () => {
           {' '}
           Submit
         </button>
+        {loading.loading && (
+          <div className="loader">
+            <div className="loader-content">
+              <TailSpin
+                color="#15518e"
+                height="40"
+                width="40"
+                className="tail-spinner"
+              />
+              <div className="loader-message">
+                Fetching and displaying results
+              </div>
+            </div>
+          </div>
+        )}
         {filteredCompanyRows.length !== 0 && (
           <div style={{ height: 400, width: '100%' }}>
             <DataGrid
