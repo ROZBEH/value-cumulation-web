@@ -29,7 +29,7 @@ export const Userformula = () => {
   const [getFilteredCompanyList, loading] = useLazyQuery(FILTERED_COMPANIES, {
     onCompleted: (data) => {
       const columns = [
-        { field: 'id', headerName: 'ID', width: 50 },
+        { field: 'id', headerName: 'ID', width: 70 },
         { field: 'company', headerName: 'Company', width: 250 },
       ]
       columns.push(
@@ -57,6 +57,8 @@ export const Userformula = () => {
   })
 
   const onSubmit = (event) => {
+    setFilteredCompanyCols([])
+    setFilteredCompanyRows([])
     var inputMetrics = []
     for (let i = 0; i < event.target.length; i++) {
       if (event.target[i].tagName === 'INPUT') {
@@ -115,12 +117,12 @@ export const Userformula = () => {
           </div>
         )}
         {filteredCompanyRows.length !== 0 && (
-          <div style={{ height: 400, width: '100%' }}>
+          <div style={{ height: 600, width: '130%' }}>
             <DataGrid
               rows={filteredCompanyRows}
               columns={filteredCompanyCols}
-              pageSize={5}
-              rowsPerPageOptions={[5]}
+              pageSize={10}
+              rowsPerPageOptions={[10]}
             />
           </div>
         )}
