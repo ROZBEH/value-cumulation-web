@@ -114,7 +114,5 @@ export const getFilteredCompanies = async ({ input }) => {
     return true
   })
 
-  console.log('filteredCompaniesData = ', filteredCompaniesData)
-
   return filteredCompaniesData
 }
