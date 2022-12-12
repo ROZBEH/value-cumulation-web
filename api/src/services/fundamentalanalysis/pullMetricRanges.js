@@ -113,6 +113,15 @@ async function callApi(ticker) {
     years,
   }
 }
+
+function sleep(milliseconds) {
+  const date = Date.now()
+  let currentDate = null
+  do {
+    currentDate = Date.now()
+  } while (currentDate - date < milliseconds)
+}
+
 const companyLists = await companyslist()
 var metricMaxMin = {}
 for (const key of Object.keys(metricsDefinition)) {
@@ -123,7 +132,12 @@ for (const key of Object.keys(metricsDefinition)) {
 }
 
 try {
-  for (let l = 0; l < 8; l++) {
+  for (let l = 0; l < companyLists.length; l++) {
+    if ((l + 1) % 50 === 0) {
+      console.log('So we have done ' + l + ' companies')
+      console.log('Sleeping for 60 seconds...')
+      sleep(60000)
+    }
     const res = await callApi(companyLists[l].symbol)
 
     for (let i = 0; i < res.metrics.length; i++) {
@@ -134,11 +148,15 @@ try {
           // console.log('result[j] = ', result[j])
           // console.log('metricMaxMin[metric].max = ', metricMaxMin[metric].max)
           // console.log('metric = ', metric)
-          metricMaxMin[metric].max = result[j]
+          if (result[j] !== Number.POSITIVE_INFINITY) {
+            metricMaxMin[metric].max = result[j]
+          }
           // console.log('metricMaxMin = ', metricMaxMin)
         }
         if (result[j] !== null && result[j] < metricMaxMin[metric].min) {
-          metricMaxMin[metric].min = result[j]
+          if (result[j] !== Number.NEGATIVE_INFINITY) {
+            metricMaxMin[metric].min = result[j]
+          }
         }
       }
     }
