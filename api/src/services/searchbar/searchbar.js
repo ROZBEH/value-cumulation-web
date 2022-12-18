@@ -27,6 +27,16 @@ export const companyslist = async () => {
       return null
     }
   })
+  matches = matches.map((res) => {
+    return {
+      symbol: res.symbol ? res.symbol : 'N/A',
+      name: res.name ? res.name : 'N/A',
+      price: res.price ? res.price : 'N/A',
+      exchange: res.exchange ? res.exchange : 'N/A',
+      exchangeShortName: res.exchangeShortName ? res.exchangeShortName : 'N/A',
+      type: res.type ? res.type : 'N/A',
+    }
+  })
 
   return matches
 }
