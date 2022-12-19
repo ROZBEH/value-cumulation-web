@@ -65,6 +65,14 @@ export class Checklist {
     ])
   }
 
+  getCurrency = () => {
+    /* Returns the currency of the company */
+    const reportedCurr = this.dfIncomeStatement
+      .getSeries('reportedCurrency')
+      .toArray()[0]
+    return reportedCurr
+  }
+
   companyName = () => {
     /* Returns the company name */
     return this.companyProfile.getSeries('companyName').toArray()[0]
@@ -354,7 +362,7 @@ export class Checklist {
   intrinsicValue = (
     years = 10,
     dRate = 0.1,
-    confidence = 1.0,
+    confidence = 0.5,
     terminalGrowthRate = 0.01,
     growthMultiple = 'MIN',
     includeTerminalValue = true
@@ -372,6 +380,11 @@ export class Checklist {
     var growthRate = Math.max(meanFCFGrowthRate, meanNetIncomeGrowthRate)
     if (growthMultiple === 'MIN') {
       growthRate = Math.min(meanFCFGrowthRate, meanNetIncomeGrowthRate)
+    }
+
+    // if the company has a negative growth rate
+    if (growthRate < 0) {
+      growthRate = 0
     }
     // Discounted Cash flow model
     const DCF = discountedCashFlowModelCalculator(
