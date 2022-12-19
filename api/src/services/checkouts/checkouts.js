@@ -20,7 +20,9 @@ import { stripe } from 'src/lib/stripe'
  */
 export const checkout = async ({ mode, cart, customerId }, { context }) => {
   // eslint-disable-next-line camelcase
-  const lineItems = cart.map((product) => ({
+  console.log(' I was here 2')
+  // eslint-disable-next-line camelcase
+  const line_items = cart.map((product) => ({
     price: product.id,
     quantity: product.quantity,
   }))
@@ -33,7 +35,7 @@ export const checkout = async ({ mode, cart, customerId }, { context }) => {
     // else, like /canceled `${context.event.headers.referer}faiure`
     cancel_url: `${context.event.headers.referer}`,
     // eslint-disable-next-line camelcase
-    lineItems,
+    line_items,
     mode,
     payment_method_types: ['card'],
     customer: customerId,
