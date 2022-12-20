@@ -148,7 +148,11 @@ export default async ({ args }) => {
     for (let l = 0; l < companyLists.length; l++) {
       const res = await callApi(companyLists[l].symbol)
 
-      if ((typeof res.companyName != 'undefined') & (res.currency === 'USD')) {
+      if (
+        (typeof res.companyName != 'undefined') &
+        (res.currency === 'USD') &
+        (companyLists[l].type === 'stock')
+      ) {
         for (let i = 0; i < res.metrics.length; i++) {
           var metric = res.metrics[i]
           var result = res.results[i]
