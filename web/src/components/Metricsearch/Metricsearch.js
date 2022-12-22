@@ -4,7 +4,7 @@ import { Autocomplete, TextField } from '@mui/material'
 
 import { AVAILABLE_METRICS } from 'src/commons/constants'
 
-export const Metricsearch = () => {
+export const Metricsearch = (props) => {
   const useStyles = makeStyles({
     backgroundTag: {
       backgroundColor: 'rgb(134 239 172) !important',
@@ -14,7 +14,7 @@ export const Metricsearch = () => {
   })
   const buttonColor = useStyles()
   return (
-    <div className="grid grid-cols-2">
+    <div className="grid grid-cols-2 ">
       <Autocomplete
         clearIcon={
           <Tooltip title="Clear">
@@ -48,6 +48,7 @@ export const Metricsearch = () => {
             min: 0.0,
           },
         }}
+        helperText={`Pick values in ${props.minRange} to ${props.maxRange} range`}
       />
     </div>
   )

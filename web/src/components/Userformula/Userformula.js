@@ -90,8 +90,12 @@ export const Userformula = () => {
         onSubmit={onSubmit}
         className="flex flex-col w-3/12"
       >
-        <Metricsearch name="test" />
-        <Metricsearch name="test2" />
+        <div className="mb-10">
+          <Metricsearch name="test" minRange={-1} maxRange={1} />
+        </div>
+        <div className="mb-10">
+          <Metricsearch name="test2" minRange={-1} maxRange={1} />
+        </div>
         <FormLabel className="mt-5"> Submit the request</FormLabel>
         <button
           type="submit"
