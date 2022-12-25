@@ -10,11 +10,13 @@ import FormLabel from '@mui/material/FormLabel'
 import { DataGrid } from '@mui/x-data-grid'
 import { TailSpin } from 'react-loader-spinner'
 import { useRecoilState } from 'recoil'
+import { atom } from 'recoil'
 
 import { AVAILABLE_METRICS } from 'src/commons/constants'
 import { FILTERED_COMPANIES } from 'src/commons/gql'
 import { Metricsearch } from 'src/components/Metricsearch/Metricsearch'
 import {
+  numMetricState as numMetricStateAtom,
   filteredCompanyRows as filteredCompanyRowsAtom,
   filteredCompanyCols as filteredCompanyColsAtom,
 } from 'src/recoil/atoms'
@@ -26,6 +28,8 @@ export const Userformula = () => {
   const [filteredCompanyCols, setFilteredCompanyCols] = useRecoilState(
     filteredCompanyColsAtom
   )
+
+  const [numMetricBox, setnumMetricBox] = useRecoilState(numMetricStateAtom)
   const [getFilteredCompanyList, loading] = useLazyQuery(FILTERED_COMPANIES, {
     onCompleted: (data) => {
       const columns = [
@@ -90,11 +94,27 @@ export const Userformula = () => {
         onSubmit={onSubmit}
         className="flex flex-col w-3/12"
       >
-        <div className="mb-10">
-          <Metricsearch name="test" minRange={-1} maxRange={1} />
+        <div>
+          {Array(numMetricBox)
+            .fill(null)
+            .map((_, i) => (
+              <div key={i} className="mb-7">
+                <Metricsearch minRange={-1} maxRange={1} />
+              </div>
+            ))}
         </div>
-        <div className="mb-10">
-          <Metricsearch name="test2" minRange={-1} maxRange={1} />
+
+        <div className="m-auto">
+          <button
+            className="rounded-lg w-20 h-8 bg-lightsky-blue border border-gray-300 cursor-pointer ml-1 mt-4"
+            onClick={(event) => {
+              event.preventDefault()
+              return setnumMetricBox(numMetricBox + 1)
+            }}
+          >
+            {' '}
+            Add
+          </button>
         </div>
         <FormLabel className="mt-5"> Submit the request</FormLabel>
         <button
