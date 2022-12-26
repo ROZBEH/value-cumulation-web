@@ -84,7 +84,7 @@ const HomePage = () => {
       <TabPanel value={value} index={1}>
         <SECLinks />
       </TabPanel>
-      <Box sx={{ width: '200%' }}>
+      <Box>
         <TabPanel value={value} index={2}>
           <Userformula />
         </TabPanel>
