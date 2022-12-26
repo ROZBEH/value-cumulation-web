@@ -6,17 +6,18 @@ Notice: All code and information in this repository is the property of Value Cum
 You are strictly prohibited from distributing or using this repository unless otherwise stated.
  */
 import { useLazyQuery } from '@apollo/client'
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import FormLabel from '@mui/material/FormLabel'
 import { DataGrid } from '@mui/x-data-grid'
 import { TailSpin } from 'react-loader-spinner'
 import { useRecoilState } from 'recoil'
-import { atom } from 'recoil'
 
 import { AVAILABLE_METRICS } from 'src/commons/constants'
 import { FILTERED_COMPANIES } from 'src/commons/gql'
 import { Metricsearch } from 'src/components/Metricsearch/Metricsearch'
 import {
-  numMetricState as numMetricStateAtom,
+  metricBox as metricBoxAtom,
   filteredCompanyRows as filteredCompanyRowsAtom,
   filteredCompanyCols as filteredCompanyColsAtom,
 } from 'src/recoil/atoms'
@@ -29,7 +30,7 @@ export const Userformula = () => {
     filteredCompanyColsAtom
   )
 
-  const [numMetricBox, setnumMetricBox] = useRecoilState(numMetricStateAtom)
+  const [metricBox, setMetricBox] = useRecoilState(metricBoxAtom)
   const [getFilteredCompanyList, loading] = useLazyQuery(FILTERED_COMPANIES, {
     onCompleted: (data) => {
       const columns = [
@@ -60,6 +61,11 @@ export const Userformula = () => {
     },
   })
 
+  const removeMetricBox = (index) => {
+    const newMetricBox = metricBox.filter((_, i) => i !== index)
+    setMetricBox(newMetricBox)
+  }
+
   const onSubmit = (event) => {
     setFilteredCompanyCols([])
     setFilteredCompanyRows([])
@@ -89,42 +95,53 @@ export const Userformula = () => {
 
   return (
     <div className="ml-1">
-      <form
-        name="userformula"
-        onSubmit={onSubmit}
-        className="flex flex-col w-3/12"
-      >
-        <div>
-          {Array(numMetricBox)
-            .fill(null)
-            .map((_, i) => (
-              <div key={i} className="mb-7">
-                <Metricsearch minRange={-1} maxRange={1} />
-              </div>
-            ))}
+      <form name="userformula" onSubmit={onSubmit} className="">
+        <div className="mb-7">
+          {metricBox.map((_, index) => (
+            <div key={index} className="mb-7 flex">
+              <Metricsearch minRange={-1} maxRange={1} className="" />
+
+              {index ? (
+                <button
+                  className=" ml-4"
+                  type="button"
+                  onClick={() => removeMetricBox(index)}
+                >
+                  <RemoveCircleOutlineIcon />
+                </button>
+              ) : null}
+            </div>
+          ))}
         </div>
 
-        <div className="m-auto">
+        <div className="">
+          <div>
+            <FormLabel>Add more metrics</FormLabel>
+          </div>
           <button
-            className="rounded-lg w-20 h-8 bg-lightsky-blue border border-gray-300 cursor-pointer ml-1 mt-4"
+            className="cursor-pointer ml-10"
             onClick={(event) => {
               event.preventDefault()
-              return setnumMetricBox(numMetricBox + 1)
+              return setMetricBox([...metricBox, { name: '', email: '' }])
             }}
           >
-            {' '}
-            Add
+            <AddCircleOutlineIcon />
           </button>
         </div>
-        <FormLabel className="mt-5"> Submit the request</FormLabel>
-        <button
-          type="submit"
-          className="rounded-lg w-20 h-8 bg-lightsky-blue border border-gray-300 text-white cursor-pointer ml-1 mt-4"
-          name="submit"
-        >
-          {' '}
-          Submit
-        </button>
+
+        <div className="mt-10 flex flex-col items-center">
+          <div>
+            <FormLabel> Submit your formula</FormLabel>
+          </div>
+          <button
+            type="submit"
+            className="rounded-lg w-20 h-8 bg-lightsky-blue border border-gray-300 text-white cursor-pointer ml-1"
+            name="submit"
+          >
+            {' '}
+            Submit
+          </button>
+        </div>
         {loading.loading && (
           <div className="loader">
             <div className="loader-content">
