@@ -8,7 +8,10 @@ You are strictly prohibited from distributing or using this repository unless ot
 
 import { atom } from 'recoil'
 
-export const numMetricState = atom({ key: 'numMetricBox', default: 2 })
+export const metricBox = atom({
+  key: 'metricBox',
+  default: [{ name: '', range: '' }],
+})
 
 // Create an atom for the list of metrics to be added to the plot
 export const metrics = atom({
