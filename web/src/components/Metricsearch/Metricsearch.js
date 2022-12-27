@@ -1,3 +1,10 @@
+/**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
 import { makeStyles, Tooltip } from '@material-ui/core'
 import { CancelRounded } from '@material-ui/icons'
 import { Autocomplete, TextField } from '@mui/material'
