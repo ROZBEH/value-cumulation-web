@@ -70,23 +70,16 @@ export const Userformula = () => {
     setFilteredCompanyCols([])
     setFilteredCompanyRows([])
     var inputMetrics = []
-    for (let i = 0; i < event.target.length; i++) {
-      if (event.target[i].tagName === 'INPUT') {
-        let currentMetric = AVAILABLE_METRICS.find(
-          (item) => item.title === event.target[i].value
-        )
-        if (currentMetric) {
-          inputMetrics.push({
-            name: currentMetric.value,
-          })
-        } else {
-          inputMetrics[inputMetrics.length - 1].value = parseFloat(
-            event.target[i].value
-          )
-        }
-        event.preventDefault()
+    metricBox.map((metric) => {
+      if (metric.value) {
+        inputMetrics.push({
+          name: metric.value,
+          value: parseFloat(metric.range),
+        })
       }
-    }
+    })
+    event.preventDefault()
+
     getFilteredCompanyList({
       variables: { input: inputMetrics },
       loading: true,
@@ -95,23 +88,39 @@ export const Userformula = () => {
 
   return (
     <div className="ml-1">
+      <div className="mb-10">
+        <p>
+          To begin, input the metrics you wish to track in the first box, and
+          specify the minimum value you would like our search engine to locate
+          in the second box.
+        </p>
+      </div>
       <form name="userformula" onSubmit={onSubmit} className="">
         <div className="mb-7">
-          {metricBox.map((_, index) => (
-            <div key={index} className="mb-7 flex">
-              <Metricsearch minRange={-1} maxRange={1} className="" />
+          {metricBox.map((metric, index) => {
+            return (
+              <div key={index} className="mb-7 flex">
+                <Metricsearch
+                  metricTitle={metric.title}
+                  value={metric}
+                  minRange={-1}
+                  maxRange={1}
+                  className=""
+                  index={index}
+                />
 
-              {index ? (
-                <button
-                  className=" ml-4"
-                  type="button"
-                  onClick={() => removeMetricBox(index)}
-                >
-                  <RemoveCircleOutlineIcon />
-                </button>
-              ) : null}
-            </div>
-          ))}
+                {index ? (
+                  <button
+                    className=" ml-4"
+                    type="button"
+                    onClick={() => removeMetricBox(index)}
+                  >
+                    <RemoveCircleOutlineIcon />
+                  </button>
+                ) : null}
+              </div>
+            )
+          })}
         </div>
 
         <div className="">
@@ -122,7 +131,10 @@ export const Userformula = () => {
             className="cursor-pointer ml-10"
             onClick={(event) => {
               event.preventDefault()
-              return setMetricBox([...metricBox, { name: '', email: '' }])
+              return setMetricBox([
+                ...metricBox,
+                { value: '', title: '', range: 0 },
+              ])
             }}
           >
             <AddCircleOutlineIcon />
@@ -152,22 +164,24 @@ export const Userformula = () => {
                 className="tail-spinner"
               />
               <div className="loader-message">
-                Fetching and displaying results
+                <p>Fetching and displaying results</p>
+                <p>Our Search Engine is Running Behind the Scenes.</p>
+                <p>This May take few minutes</p>
               </div>
             </div>
           </div>
         )}
-        {filteredCompanyRows.length !== 0 && (
-          <div style={{ height: 600, width: '130%' }}>
-            <DataGrid
-              rows={filteredCompanyRows}
-              columns={filteredCompanyCols}
-              pageSize={10}
-              rowsPerPageOptions={[10]}
-            />
-          </div>
-        )}
       </form>
+      {filteredCompanyRows.length !== 0 && (
+        <div style={{ height: 600, width: '100%' }}>
+          <DataGrid
+            rows={filteredCompanyRows}
+            columns={filteredCompanyCols}
+            pageSize={10}
+            rowsPerPageOptions={[10]}
+          />
+        </div>
+      )}
     </div>
   )
 }
