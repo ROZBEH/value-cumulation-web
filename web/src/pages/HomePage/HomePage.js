@@ -14,11 +14,11 @@ import PropTypes from 'prop-types'
 
 // import { useAuth } from '@redwoodjs/auth'
 
+import { Companyfinder } from 'src/components/Companyfinder/Companyfinder'
 import { Financials } from 'src/components/Financials/Financials'
 // import ProductsCell from 'src/components/ProductsCell'
 import { SECLinks } from 'src/components/SECLinks/SECLinks'
 import { Sector } from 'src/components/Sector/Sector'
-import { Userformula } from 'src/components/Userformula/Userformula'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -74,7 +74,7 @@ const HomePage = () => {
         >
           <Tab label="Financials" />
           <Tab label="SEC Reports" />
-          <Tab label="Your Own Formula" />
+          <Tab label="Company Finder" />
           <Tab label="Sector Comparison" />
         </Tabs>
       </Box>
@@ -86,7 +86,7 @@ const HomePage = () => {
       </TabPanel>
       <Box>
         <TabPanel value={value} index={2}>
-          <Userformula />
+          <Companyfinder />
         </TabPanel>
       </Box>
       <TabPanel value={value} index={3}>

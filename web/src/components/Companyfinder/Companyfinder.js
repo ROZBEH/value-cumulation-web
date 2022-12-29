@@ -13,7 +13,6 @@ import { DataGrid } from '@mui/x-data-grid'
 import { TailSpin } from 'react-loader-spinner'
 import { useRecoilState } from 'recoil'
 
-import { AVAILABLE_METRICS } from 'src/commons/constants'
 import { FILTERED_COMPANIES } from 'src/commons/gql'
 import { Metricsearch } from 'src/components/Metricsearch/Metricsearch'
 import {
@@ -22,7 +21,7 @@ import {
   filteredCompanyCols as filteredCompanyColsAtom,
 } from 'src/recoil/atoms'
 
-export const Userformula = () => {
+export const Companyfinder = () => {
   const [filteredCompanyRows, setFilteredCompanyRows] = useRecoilState(
     filteredCompanyRowsAtom
   )
@@ -95,7 +94,7 @@ export const Userformula = () => {
           in the second box.
         </p>
       </div>
-      <form name="userformula" onSubmit={onSubmit} className="">
+      <form name="companyfinder" onSubmit={onSubmit} className="">
         <div className="mb-7">
           {metricBox.map((metric, index) => {
             return (

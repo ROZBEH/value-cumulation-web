@@ -1,14 +1,14 @@
 import { render } from '@redwoodjs/testing/web'
 
-import Userformula from './Userformula'
+import Companyfinder from './Companyfinder'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
 
-describe('Userformula', () => {
+describe('Companyfinder', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<Userformula />)
+      render(<Companyfinder />)
     }).not.toThrow()
   })
 })

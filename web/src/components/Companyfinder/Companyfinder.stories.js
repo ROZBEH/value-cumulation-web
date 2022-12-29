@@ -3,19 +3,19 @@
 //
 // ```jsx
 // export const generated = (args) => {
-//   return <Userformula {...args} />
+//   return <Companyfinder {...args} />
 // }
 // ```
 //
 // See https://storybook.js.org/docs/react/writing-stories/args.
 
-import Userformula from './Userformula'
+import Companyfinder from './Companyfinder'
 
 export const generated = () => {
-  return <Userformula />
+  return <Companyfinder />
 }
 
 export default {
-  title: 'Components/Userformula',
-  component: Userformula,
+  title: 'Components/Companyfinder',
+  component: Companyfinder,
 }
