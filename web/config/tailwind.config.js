@@ -1,3 +1,10 @@
+/**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
 module.exports = {
   mode: 'jit',
   purge: ['src/**/*.{js,jsx,ts,tsx}'],
@@ -26,6 +33,10 @@ module.exports = {
       flex: {
         50: '0 0 50%',
         100: '0 0 100%',
+      },
+      width: {
+        200: '200%',
+        150: '150%',
       },
     },
   },

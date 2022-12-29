@@ -1,0 +1,128 @@
+{
+    "netIncome": {
+        "max": 1000000000,
+        "min": -1000000000,
+        "maxCompany": "Oxford Square Capital Corp. - 6",
+        "minCompany": "First Wave BioPharma, Inc."
+    },
+    "ratioCostOfRevenue": {
+        "max": 1.0,
+        "min": -1.0,
+        "maxCompany": "Absci Corporation",
+        "minCompany": "Stratus Properties Inc."
+    },
+    "burnRatio": {
+        "max": 1.0,
+        "min": -1.0,
+        "maxCompany": "BioXcel Therapeutics, Inc.",
+        "minCompany": "GreenLight Biosciences Holdings"
+    },
+    "rAndDBudgetToRevenue": {
+        "max": 1.0,
+        "min": -1.0,
+        "maxCompany": "BioXcel Therapeutics, Inc.",
+        "minCompany": "INmune Bio, Inc."
+    },
+    "grossProfitMargin": {
+        "max": 1000000000,
+        "min": -1000000000,
+        "maxCompany": "Cassava Sciences, Inc.",
+        "minCompany": "Lipocine Inc."
+    },
+    "netProfitMargin": {
+        "max": 1000000000,
+        "min": -1000000000,
+        "maxCompany": "Loral Space & Communications Inc.",
+        "minCompany": "Lipocine Inc."
+    },
+    "priceToEarning": {
+        "max": 10,
+        "min": -10,
+        "maxCompany": "MMA Capital Holdings, Inc.",
+        "minCompany": "Healthcare Capital Corp."
+    },
+    "debtRatio": {
+        "max": 1.0,
+        "min": -1.0,
+        "maxCompany": "Nicholas Financial, Inc.",
+        "minCompany": "Middlesex Water Company"
+    },
+    "currentRatio": {
+        "max": 1.0,
+        "min": -1.0,
+        "maxCompany": "Popular, Inc.",
+        "minCompany": "Spruce Biosciences, Inc."
+    },
+    "priceToFreeCashFlowsRatio": {
+        "max": 1.0,
+        "min": -1.0,
+        "maxCompany": "Genasys Inc.",
+        "minCompany": "Aequi Acquisition Corp."
+    },
+    "freeCashFlow": {
+        "max": 1000000000,
+        "min": -1000000000,
+        "maxCompany": "Ovid Therapeutics Inc.",
+        "minCompany": "Oxford Square Capital Corp. - 6"
+    },
+    "operatingCashFlow": {
+        "max": 1000000000,
+        "min": -1000000000,
+        "maxCompany": "Apple Inc.",
+        "minCompany": "Oxford Square Capital Corp. - 6"
+    },
+    "freeCashFlowToNetIncome": {
+        "max": 1.0,
+        "min": -1.0,
+        "maxCompany": "MMA Capital Holdings, Inc.",
+        "minCompany": "Vigil Neuroscience, Inc."
+    },
+    "operatingCFToCurrentLiabilities": {
+        "max": 1.0,
+        "min": -1.0,
+        "maxCompany": "Nicholas Financial, Inc.",
+        "minCompany": "Sarissa Capital Acquisition Corp."
+    },
+    "dividendYield": {
+        "max": 1.0,
+        "min": -1.0,
+        "maxCompany": "Fifth Third Bancorp",
+        "minCompany": "CrossFirst Bankshares, Inc."
+    },
+    "incomeTaxToNetIncome": {
+        "max": 1.0,
+        "min": -1.0,
+        "maxCompany": "Freshworks Inc.",
+        "minCompany": "Magnite, Inc."
+    },
+    "returnOnRetainedEarnings": {
+        "max": 1.0,
+        "min": -1.0,
+        "maxCompany": "Virco Mfg. Corporation",
+        "minCompany": "Fifth Third Bancorp"
+    },
+    "marketCapChangeWithRetainedEarnings": {
+        "max": 1.0,
+        "min": -1.0,
+        "maxCompany": "Hillman Solutions Corp.",
+        "minCompany": "iSun, Inc."
+    },
+    "meanNetIncomeGrowthRate": {
+        "max": 1.0,
+        "min": -1.0,
+        "maxCompany": "SOBR Safe, Inc.",
+        "minCompany": "Via Renewables, Inc."
+    },
+    "meanFCFGrowthRate": {
+        "max": 1.0,
+        "min": -1.0,
+        "maxCompany": "Nuvve Holding Corp.",
+        "minCompany": "Senmiao Technology Limited"
+    },
+    "intrinsicValue": {
+        "max": 100000000000,
+        "min": -100000000000,
+        "maxCompany": "Altus Midstream Company",
+        "minCompany": "Monaker Group, Inc."
+    }
+}

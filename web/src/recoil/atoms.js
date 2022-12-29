@@ -8,6 +8,14 @@ You are strictly prohibited from distributing or using this repository unless ot
 
 import { atom } from 'recoil'
 
+export const metricBox = atom({
+  key: 'metricBox',
+  default: [
+    { value: '', title: '', range: 0 },
+    { value: '', title: '', range: 0 },
+  ],
+})
+
 // Create an atom for the list of metrics to be added to the plot
 export const metrics = atom({
   key: 'metrics',
@@ -99,4 +107,14 @@ export const userFavMetrics = atom({
 export const secReports = atom({
   key: 'secReports',
   default: {},
+})
+
+export const filteredCompanyRows = atom({
+  key: 'filteredCompanyRows',
+  default: [],
+})
+
+export const filteredCompanyCols = atom({
+  key: 'filteredCompanyCols',
+  default: [],
 })
