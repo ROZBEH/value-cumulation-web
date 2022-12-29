@@ -10,7 +10,10 @@ import { atom } from 'recoil'
 
 export const metricBox = atom({
   key: 'metricBox',
-  default: [{ value: '', title: '', range: null }],
+  default: [
+    { value: '', title: '', range: 0 },
+    { value: '', title: '', range: 0 },
+  ],
 })
 
 // Create an atom for the list of metrics to be added to the plot
