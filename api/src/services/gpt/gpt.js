@@ -15,11 +15,17 @@ export const gptIntelligence = async (inputQuery) => {
   const OPENAI_API_KEY = process.env.OPENAI_API_KEY
   const openai = new OpenAI(OPENAI_API_KEY)
 
+  // For API reference please checkout the following link
+  // https://beta.openai.com/docs/api-reference/completions/create
   const gptResponse = await openai.complete({
-    engine: 'text-davinci-002',
+    // engine: 'text-davinci-003',
+    engine: 'text-curie-001',
+    // engine: 'text-ada-001',
     prompt: fineTuneData + query + '\n',
     max_tokens: 100,
     temperature: 0.4,
+    presence_penalty: 2.0,
+    frequency_penalty: 2.0,
     stop: ['Q: ', '\n'],
   })
   const aiRes = gptResponse.data.choices[0].text
@@ -48,7 +54,8 @@ export const gptSentiment = async (inputQuery) => {
   const OPENAI_API_KEY = process.env.OPENAI_API_KEY
   const openai = new OpenAI(OPENAI_API_KEY)
   const gptResponse = await openai.complete({
-    engine: 'text-davinci-002',
+    // engine: 'text-davinci-003',
+    engine: 'text-curie-001',
     prompt:
       `Decide whether a Tweet\'s sentiment is positive, neutral, or negative.\n\nTweet: "` +
       query +
