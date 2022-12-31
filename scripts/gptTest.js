@@ -56,7 +56,8 @@ export const gptSentiment = async (inputQuery) => {
   const openai = new OpenAI(OPENAI_API_KEY)
   const gptResponse = await openai.complete({
     // engine: 'text-davinci-002',
-    engine: 'text-ada-001',
+    // engine: 'text-ada-001',
+    engine: 'text-curie-001',
     prompt:
       `Decide whether a Tweet\'s sentiment is positive, neutral, or negative.\n\nTweet: "` +
       query +
