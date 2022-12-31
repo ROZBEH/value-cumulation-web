@@ -15,11 +15,15 @@ export const Sector = () => {
 
   return (
     <div>
-      {sectorCompanies.map((company, index) => (
-        <div key={index}>
-          {company.symbol}: {company.name}
-        </div>
-      ))}
+      {sectorCompanies.length > 0 ? (
+        sectorCompanies.map((company, index) => (
+          <div key={index}>
+            {company.symbol}: {company.name}
+          </div>
+        ))
+      ) : (
+        <div>Please first pick a company on the FINANCIALS tab</div>
+      )}
     </div>
   )
 }

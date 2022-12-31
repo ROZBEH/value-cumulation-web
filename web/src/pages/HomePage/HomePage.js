@@ -74,8 +74,8 @@ const HomePage = () => {
         >
           <Tab label="Financials" />
           <Tab label="SEC Reports" />
-          <Tab label="Company Finder" />
           <Tab label="Sector Comparison" />
+          <Tab label="Company Finder" />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -84,14 +84,13 @@ const HomePage = () => {
       <TabPanel value={value} index={1}>
         <SECLinks />
       </TabPanel>
-      <Box>
-        <TabPanel value={value} index={2}>
-          <Companyfinder />
-        </TabPanel>
-      </Box>
-      <TabPanel value={value} index={3}>
+      <TabPanel value={value} index={2}>
         <Sector />
       </TabPanel>
+      <TabPanel value={value} index={3}>
+        <Companyfinder />
+      </TabPanel>
+
       {/* <ProductsCell type={'recurring'} /> */}
     </Box>
   )
