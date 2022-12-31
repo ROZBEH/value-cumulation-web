@@ -18,8 +18,8 @@ export const gptIntelligence = async (inputQuery) => {
   // For API reference please checkout the following link
   // https://beta.openai.com/docs/api-reference/completions/create
   const gptResponse = await openai.complete({
-    // engine: 'text-davinci-003',
-    engine: 'text-curie-001',
+    engine: 'text-davinci-003',
+    // engine: 'text-curie-001',
     // engine: 'text-ada-001',
     prompt: fineTuneData + query + '\n',
     max_tokens: 100,
@@ -28,10 +28,10 @@ export const gptIntelligence = async (inputQuery) => {
     frequency_penalty: 2.0,
     stop: ['Q: ', '\n'],
   })
-  console.log('gptResponse = ' + gptResponse)
   const aiRes = gptResponse.data.choices[0].text
-  const aiResArrStr = aiRes.split('A: ')[1]
-  var aiResArr = JSON.parse('[' + aiResArrStr + ']')[0]
+  var aiResArrStr = aiRes.split('A: ')[1]
+  aiResArrStr = aiResArrStr.substr(1, aiResArrStr.length - 2)
+  var aiResArr = aiResArrStr.split(', ')
 
   return {
     query: inputQuery.query,
@@ -75,6 +75,6 @@ export const gptSentiment = async (inputQuery) => {
   }
 }
 
-gptIntelligence({ query: 'INTL' }).then((res) => {
+gptIntelligence({ query: 'PFE' }).then((res) => {
   console.log('res = ', res)
 })

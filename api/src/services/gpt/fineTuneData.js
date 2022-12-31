@@ -7,10 +7,7 @@ You are strictly prohibited from distributing or using this repository unless ot
  */
 
 export const fineTuneData = `Q: AAPL
-A: ["MSFT", "FB", "GOOG", "TSLA"]
-
-Q: COST
-A: ["WMT", "AMZN", "EBAY", "SHLDQ"]
+A: [MSFT, FB, GOOG, TSLA]
 
 Q: BP
-A: ["XOM", "CVX", "MPC", "VLO"]`
+A: [XOM, CVX, MPC, VLO]`

@@ -20,13 +20,13 @@ export const companyslist = async () => {
   matches = jsonRes.filter((res) => {
     if (
       res.exchangeShortName === 'NASDAQ' ||
-      (res.exchangeShortName === 'NYSE') &
-        res.symbol &
-        res.name &
-        res.price &
-        res.exchange &
-        res.exchangeShortName &
-        res.type
+      res.exchangeShortName === 'NYSE'
+      // res.symbol &
+      // res.name &
+      // res.price &
+      // res.exchange &
+      // res.exchangeShortName &
+      // res.type
     ) {
       return true
     } else {
