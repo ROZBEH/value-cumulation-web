@@ -28,10 +28,7 @@ import {
   GPT_QUERY_SECTOR,
   GPT_QUERY_SENTIMENT,
 } from 'src/commons/gql'
-import {
-  popCompany,
-  postProcess,
-} from 'src/components/Mainsubmission/utilitiesMainsubmission'
+import { popCompany, postProcess } from 'src/commons/processCompany'
 import {
   calledCompanies as calledCompaniesAtom,
   loadingFinancials as loadingFinancialsAtom,
