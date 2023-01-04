@@ -109,6 +109,7 @@ export const Financials = () => {
           <PlotFundamentals
             key={index}
             metric={metrics[metrics.length - 1 - index]}
+            plottingData={plottingData}
           />
         ))}
     </>
