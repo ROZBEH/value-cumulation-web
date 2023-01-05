@@ -118,3 +118,8 @@ export const filteredCompanyCols = atom({
   key: 'filteredCompanyCols',
   default: [],
 })
+
+export const sectorCompData = atom({
+  key: 'sectorCompData',
+  default: {},
+})
