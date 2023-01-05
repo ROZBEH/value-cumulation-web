@@ -73,8 +73,9 @@ export const Mainsubmission = () => {
   })
 
   const [getGPTResSentiment] = useLazyQuery(GPT_QUERY_SENTIMENT, {
-    onCompleted: (data) => {
-      console.log('data: ', data)
+    onCompleted: (_data) => {
+      // console.log('data: ', data)
+      //pass
     },
   })
   // Handling errors for user input
@@ -177,8 +178,7 @@ export const Mainsubmission = () => {
         plotData = JSON.parse(JSON.stringify(pltData))
         plotData = postProcess(
           fundamentalanalysis.data.getFundamentals,
-          plotData,
-          index
+          plotData
         )
         getGPTResSector({
           variables: { query: values.symbol },
