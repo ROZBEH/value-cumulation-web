@@ -5,10 +5,10 @@ Copyright (c) 2022 Value Cumulation
 Notice: All code and information in this repository is the property of Value Cumulation.
 You are strictly prohibited from distributing or using this repository unless otherwise stated.
  */
-
-import { useEffect } from 'react'
+import * as React from 'react'
 
 import { useLazyQuery } from '@apollo/client'
+import { TailSpin } from 'react-loader-spinner'
 import { useRecoilValue, useRecoilState } from 'recoil'
 
 import { COMPANY_QUERY } from 'src/commons/gql'
@@ -20,9 +20,10 @@ import {
 } from 'src/recoil/atoms'
 import { sectorCompanies as sectorCompaniesAtom } from 'src/recoil/sectorAtom'
 export const Sector = () => {
+  // define a react state variable called 'count' with an initial value of 0
+  const [loading, setLoading] = React.useState(false)
   const [sectorCompData, setSectorCompData] = useRecoilState(sectorCompDataAtom)
-  const [getFunamentals, { _called, _loading, _data }] =
-    useLazyQuery(COMPANY_QUERY)
+  const [getFunamentals] = useLazyQuery(COMPANY_QUERY)
   const metrics = useRecoilValue(metricsAtom)
   const sectorCompanies = useRecoilValue(sectorCompaniesAtom)
 
@@ -30,6 +31,7 @@ export const Sector = () => {
     let plotData = {}
     if (sectorCompanies.length > 0) {
       for (var i = 0; i < sectorCompanies.length; i++) {
+        setLoading(true)
         await getFunamentals({
           variables: { ticker: sectorCompanies[i].symbol },
         }).then((fundamentalanalysis) => {
@@ -41,22 +43,57 @@ export const Sector = () => {
         })
       }
     }
+    setLoading(false)
     setSectorCompData(plotData)
   }
 
   return (
     <div>
-      <button onClick={onClickSectorComp}>Plot Sector</button>
       {sectorCompanies.length > 0 ? (
-        metrics &&
-        Object.keys(sectorCompData).length != 0 &&
-        metrics.map((item, index) => (
-          <PlotFundamentals
-            key={index}
-            metric={metrics[metrics.length - 1 - index]}
-            plottingData={sectorCompData}
-          />
-        ))
+        <div>
+          <div className="sectorComp flex flex-col items-center justify-center mb-20">
+            <div className="mb-10">
+              Our Artificial Intelligence Engine allows us to compare the
+              performance of your company of interest to that of other companies
+              in the same industry, providing valuable insights.
+            </div>
+            <div>
+              Pick the Company in the list below and click submit to see the
+            </div>
+            <button
+              className="rounded-lg w-20 h-8 bg-lightsky-blue border border-gray-300 text-white cursor-pointer ml-1"
+              onClick={onClickSectorComp}
+            >
+              Submit
+            </button>
+            {loading && (
+              <div className="loader">
+                <div className="loader-content">
+                  <TailSpin
+                    color="#15518e"
+                    height="40"
+                    width="40"
+                    className="tail-spinner"
+                  />
+                  <div className="loader-message">
+                    <p>Fetching and displaying results</p>
+                    <p>Our Search Engine is Running Behind the Scenes.</p>
+                    <p>We will be back shortly</p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+          {metrics &&
+            Object.keys(sectorCompData).length != 0 &&
+            metrics.map((item, index) => (
+              <PlotFundamentals
+                key={index}
+                metric={metrics[metrics.length - 1 - index]}
+                plottingData={sectorCompData}
+              />
+            ))}
+        </div>
       ) : (
         <div>Please first pick a company on the FINANCIALS tab</div>
       )}
