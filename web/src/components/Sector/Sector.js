@@ -14,6 +14,7 @@ import { useRecoilValue, useRecoilState } from 'recoil'
 import { COMPANY_QUERY } from 'src/commons/gql'
 import { postProcess } from 'src/commons/processCompany'
 import { PlotFundamentals } from 'src/components/PlotFundamentals/PlotFundamentals'
+import { SectorRadioButton } from 'src/components/SectorRadioButton/SectorRadioButton'
 import {
   sectorCompData as sectorCompDataAtom,
   metrics as metricsAtom,
@@ -60,6 +61,7 @@ export const Sector = () => {
             <div>
               Pick the Company in the list below and click submit to see the
             </div>
+            <SectorRadioButton />
             <button
               className="rounded-lg w-20 h-8 bg-lightsky-blue border border-gray-300 text-white cursor-pointer ml-1"
               onClick={onClickSectorComp}
