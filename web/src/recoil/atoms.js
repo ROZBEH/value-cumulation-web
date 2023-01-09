@@ -123,3 +123,8 @@ export const sectorCompData = atom({
   key: 'sectorCompData',
   default: {},
 })
+
+export const sectorComp = atom({
+  key: 'sectorComp',
+  default: '',
+})
