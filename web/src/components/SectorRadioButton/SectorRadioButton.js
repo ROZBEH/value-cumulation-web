@@ -1,12 +1,26 @@
+import * as React from 'react'
+
 import Box from '@mui/joy/Box'
-import FormLabel from '@mui/joy/FormLabel'
 import Radio from '@mui/joy/Radio'
 import RadioGroup from '@mui/joy/RadioGroup'
 import Sheet from '@mui/joy/Sheet'
+import { useRecoilValue, useRecoilState } from 'recoil'
+
+import {
+  valueTicker as valueTickerAtom,
+  sectorComp as sectorCompAtom,
+} from 'src/recoil/atoms'
 export const SectorRadioButton = () => {
+  const valueTicker = useRecoilValue(valueTickerAtom)
+  const [value, setValue] = React.useState(valueTicker[0].symbol)
+  const [sectorComp, setSectorComp] = useRecoilState(sectorCompAtom)
+
+  React.useEffect(() => {
+    if (sectorComp === '') setSectorComp(valueTicker[0].symbol)
+  }, [sectorComp, valueTicker, setSectorComp])
   return (
     <Box sx={{ width: 300 }}>
-      <FormLabel
+      {/* <FormLabel
         id="storage-label"
         sx={{
           mb: 2,
@@ -16,17 +30,22 @@ export const SectorRadioButton = () => {
           letterSpacing: '0.15rem',
         }}
       >
-        Storage
-      </FormLabel>
+        Available Companies
+      </FormLabel> */}
       <RadioGroup
         aria-labelledby="storage-label"
-        defaultValue="512GB"
+        defaultValue={value}
+        value={value}
         size="lg"
         sx={{ gap: 1.5, flexDirection: 'row' }}
+        onChange={(event) => {
+          setSectorComp(event.target.value)
+          setValue(event.target.value)
+        }}
       >
-        {['512GB', '1TB', '2TB'].map((value) => (
+        {valueTicker.map((value) => (
           <Sheet
-            key={value}
+            key={value.name}
             sx={{
               p: 2,
               borderRadius: 'md',
@@ -35,10 +54,10 @@ export const SectorRadioButton = () => {
             }}
           >
             <Radio
-              label={`${value} SSD storage`}
+              label={`${value.name}`}
               overlay
               disableIcon
-              value={value}
+              value={value.symbol}
               slotProps={{
                 label: ({ checked }) => ({
                   sx: {
