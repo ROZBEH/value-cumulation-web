@@ -9,7 +9,7 @@ import * as React from 'react'
 
 import { useLazyQuery } from '@apollo/client'
 import { TailSpin } from 'react-loader-spinner'
-import { useRecoilValue, useRecoilState } from 'recoil'
+import { useRecoilValue, useRecoilState, useResetRecoilState } from 'recoil'
 
 import { COMPANY_QUERY } from 'src/commons/gql'
 import { postProcess } from 'src/commons/processCompany'
@@ -18,23 +18,28 @@ import { SectorRadioButton } from 'src/components/SectorRadioButton/SectorRadioB
 import {
   sectorCompData as sectorCompDataAtom,
   metrics as metricsAtom,
+  sectorComp as sectorCompAtom,
 } from 'src/recoil/atoms'
 import { sectorCompanies as sectorCompaniesAtom } from 'src/recoil/sectorAtom'
 export const Sector = () => {
   // define a react state variable called 'count' with an initial value of 0
   const [loading, setLoading] = React.useState(false)
   const [sectorCompData, setSectorCompData] = useRecoilState(sectorCompDataAtom)
+  const resetSectorCompData = useResetRecoilState(sectorCompDataAtom)
   const [getFunamentals] = useLazyQuery(COMPANY_QUERY)
   const metrics = useRecoilValue(metricsAtom)
   const sectorCompanies = useRecoilValue(sectorCompaniesAtom)
+  const [sectorComp, _setSectorComp] = useRecoilState(sectorCompAtom)
 
   const onClickSectorComp = async () => {
+    resetSectorCompData()
     let plotData = {}
     if (sectorCompanies.length > 0) {
       for (var i = 0; i < sectorCompanies.length; i++) {
         setLoading(true)
         await getFunamentals({
           variables: { ticker: sectorCompanies[i].symbol },
+          // fetchPolicy: 'no-cache',
         }).then((fundamentalanalysis) => {
           plotData = JSON.parse(JSON.stringify(plotData))
           plotData = postProcess(
@@ -44,6 +49,18 @@ export const Sector = () => {
         })
       }
     }
+    // Now add the company of interest to the plotData
+    await getFunamentals({
+      variables: { ticker: sectorComp },
+      fetchPolicy: 'no-cache',
+    }).then((fundamentalanalysis) => {
+      plotData = JSON.parse(JSON.stringify(plotData))
+      plotData = postProcess(
+        fundamentalanalysis.data.getFundamentals,
+        plotData,
+        4 // strokeWidth
+      )
+    })
     setLoading(false)
     setSectorCompData(plotData)
   }
@@ -61,9 +78,11 @@ export const Sector = () => {
             <div>
               Pick the Company in the list below and click submit to see the
             </div>
-            <SectorRadioButton />
+            <div className="mt-4">
+              <SectorRadioButton />
+            </div>
             <button
-              className="rounded-lg w-20 h-8 bg-lightsky-blue border border-gray-300 text-white cursor-pointer ml-1"
+              className="rounded-lg w-20 h-8 bg-lightsky-blue border border-gray-300 text-white cursor-pointer ml-1 mt-4"
               onClick={onClickSectorComp}
             >
               Submit
