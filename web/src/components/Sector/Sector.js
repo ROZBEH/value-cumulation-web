@@ -34,12 +34,12 @@ export const Sector = () => {
   const onClickSectorComp = async () => {
     resetSectorCompData()
     let plotData = {}
-    if (sectorCompanies.length > 0) {
-      for (var i = 0; i < sectorCompanies.length; i++) {
+    const thisSector = sectorCompanies[sectorComp]
+    if (thisSector.length > 0) {
+      for (var i = 0; i < thisSector.length; i++) {
         setLoading(true)
         await getFunamentals({
-          variables: { ticker: sectorCompanies[i].symbol },
-          // fetchPolicy: 'no-cache',
+          variables: { ticker: thisSector[i].symbol },
         }).then((fundamentalanalysis) => {
           plotData = JSON.parse(JSON.stringify(plotData))
           plotData = postProcess(
@@ -67,7 +67,7 @@ export const Sector = () => {
 
   return (
     <div>
-      {sectorCompanies.length > 0 ? (
+      {Object.keys(sectorCompanies).length > 0 ? (
         <div>
           <div className="sectorComp flex flex-col items-center justify-center mb-20">
             <div className="mb-10">
@@ -78,7 +78,7 @@ export const Sector = () => {
             <div>
               Pick the Company in the list below and click submit to see the
             </div>
-            <div className="mt-4">
+            <div className="mt-4 z-0">
               <SectorRadioButton />
             </div>
             <button
@@ -105,7 +105,8 @@ export const Sector = () => {
               </div>
             )}
           </div>
-          {metrics &&
+          {!loading &&
+            metrics &&
             Object.keys(sectorCompData).length != 0 &&
             metrics.map((item, index) => (
               <PlotFundamentals
