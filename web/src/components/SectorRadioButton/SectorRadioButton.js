@@ -1,5 +1,6 @@
 import * as React from 'react'
 
+// import theme from '@material-tailwind/react/theme'
 import Box from '@mui/joy/Box'
 import Radio from '@mui/joy/Radio'
 import RadioGroup from '@mui/joy/RadioGroup'
@@ -67,12 +68,14 @@ export const SectorRadioButton = () => {
                   },
                 }),
                 action: ({ checked }) => ({
-                  sx: (theme) => ({
+                  sx: (_theme) => ({
                     ...(checked && {
                       '--variant-borderWidth': '2px',
                       '&&': {
                         // && to increase the specificity to win the base :hover styles
-                        borderColor: theme.vars.palette.primary[500],
+                        borderColor: 'rgb(134 239 172)',
+                        // borderColor: theme.vars.palette.primary[500],
+                        backgroundColor: 'rgb(134 239 172)',
                       },
                     }),
                   }),
