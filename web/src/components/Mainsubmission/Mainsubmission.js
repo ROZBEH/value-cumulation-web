@@ -55,26 +55,31 @@ export const Mainsubmission = () => {
   const [counterCompany, setCounterCompany] = useRecoilState(counterCompanyAtom)
   const [_secReport, setSECReports] = useRecoilState(secReportsAtom)
   const [valueTicker, setValueTicker] = useRecoilState(valueTickerAtom)
-  const [_sectorCompanies, setSectorCompanies] =
+  const [sectorCompanies, setSectorCompanies] =
     useRecoilState(sectorCompaniesAtom)
   const loadingSuggestion = companyList.length === 0
   const [inputValueTicker, setInputValueTicker] =
     useRecoilState(inputValueTickerAtom)
   const _formCustomMethods = useForm({ mode: 'onBlur' })
-  const [getGPTResSector] = useLazyQuery(GPT_QUERY_SECTOR, {
-    onCompleted: (data) => {
-      // First filter the list of available companies for GPT suggestions
-      const tmpSectorComp = companyList.filter((company) =>
-        data.gptIntelligence.response.some((res) => res === company.symbol)
-      )
-      // Now set the list of sector companies
-      setSectorCompanies(tmpSectorComp)
-    },
-  })
+  const [getGPTResSector, { loading: loadingGPTSector }] = useLazyQuery(
+    GPT_QUERY_SECTOR,
+    {
+      onCompleted: (data) => {
+        // First filter the list of available companies for GPT suggestions
+        const tmpSectorComp = companyList.filter((company) =>
+          data.gptIntelligence.response.some((res) => res === company.symbol)
+        )
+        // Now set the list of sector companies
+        const query = data.gptIntelligence.query
+        setSectorCompanies((currentState) => {
+          return { ...currentState, [query]: tmpSectorComp }
+        })
+      },
+    }
+  )
 
   const [getGPTResSentiment] = useLazyQuery(GPT_QUERY_SENTIMENT, {
     onCompleted: (_data) => {
-      // console.log('data: ', data)
       //pass
     },
   })
@@ -97,8 +102,11 @@ export const Mainsubmission = () => {
   }
 
   const decreaseCounter = () => {
+    let tmpSectorComp = { ...sectorCompanies }
     if (counterCompany > 1) {
       // remove the last item from the array
+      delete tmpSectorComp[valueTicker.slice(-1)[0].symbol]
+      setSectorCompanies(tmpSectorComp)
       setCalledCompanies((currentState) => currentState.slice(0, -1))
       setValueTicker(valueTicker.slice(0, -1))
       setInputValueTicker(inputValueTicker.slice(0, -1))
@@ -112,6 +120,8 @@ export const Mainsubmission = () => {
         setPltData(plotData)
       }
     } else if (counterCompany === 1) {
+      delete tmpSectorComp[valueTicker.slice(-1)[0].symbol]
+      setSectorCompanies(tmpSectorComp)
       setCalledCompanies([])
       setValueTicker([''])
       setInputValueTicker([''])
@@ -151,7 +161,7 @@ export const Mainsubmission = () => {
   }
 
   // Query the API for financial data of a company that the user has selected
-  const [getFunamentals, { _called, loading, _data }] =
+  const [getFunamentals, { loading: loadingFundamentals }] =
     useLazyQuery(COMPANY_QUERY)
 
   const myChangeFunc = async (_event, values, reason, _details, index) => {
@@ -175,18 +185,17 @@ export const Mainsubmission = () => {
       getFunamentals({
         variables: { ticker: values.symbol },
       }).then((fundamentalanalysis) => {
+        getGPTResSector({
+          variables: { query: values.symbol },
+        })
+        getGPTResSentiment({
+          variables: { query: `I  didn't liked last years result` },
+        })
         plotData = JSON.parse(JSON.stringify(pltData))
         plotData = postProcess(
           fundamentalanalysis.data.getFundamentals,
           plotData
         )
-        getGPTResSector({
-          variables: { query: values.symbol },
-        })
-
-        getGPTResSentiment({
-          variables: { query: `I  didn't liked last years result` },
-        })
 
         // Clean up the SEC report data and save it as an object
         // The format of the report will be
@@ -243,8 +252,12 @@ export const Mainsubmission = () => {
   // The following is kind of hacky, it should be refactored
   // Actually I hate doing it this way
   useEffect(() => {
-    setLoading(loading)
-  }, [setLoading, loading])
+    if (loadingFundamentals || loadingGPTSector) {
+      setLoading(true)
+    } else {
+      setLoading(false)
+    }
+  }, [setLoading, loadingFundamentals, loadingGPTSector])
 
   return (
     // <>
