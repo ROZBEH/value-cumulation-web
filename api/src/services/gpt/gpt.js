@@ -23,19 +23,21 @@ export const gptIntelligence = async (inputQuery) => {
     // engine: 'text-ada-001',
     prompt: fineTuneData + query + '\n',
     max_tokens: 100,
-    temperature: 0.4,
+    temperature: 1,
     presence_penalty: 2.0,
     frequency_penalty: 2.0,
     stop: ['Q: ', '\n'],
   })
-  const aiRes = gptResponse.data.choices[0].text
-  var aiResArrStr = aiRes.split('A: ')[1]
-  aiResArrStr = aiResArrStr.substr(1, aiResArrStr.length - 2)
-  var aiResArr = aiResArrStr.split(', ')
+  const apiRes = gptResponse.data.choices[0].text
+  var apiResArrStr = apiRes.split('A: ')[1]
+  apiResArrStr = apiResArrStr.substr(1, apiResArrStr.length - 2)
+  var apiResArr = apiResArrStr.split(', ')
+  // filter the apiResArr to remove the ticker if it exists
+  apiResArr = apiResArr.filter((item) => item !== inputQuery.query)
 
   return {
     query: inputQuery.query,
-    response: aiResArr,
+    response: apiResArr,
   }
 }
 
