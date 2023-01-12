@@ -57,8 +57,6 @@ export const Mainsubmission = () => {
   const [valueTicker, setValueTicker] = useRecoilState(valueTickerAtom)
   const [sectorCompanies, setSectorCompanies] =
     useRecoilState(sectorCompaniesAtom)
-  console.log('sectorCompanies =>', sectorCompanies)
-  console.log('valueTicker =>', valueTicker)
   const loadingSuggestion = companyList.length === 0
   const [inputValueTicker, setInputValueTicker] =
     useRecoilState(inputValueTickerAtom)
