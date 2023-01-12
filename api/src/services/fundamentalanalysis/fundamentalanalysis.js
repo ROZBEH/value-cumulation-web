@@ -78,6 +78,8 @@ async function callApi(ticker) {
     result = result.map((item) => {
       if (isNaN(item)) {
         return null
+      } else if (item === Infinity || item === -Infinity) {
+        return null
       } else {
         return item
       }

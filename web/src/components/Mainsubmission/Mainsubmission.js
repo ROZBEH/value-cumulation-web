@@ -28,10 +28,7 @@ import {
   GPT_QUERY_SECTOR,
   GPT_QUERY_SENTIMENT,
 } from 'src/commons/gql'
-import {
-  popCompany,
-  postProcess,
-} from 'src/components/Mainsubmission/utilitiesMainsubmission'
+import { popCompany, postProcess } from 'src/commons/processCompany'
 import {
   calledCompanies as calledCompaniesAtom,
   loadingFinancials as loadingFinancialsAtom,
@@ -48,7 +45,7 @@ import { sectorCompanies as sectorCompaniesAtom } from 'src/recoil/sectorAtom'
 import './Mainsubmission.css'
 
 export const Mainsubmission = () => {
-  const [_calledCompanies, setCalledCompanies] =
+  const [calledCompanies, setCalledCompanies] =
     useRecoilState(calledCompaniesAtom)
   const [_loadingFinancials, setLoading] = useRecoilState(loadingFinancialsAtom)
   const companyList = useRecoilValue(companyListAtom)
@@ -58,26 +55,34 @@ export const Mainsubmission = () => {
   const [counterCompany, setCounterCompany] = useRecoilState(counterCompanyAtom)
   const [_secReport, setSECReports] = useRecoilState(secReportsAtom)
   const [valueTicker, setValueTicker] = useRecoilState(valueTickerAtom)
-  const [_sectorCompanies, setSectorCompanies] =
+  const [sectorCompanies, setSectorCompanies] =
     useRecoilState(sectorCompaniesAtom)
   const loadingSuggestion = companyList.length === 0
   const [inputValueTicker, setInputValueTicker] =
     useRecoilState(inputValueTickerAtom)
   const _formCustomMethods = useForm({ mode: 'onBlur' })
-  const [getGPTResSector] = useLazyQuery(GPT_QUERY_SECTOR, {
-    onCompleted: (data) => {
-      // First filter the list of available companies for GPT suggestions
-      const tmpSectorComp = companyList.filter((company) =>
-        data.gptIntelligence.response.some((res) => res === company.symbol)
-      )
-      // Now set the list of sector companies
-      setSectorCompanies(tmpSectorComp)
-    },
-  })
+  const [getGPTResSector, { loading: loadingGPTSector }] = useLazyQuery(
+    GPT_QUERY_SECTOR,
+    {
+      onCompleted: (data) => {
+        // First filter the list of available companies for GPT suggestions
+        const tmpSectorComp = companyList.filter((company) =>
+          data.gptIntelligence.response.some((res) => res === company.symbol)
+        )
+        // Now set the list of sector companies
+        const query = data.gptIntelligence.query
+        setSectorCompanies((currentState) => {
+          return { ...currentState, [query]: tmpSectorComp }
+        })
+      },
+      notifyOnNetworkStatusChange: true,
+      fetchPolicy: 'network-only',
+    }
+  )
 
   const [getGPTResSentiment] = useLazyQuery(GPT_QUERY_SENTIMENT, {
-    onCompleted: (data) => {
-      console.log('data: ', data)
+    onCompleted: (_data) => {
+      //pass
     },
   })
   // Handling errors for user input
@@ -99,8 +104,11 @@ export const Mainsubmission = () => {
   }
 
   const decreaseCounter = () => {
+    let tmpSectorComp = { ...sectorCompanies }
     if (counterCompany > 1) {
       // remove the last item from the array
+      delete tmpSectorComp[valueTicker.slice(-1)[0].symbol]
+      setSectorCompanies(tmpSectorComp)
       setCalledCompanies((currentState) => currentState.slice(0, -1))
       setValueTicker(valueTicker.slice(0, -1))
       setInputValueTicker(inputValueTicker.slice(0, -1))
@@ -114,22 +122,25 @@ export const Mainsubmission = () => {
         setPltData(plotData)
       }
     } else if (counterCompany === 1) {
+      delete tmpSectorComp[valueTicker.slice(-1)[0].symbol]
+      setSectorCompanies(tmpSectorComp)
       setCalledCompanies([])
       setValueTicker([''])
       setInputValueTicker([''])
       plotData = JSON.parse(JSON.stringify(pltData))
       if (plotData['netIncome']) {
         // passing (counterCompany - 1) since js array starts at index 0
-        plotData = popCompany(plotData, counterCompany - 1)
-        setPltData(plotData)
-      }
-      // Resetting the items inside the autocomplete searchbar
-      // This is kind of hacky but it works
-      const autoCompleteClear = document.getElementsByClassName(
-        'MuiAutocomplete-clearIndicator'
-      )[0]
-      if (autoCompleteClear) {
-        autoCompleteClear.click()
+        // plotData = popCompany(plotData, counterCompany - 1)
+        // setPltData(plotData)
+        setPltData({})
+        // Resetting the items inside the autocomplete searchbar
+        // This is kind of hacky but it works
+        const autoCompleteClear = document.getElementsByClassName(
+          'MuiAutocomplete-clearIndicator'
+        )[0]
+        if (autoCompleteClear) {
+          autoCompleteClear.click()
+        }
       }
     }
   }
@@ -153,7 +164,7 @@ export const Mainsubmission = () => {
   }
 
   // Query the API for financial data of a company that the user has selected
-  const [getFunamentals, { _called, loading, _data }] =
+  const [getFunamentals, { loading: loadingFundamentals }] =
     useLazyQuery(COMPANY_QUERY)
 
   const myChangeFunc = async (_event, values, reason, _details, index) => {
@@ -177,19 +188,17 @@ export const Mainsubmission = () => {
       getFunamentals({
         variables: { ticker: values.symbol },
       }).then((fundamentalanalysis) => {
-        plotData = JSON.parse(JSON.stringify(pltData))
-        plotData = postProcess(
-          fundamentalanalysis.data.getFundamentals,
-          plotData,
-          index
-        )
         getGPTResSector({
           variables: { query: values.symbol },
         })
-
         getGPTResSentiment({
           variables: { query: `I  didn't liked last years result` },
         })
+        plotData = JSON.parse(JSON.stringify(pltData))
+        plotData = postProcess(
+          fundamentalanalysis.data.getFundamentals,
+          plotData
+        )
 
         // Clean up the SEC report data and save it as an object
         // The format of the report will be
@@ -237,6 +246,20 @@ export const Mainsubmission = () => {
         setPltData(plotData)
       })
     } else if (reason === 'clear') {
+      let tmpSectorComp = { ...sectorCompanies }
+      delete tmpSectorComp[valueTicker.slice(-1)[0].symbol]
+      setSectorCompanies(tmpSectorComp)
+      var tmpCalledCompanies = [...calledCompanies]
+      tmpCalledCompanies.splice(index, 1)
+      setCalledCompanies(tmpCalledCompanies)
+      // Autocomplete value
+      var tmpValueTicker = [...valueTicker]
+      tmpValueTicker[index] = ''
+      setValueTicker(tmpValueTicker)
+      // Autocomplete Input value
+      var tmpInputValueTicker = [...inputValueTicker]
+      tmpInputValueTicker[index] = ''
+      setInputValueTicker(tmpInputValueTicker)
       plotData = JSON.parse(JSON.stringify(pltData))
       plotData = popCompany(plotData, index)
       setPltData(plotData)
@@ -246,8 +269,12 @@ export const Mainsubmission = () => {
   // The following is kind of hacky, it should be refactored
   // Actually I hate doing it this way
   useEffect(() => {
-    setLoading(loading)
-  }, [setLoading, loading])
+    if (loadingFundamentals || loadingGPTSector) {
+      setLoading(true)
+    } else {
+      setLoading(false)
+    }
+  }, [setLoading, loadingFundamentals, loadingGPTSector])
 
   return (
     // <>

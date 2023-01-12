@@ -31,6 +31,8 @@ export function popCompany(plotData, index) {
       var seqNum = plotData[metric]['companyOrder'][company]
       delete plotData[metric]['companyOrder'][company]
       delete plotData[metric]['companyOrder'][seqNum]
+      // remove the specific stroke width
+      plotData[metric]['strokeWidth'].splice(updatedIndex, 1)
       for (const companyName in plotData[metric]['data']) {
         if (companyName === company) {
           plotData[metric]['data'].splice(companyName, 1)
@@ -41,7 +43,7 @@ export function popCompany(plotData, index) {
   return plotData
 }
 
-export function postProcess(data, plotData, index) {
+export function postProcess(data, plotData, strokeWidth) {
   // Brining the data into a format that is recognizable by rechart
   // Data format for plotData is in the following format:
   // {
@@ -56,18 +58,22 @@ export function postProcess(data, plotData, index) {
   //                         { 'name': '2021', 'Apple Inc.': '$10,100,000', 'Tesla Inc.': '$11,200,000' }]
   //              }
   // }
+  if (strokeWidth === undefined) {
+    strokeWidth = 1
+  }
   const nameCompany = data.companyName
   const metricsArrays = data.metricValues
   const fullMetricNames = data.fullMetricNames
   const metricNames = data.metricNames
   const metricsDescription = data.metricsDescription
   const yearsArray = data.years
-
+  let index
   for (var i = 0; i < metricsArrays.length; i++) {
     if (!(metricNames[i] in plotData)) {
       plotData[metricNames[i]] = {}
       plotData[metricNames[i]]['metricName'] = fullMetricNames[i]
       plotData[metricNames[i]]['nameCompany'] = [nameCompany]
+      plotData[metricNames[i]]['strokeWidth'] = [strokeWidth]
       plotData[metricNames[i]]['description'] = metricsDescription[i]
       // companyOrder is an Object that keeps track of the order that companies have been
       // added to the plotData. companyOrder will never get removed from the array until
@@ -75,7 +81,9 @@ export function postProcess(data, plotData, index) {
       plotData[metricNames[i]]['companyOrder'] = {}
     } else {
       plotData[metricNames[i]]['nameCompany'].push(nameCompany)
+      plotData[metricNames[i]]['strokeWidth'].push(strokeWidth)
     }
+    index = Object.keys(plotData[metricNames[i]]['companyOrder']).length / 2
     plotData[metricNames[i]]['companyOrder'][index] = nameCompany
     plotData[metricNames[i]]['companyOrder'][nameCompany] = index
 

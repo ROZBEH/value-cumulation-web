@@ -23,21 +23,19 @@ export const gptIntelligence = async (inputQuery) => {
     // engine: 'text-ada-001',
     prompt: fineTuneData + query + '\n',
     max_tokens: 100,
-    temperature: 1,
+    temperature: 0.4,
     presence_penalty: 2.0,
     frequency_penalty: 2.0,
     stop: ['Q: ', '\n'],
   })
-  const apiRes = gptResponse.data.choices[0].text
-  var apiResArrStr = apiRes.split('A: ')[1]
-  apiResArrStr = apiResArrStr.substr(1, apiResArrStr.length - 2)
-  var apiResArr = apiResArrStr.split(', ')
-  // filter the apiResArr to remove the ticker if it exists
-  apiResArr = apiResArr.filter((item) => item !== inputQuery.query)
+  const aiRes = gptResponse.data.choices[0].text
+  var aiResArrStr = aiRes.split('A: ')[1]
+  aiResArrStr = aiResArrStr.substr(1, aiResArrStr.length - 2)
+  var aiResArr = aiResArrStr.split(', ')
 
   return {
     query: inputQuery.query,
-    response: apiResArr,
+    response: aiResArr,
   }
 }
 
@@ -57,7 +55,8 @@ export const gptSentiment = async (inputQuery) => {
   const OPENAI_API_KEY = process.env.OPENAI_API_KEY
   const openai = new OpenAI(OPENAI_API_KEY)
   const gptResponse = await openai.complete({
-    // engine: 'text-davinci-003',
+    // engine: 'text-davinci-002',
+    // engine: 'text-ada-001',
     engine: 'text-curie-001',
     prompt:
       `Decide whether a Tweet\'s sentiment is positive, neutral, or negative.\n\nTweet: "` +
@@ -75,3 +74,7 @@ export const gptSentiment = async (inputQuery) => {
     sentiment: sentiment,
   }
 }
+
+gptIntelligence({ query: 'PFE' }).then((res) => {
+  console.log('res = ', res)
+})
