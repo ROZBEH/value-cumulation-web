@@ -44,46 +44,48 @@ export const SectorRadioButton = () => {
           setValue(event.target.value)
         }}
       >
-        {valueTicker.map((value) => (
-          <Sheet
-            key={value.name}
-            sx={{
-              p: 2,
-              borderRadius: 'md',
-              boxShadow: 'sm',
-              bgcolor: 'background.body',
-            }}
-          >
-            <Radio
-              label={`${value.name}`}
-              overlay
-              disableIcon
-              value={value.symbol}
-              slotProps={{
-                label: ({ checked }) => ({
-                  sx: {
-                    fontWeight: 'lg',
-                    fontSize: 'md',
-                    color: checked ? 'text.primary' : 'text.secondary',
-                  },
-                }),
-                action: ({ checked }) => ({
-                  sx: (_theme) => ({
-                    ...(checked && {
-                      '--variant-borderWidth': '2px',
-                      '&&': {
-                        // && to increase the specificity to win the base :hover styles
-                        borderColor: 'rgb(134 239 172)',
-                        // borderColor: theme.vars.palette.primary[500],
-                        backgroundColor: 'rgb(134 239 172)',
-                      },
+        {valueTicker
+          .filter((item) => item != '')
+          .map((value) => (
+            <Sheet
+              key={value.name}
+              sx={{
+                p: 2,
+                borderRadius: 'md',
+                boxShadow: 'sm',
+                bgcolor: 'background.body',
+              }}
+            >
+              <Radio
+                label={`${value.name}`}
+                overlay
+                disableIcon
+                value={value.symbol}
+                slotProps={{
+                  label: ({ checked }) => ({
+                    sx: {
+                      fontWeight: 'lg',
+                      fontSize: 'md',
+                      color: checked ? 'text.primary' : 'text.secondary',
+                    },
+                  }),
+                  action: ({ checked }) => ({
+                    sx: (_theme) => ({
+                      ...(checked && {
+                        '--variant-borderWidth': '2px',
+                        '&&': {
+                          // && to increase the specificity to win the base :hover styles
+                          borderColor: 'rgb(134 239 172)',
+                          // borderColor: theme.vars.palette.primary[500],
+                          backgroundColor: 'rgb(134 239 172)',
+                        },
+                      }),
                     }),
                   }),
-                }),
-              }}
-            />
-          </Sheet>
-        ))}
+                }}
+              />
+            </Sheet>
+          ))}
       </RadioGroup>
     </Box>
   )
