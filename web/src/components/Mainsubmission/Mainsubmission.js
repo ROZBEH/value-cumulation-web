@@ -45,7 +45,7 @@ import { sectorCompanies as sectorCompaniesAtom } from 'src/recoil/sectorAtom'
 import './Mainsubmission.css'
 
 export const Mainsubmission = () => {
-  const [_calledCompanies, setCalledCompanies] =
+  const [calledCompanies, setCalledCompanies] =
     useRecoilState(calledCompaniesAtom)
   const [_loadingFinancials, setLoading] = useRecoilState(loadingFinancialsAtom)
   const companyList = useRecoilValue(companyListAtom)
@@ -57,6 +57,8 @@ export const Mainsubmission = () => {
   const [valueTicker, setValueTicker] = useRecoilState(valueTickerAtom)
   const [sectorCompanies, setSectorCompanies] =
     useRecoilState(sectorCompaniesAtom)
+  console.log('sectorCompanies =>', sectorCompanies)
+  console.log('valueTicker =>', valueTicker)
   const loadingSuggestion = companyList.length === 0
   const [inputValueTicker, setInputValueTicker] =
     useRecoilState(inputValueTickerAtom)
@@ -75,6 +77,8 @@ export const Mainsubmission = () => {
           return { ...currentState, [query]: tmpSectorComp }
         })
       },
+      notifyOnNetworkStatusChange: true,
+      fetchPolicy: 'network-only',
     }
   )
 
@@ -128,16 +132,17 @@ export const Mainsubmission = () => {
       plotData = JSON.parse(JSON.stringify(pltData))
       if (plotData['netIncome']) {
         // passing (counterCompany - 1) since js array starts at index 0
-        plotData = popCompany(plotData, counterCompany - 1)
-        setPltData(plotData)
-      }
-      // Resetting the items inside the autocomplete searchbar
-      // This is kind of hacky but it works
-      const autoCompleteClear = document.getElementsByClassName(
-        'MuiAutocomplete-clearIndicator'
-      )[0]
-      if (autoCompleteClear) {
-        autoCompleteClear.click()
+        // plotData = popCompany(plotData, counterCompany - 1)
+        // setPltData(plotData)
+        setPltData({})
+        // Resetting the items inside the autocomplete searchbar
+        // This is kind of hacky but it works
+        const autoCompleteClear = document.getElementsByClassName(
+          'MuiAutocomplete-clearIndicator'
+        )[0]
+        if (autoCompleteClear) {
+          autoCompleteClear.click()
+        }
       }
     }
   }
@@ -243,6 +248,20 @@ export const Mainsubmission = () => {
         setPltData(plotData)
       })
     } else if (reason === 'clear') {
+      let tmpSectorComp = { ...sectorCompanies }
+      delete tmpSectorComp[valueTicker.slice(-1)[0].symbol]
+      setSectorCompanies(tmpSectorComp)
+      var tmpCalledCompanies = [...calledCompanies]
+      tmpCalledCompanies.splice(index, 1)
+      setCalledCompanies(tmpCalledCompanies)
+      // Autocomplete value
+      var tmpValueTicker = [...valueTicker]
+      tmpValueTicker[index] = ''
+      setValueTicker(tmpValueTicker)
+      // Autocomplete Input value
+      var tmpInputValueTicker = [...inputValueTicker]
+      tmpInputValueTicker[index] = ''
+      setInputValueTicker(tmpInputValueTicker)
       plotData = JSON.parse(JSON.stringify(pltData))
       plotData = popCompany(plotData, index)
       setPltData(plotData)
