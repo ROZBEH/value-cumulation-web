@@ -98,7 +98,7 @@ export const handler = async (event, context) => {
   const signupOptions = {
     // Whatever you want to happen to your data on new user signup. Redwood will
     // check for duplicate usernames before calling this handler. At a minimum
-    // you need to save the `username`, `hashedPassword` and `salt` to your
+    // you need to save the `username`, `hashedpassword` and `salt` to your
     // user table. `userAttributes` contains any additional object members that
     // were included in the object given to the `signUp()` function you got
     // from `useAuth()`.
@@ -113,7 +113,7 @@ export const handler = async (event, context) => {
     // `signUp()` function in the form of: `{ message: 'String here' }`.
     handler: async ({
       username: email,
-      hashedPassword,
+      hashedpassword,
       salt,
       userAttributes,
     }) => {
@@ -135,7 +135,7 @@ export const handler = async (event, context) => {
         data: {
           id: customerId,
           email,
-          hashedPassword: hashedPassword,
+          hashedpassword: hashedpassword,
           salt: salt,
           name: customerName,
           // name: userAttributes.name
@@ -164,7 +164,7 @@ export const handler = async (event, context) => {
     authFields: {
       id: 'id',
       username: 'email',
-      hashedPassword: 'hashedPassword',
+      hashedpassword: 'hashedpassword',
       salt: 'salt',
       resetToken: 'resetToken',
       resetTokenExpiresAt: 'resetTokenExpiresAt',
