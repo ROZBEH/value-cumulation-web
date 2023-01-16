@@ -15,7 +15,7 @@ model User {
   id                  String                 @id
   email               String                 @unique
   name                String?
-  hashedpassword      String                 @default("")
+  hashedPassword      String                 @default("")
   salt                String                 @default("")
   resetToken          String?
   resetTokenExpiresAt DateTime?
