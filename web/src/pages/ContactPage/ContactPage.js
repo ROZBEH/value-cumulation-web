@@ -6,6 +6,8 @@ Notice: All code and information in this repository is the property of Value Cum
 You are strictly prohibited from distributing or using this repository unless otherwise stated.
  */
 
+import { useForm as useSpreeForm } from '@formspree/react'
+
 import {
   FieldError,
   FormError,
@@ -22,6 +24,7 @@ import { toast, Toaster } from '@redwoodjs/web/toast'
 import { CREATE_CONTACT } from 'src/commons/gql'
 
 const ContactPage = () => {
+  const [_spreeState, spreeSubmit] = useSpreeForm('xnqynnrr')
   const formMethods = useForm({ mode: 'onBlur' })
   // for displaying the contact name after submission
   const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
@@ -32,6 +35,7 @@ const ContactPage = () => {
     },
   })
   const onSubmit = (data) => {
+    spreeSubmit(data)
     create({ variables: { input: data } })
   }
 
