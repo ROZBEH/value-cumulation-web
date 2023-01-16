@@ -9,6 +9,8 @@ You are strictly prohibited from distributing or using this repository unless ot
 import { useRef } from 'react'
 import { useEffect } from 'react'
 
+import { useForm as useSpreeForm } from '@formspree/react'
+
 import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
@@ -23,6 +25,7 @@ import { MetaTags } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 const LoginPage = () => {
+  const [_spreeState, spreeSubmit] = useSpreeForm('xknagowb')
   const { isAuthenticated, logIn } = useAuth()
 
   useEffect(() => {
@@ -37,7 +40,8 @@ const LoginPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    toast.loading('Logging You in...',{
+    spreeSubmit({ username: data.username })
+    toast.loading('Logging You in...', {
       duration: Infinity,
     })
     const response = await logIn({ ...data })
