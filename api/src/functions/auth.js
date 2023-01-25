@@ -6,7 +6,7 @@ Notice: All code and information in this repository is the property of Value Cum
 You are strictly prohibited from distributing or using this repository unless otherwise stated.
  */
 
-import { DbAuthHandler } from '@redwoodjs/api'
+import { DbAuthHandler, PasswordValidationError } from '@redwoodjs/api'
 
 import { db } from 'src/lib/db'
 import { stripe } from 'src/lib/stripe'
@@ -141,6 +141,26 @@ export const handler = async (event, context) => {
           // name: userAttributes.name
         },
       })
+    },
+
+    passwordValidation: (password) => {
+      if (password.length < 8) {
+        throw new PasswordValidationError(
+          'Password must be at least 8 characters'
+        )
+      }
+      if (
+        !password.match(
+          // eslint-disable-next-line prettier/prettier
+          '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&()*])[A-Za-z\d!@#$%^&()*]{8,}$'
+        )
+      ) {
+        throw new PasswordValidationError(
+          'Password must contain at least one capital letter'
+        )
+      }
+
+      return true
     },
 
     errors: {
