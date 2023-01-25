@@ -129,6 +129,21 @@ const SignupPage = () => {
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
                     validation={{
+                      validate: (value) => {
+                        if (value.length < 8) {
+                          return 'Password must be at least 8 characters'
+                        } else if (!value.match(/[A-Z]/)) {
+                          return 'Password must contain at least one uppercase letter'
+                        } else if (!value.match(/[a-z]/)) {
+                          return 'Password must contain at least one lowercase letter'
+                        } else if (!value.match(/[0-9]/)) {
+                          return 'Password must contain at least one number'
+                        } else if (!value.match(/[!@#$%^&*()]/)) {
+                          return 'Password must contain at least one special character'
+                        } else {
+                          return true
+                        }
+                      },
                       required: {
                         value: true,
                         message: 'Password is required',
