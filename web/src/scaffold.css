@@ -282,10 +282,18 @@
 .rw-field-error {
   display: block;
   margin-top: 0.25rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: full-width;
+  font-size: 0.65rem;
   color: #c53030;
+}
+.rw-field-verified {
+  display: block;
+  margin-top: 0.25rem;
+  font-weight: 500;
+  text-transform: full-width;
+  font-size: 0.65rem;
+  color: #008000;
 }
 .rw-table-wrapper-responsive {
   overflow-x: auto;
