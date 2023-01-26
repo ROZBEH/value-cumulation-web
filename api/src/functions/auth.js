@@ -9,8 +9,10 @@ You are strictly prohibited from distributing or using this repository unless ot
 import { DbAuthHandler, PasswordValidationError } from '@redwoodjs/api'
 
 import { db } from 'src/lib/db'
+// import { logger } from 'src/lib/logger'
 import { stripe } from 'src/lib/stripe'
 
+const nodemailer = require('nodemailer')
 export const handler = async (event, context) => {
   const forgotPasswordOptions = {
     // handler() is invoked after verifying that a user was found with the given
@@ -26,11 +28,39 @@ export const handler = async (event, context) => {
     // address in a toast message so the user will know it worked and where
     // to look for the email.
     handler: (user) => {
+      let transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: 587,
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS,
+        },
+      })
+      console.log('user', user)
+
+      const resetLink = `${process.env.REDIRECT_URL}/reset-password?resetToken=${user.resetToken}`
+      const message = {
+        from: process.env.AUTH_EMAIL_FROM,
+        to: user.email,
+        subject: 'Reset Forgotten Password',
+        html: `<p>Here is the link to reset your password. It will expire after 5 minutes. <a href="${resetLink}">Reset my Password</a></p>
+        <p> Please copy and paste the following link into your browser if the above link does not work.</p>
+        <p>${resetLink}</p>
+        <p>If you did not request a password reset, please ignore this email.</p>`,
+      }
+      transporter.sendMail(message, (err, info) => {
+        if (err) {
+          console.log(err)
+        } else {
+          console.log(info)
+        }
+      })
+
       return user
     },
 
-    // How long the resetToken is valid for, in seconds (default is 24 hours)
-    expires: 60 * 60 * 24,
+    // How long the resetToken is valid for, in seconds (default is 5minutes)
+    expires: 60 * 5,
 
     errors: {
       // for security reasons you may want to be vague here rather than expose
@@ -149,15 +179,34 @@ export const handler = async (event, context) => {
           'Password must be at least 8 characters'
         )
       }
-      if (
-        !password.match(
-          // eslint-disable-next-line prettier/prettier
-          '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&()*])[A-Za-z\d!@#$%^&()*]{8,}$'
-        )
-      ) {
-        throw new PasswordValidationError(
-          'Password must contain at least one capital letter'
-        )
+
+      if (!password.match(/[A-Z]/)) {
+        {
+          throw new PasswordValidationError(
+            'Password must contain at least one uppercase letter'
+          )
+        }
+      }
+      if (!password.match(/[a-z]/)) {
+        {
+          throw new PasswordValidationError(
+            'Password must contain at least one lowercase letter'
+          )
+        }
+      }
+      if (!password.match(/[0-9]/)) {
+        {
+          throw new PasswordValidationError(
+            'Password must contain at least one number'
+          )
+        }
+      }
+      if (!password.match(/[!@#$%^&*()]/)) {
+        {
+          throw new PasswordValidationError(
+            'Password must contain at least one special character'
+          )
+        }
       }
 
       return true
