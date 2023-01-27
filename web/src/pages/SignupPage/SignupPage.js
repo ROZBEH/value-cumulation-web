@@ -84,6 +84,7 @@ const SignupPage = () => {
   }
 
   const onSubmit = async (data) => {
+    setErrors({})
     spreeSubmit({ username: data.username, name: data.name })
     toast.loading('Signing You Up...', {
       duration: Infinity,
