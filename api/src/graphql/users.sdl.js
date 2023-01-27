@@ -19,6 +19,7 @@ export const schema = gql`
     hashedPassword: String!
     salt: String!
     resetToken: String
+    verifyToken: String
     resetTokenExpiresAt: DateTime
     favorites: [favorite]
   }
@@ -53,5 +54,7 @@ export const schema = gql`
     createUser(input: CreateUserInput!): User! @requireAuth
     updateUser(id: String!, input: UpdateUserInput!): User! @requireAuth
     deleteUser(id: String!): User! @requireAuth
+    verifyReset(email: String!): String! @skipAuth
+    verifyEmail(token: String!): Boolean! @skipAuth
   }
 `

@@ -6,10 +6,14 @@ Notice: All code and information in this repository is the property of Value Cum
 You are strictly prohibited from distributing or using this repository unless otherwise stated.
  */
 
+import { randomUUID } from 'crypto'
+
 import { DbAuthHandler, PasswordValidationError } from '@redwoodjs/api'
 
+import { email as verificationEmail } from 'src/emails/user-verification'
 import { db } from 'src/lib/db'
 // import { logger } from 'src/lib/logger'
+import { sendEmail } from 'src/lib/mailer'
 import { stripe } from 'src/lib/stripe'
 
 const nodemailer = require('nodemailer')
@@ -30,7 +34,7 @@ export const handler = async (event, context) => {
     handler: (user) => {
       let transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
-        port: 587,
+        port: process.env.SMTP_HOST,
         auth: {
           user: process.env.SMTP_USER,
           pass: process.env.SMTP_PASS,
@@ -42,11 +46,13 @@ export const handler = async (event, context) => {
       const message = {
         from: process.env.AUTH_EMAIL_FROM,
         to: user.email,
-        subject: 'Reset Forgotten Password',
-        html: `<p>Here is the link to reset your password. It will expire after 5 minutes. <a href="${resetLink}">Reset my Password</a></p>
+        subject: 'Reset Password',
+        html: `
+        <p>Here is the link to reset your password. It will expire after 5 minutes. <a href="${resetLink}">Reset my Password</a></p>
         <p> Please copy and paste the following link into your browser if the above link does not work.</p>
         <p>${resetLink}</p>
-        <p>If you did not request a password reset, please ignore this email.</p>`,
+        <p>If you did not request a password reset, please ignore this email.</p>
+        <p>We appreciate doing busines with you ❤️</p>`,
       }
       transporter.sendMail(message, (err, info) => {
         if (err) {
@@ -85,6 +91,9 @@ export const handler = async (event, context) => {
     // by the `logIn()` function from `useAuth()` in the form of:
     // `{ message: 'Error message' }`
     handler: (user) => {
+      if (user.verifyToken) {
+        throw new Error('User not Verified')
+      }
       return user
     },
 
@@ -161,16 +170,25 @@ export const handler = async (event, context) => {
         })
         customerId = newCustomer.id
       }
-      return db.user.create({
+      const user = await db.user.create({
         data: {
           id: customerId,
           email,
           hashedPassword: hashedPassword,
           salt: salt,
           name: customerName,
+          verifyToken: randomUUID(),
           // name: userAttributes.name
         },
       })
+
+      sendEmail({
+        to: user.email,
+        subject: verificationEmail.subject(),
+        html: verificationEmail.htmlBody(user),
+      })
+
+      return user
     },
 
     passwordValidation: (password) => {

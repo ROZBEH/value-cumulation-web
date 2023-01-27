@@ -18,6 +18,7 @@ model User {
   hashedPassword      String                 @default("")
   salt                String                 @default("")
   resetToken          String?
+  verifyToken         String?
   resetTokenExpiresAt DateTime?
   favoriteMetrics     FavoriteMetricOnUser[]
 }
