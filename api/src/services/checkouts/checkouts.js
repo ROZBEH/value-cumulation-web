@@ -20,8 +20,6 @@ import { stripe } from 'src/lib/stripe'
  */
 export const checkout = async ({ mode, cart, customerId }, { context }) => {
   // eslint-disable-next-line camelcase
-  console.log(' I was here 2')
-  // eslint-disable-next-line camelcase
   const line_items = cart.map((product) => ({
     price: product.id,
     quantity: product.quantity,
