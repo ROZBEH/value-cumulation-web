@@ -8,6 +8,10 @@ You are strictly prohibited from distributing or using this repository unless ot
 
 import { useEffect, useRef, useState } from 'react'
 
+import CloseIcon from '@mui/icons-material/Close'
+import DoneIcon from '@mui/icons-material/Done'
+import { useForm } from 'react-hook-form'
+
 import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
@@ -42,14 +46,61 @@ const ResetPasswordPage = ({ resetToken }) => {
       }
     }
     validateToken()
-  }, [])
+  }, [resetToken, validateResetToken])
 
-  const passwordRef = useRef()
-  useEffect(() => {
-    passwordRef.current.focus()
-  }, [])
+  // const passwordRef = useRef()
+  // useEffect(() => {
+  //   passwordRef.current.focus()
+  // }, [])
+
+  const [errors, setErrors] = useState({})
+  const checkErrors = (password) => {
+    console.log('inside check errors')
+    const length = password.length >= 8
+    const uppercase = /[A-Z]/.test(password)
+    const lowercase = /[a-z]/.test(password)
+    const number = /[0-9]/.test(password)
+    const special = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
+    const whitespace = !/\s/.test(password)
+
+    setErrors({
+      length: length,
+      uppercase: uppercase,
+      lowercase: lowercase,
+      number: number,
+      special: special,
+      whitespace: whitespace,
+    })
+  }
+  const errMsg = (error) => {
+    if (error === 'length') {
+      return 'Password must be at least 8 characters'
+    } else if (error === 'uppercase') {
+      return 'Password must contain at least one uppercase letter'
+    } else if (error === 'lowercase') {
+      return 'Password must contain at least one lowercase letter'
+    } else if (error === 'number') {
+      return 'Password must contain at least one number'
+    } else if (error === 'special') {
+      return 'Password must contain at least one special character'
+    } else if (error === 'whitespace') {
+      return 'Password must not contain any whitespace'
+    }
+  }
+  // This is a hack to clear the errors when the user deletes the password
+  const password = useRef()
+  const formMethods = useForm()
+  password.current = formMethods.watch('password', '')
+  if ((password.current === null) & (Object.keys(errors).length > 0)) {
+    setErrors({})
+  }
 
   const onSubmit = async (data) => {
+    // Making sure there is no errors
+    if (Object.values(errors).every((item) => item) !== true) {
+      toast.error('Password must meet all requirements')
+      return
+    }
     const response = await resetPassword({
       resetToken,
       password: data.password,
@@ -58,6 +109,7 @@ const ResetPasswordPage = ({ resetToken }) => {
     if (response.error) {
       toast.error(response.error)
     } else {
+      setErrors({})
       toast.success('Password changed!')
       await reauthenticate()
       navigate(routes.login())
@@ -80,7 +132,11 @@ const ResetPasswordPage = ({ resetToken }) => {
 
             <div className="rw-segment-main">
               <div className="rw-form-wrapper">
-                <Form onSubmit={onSubmit} className="rw-form-wrapper">
+                <Form
+                  formMethods={formMethods}
+                  onSubmit={onSubmit}
+                  className="rw-form-wrapper"
+                >
                   <div className="text-left">
                     <Label
                       name="password"
@@ -95,14 +151,38 @@ const ResetPasswordPage = ({ resetToken }) => {
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
                       disabled={!enabled}
-                      ref={passwordRef}
+                      // ref={passwordRef}
                       validation={{
+                        validate: (password) => {
+                          checkErrors(password)
+                        },
                         required: {
                           value: true,
                           message: 'Password is required',
                         },
                       }}
                     />
+                    {Object.keys(errors).map((error, index) => {
+                      let color = errors[error] ? 'green' : 'red'
+                      return (
+                        <div key={index}>
+                          <div
+                            className={
+                              color == 'red'
+                                ? 'rw-field-error'
+                                : 'rw-field-verified'
+                            }
+                          >
+                            {color === 'green' ? (
+                              <DoneIcon style={{ color: color }} />
+                            ) : (
+                              <CloseIcon style={{ color: color }} />
+                            )}
+                            {errMsg(error)}
+                          </div>
+                        </div>
+                      )
+                    })}
 
                     <FieldError name="password" className="rw-field-error" />
                   </div>

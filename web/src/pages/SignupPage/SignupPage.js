@@ -84,7 +84,10 @@ const SignupPage = () => {
   }
 
   const onSubmit = async (data) => {
-    setErrors({})
+    if (Object.values(errors).every((item) => item) !== true) {
+      toast.error('Password must meet all requirements')
+      return
+    }
     spreeSubmit({ username: data.username, name: data.name })
     toast.loading('Signing You Up...', {
       duration: Infinity,
@@ -92,6 +95,7 @@ const SignupPage = () => {
     const response = await signUp({ ...data })
     toast.dismiss()
     if (response.message) {
+      setErrors({})
       toast.success(response.message, { duration: 5000 })
       navigate(routes.login())
     } else if (response.error) {

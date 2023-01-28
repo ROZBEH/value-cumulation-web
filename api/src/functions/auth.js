@@ -16,7 +16,6 @@ import { db } from 'src/lib/db'
 import { sendEmail } from 'src/lib/mailer'
 import { stripe } from 'src/lib/stripe'
 
-const nodemailer = require('nodemailer')
 export const handler = async (event, context) => {
   const forgotPasswordOptions = {
     // handler() is invoked after verifying that a user was found with the given
@@ -32,19 +31,8 @@ export const handler = async (event, context) => {
     // address in a toast message so the user will know it worked and where
     // to look for the email.
     handler: (user) => {
-      let transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: process.env.SMTP_HOST,
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASS,
-        },
-      })
-      console.log('user', user)
-
       const resetLink = `${process.env.REDIRECT_URL}/reset-password?resetToken=${user.resetToken}`
       const message = {
-        from: process.env.AUTH_EMAIL_FROM,
         to: user.email,
         subject: 'Reset Password',
         html: `
@@ -54,13 +42,7 @@ export const handler = async (event, context) => {
         <p>If you did not request a password reset, please ignore this email.</p>
         <p>We appreciate doing busines with you ❤️</p>`,
       }
-      transporter.sendMail(message, (err, info) => {
-        if (err) {
-          console.log(err)
-        } else {
-          console.log(info)
-        }
-      })
+      sendEmail(message)
 
       return user
     },
@@ -99,11 +81,11 @@ export const handler = async (event, context) => {
 
     errors: {
       usernameOrPasswordMissing: 'Both username and password are required',
-      usernameNotFound: 'Username ${username} not found',
+      usernameNotFound: 'Username ${username} and not found',
       // For security reasons you may want to make this the same as the
       // usernameNotFound error so that a malicious user can't use the error
       // to narrow down if it's the username or password that's incorrect
-      incorrectPassword: 'Incorrect password for ${username}',
+      incorrectPassword: 'Username ${username} and not found',
     },
 
     // How long a user will remain logged in, in seconds
@@ -120,7 +102,7 @@ export const handler = async (event, context) => {
     },
 
     // If `false` then the new password MUST be different than the current one
-    allowReusedPassword: true,
+    allowReusedPassword: false,
 
     errors: {
       // the resetToken is valid, but expired

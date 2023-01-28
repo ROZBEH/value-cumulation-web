@@ -12,8 +12,8 @@ const VERIFY_TOKEN_MUTATION = gql`
 const Verification = ({ token }) => {
   const [verifyEmail, { loading, error }] = useMutation(VERIFY_TOKEN_MUTATION, {
     onCompleted: () => {
-      toast.success('Account Verified')
-      navigate(routes.home())
+      toast.success('Account Verified. Now you can login.')
+      navigate(routes.login())
     },
     onError: (error) => {
       toast.error(error.message)
