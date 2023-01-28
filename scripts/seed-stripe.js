@@ -19,8 +19,9 @@ import { execSync } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
-import { stripe } from 'api/src/lib/stripe'
 import { prompt } from 'enquirer'
+
+import { stripe } from 'src/lib/stripe'
 
 export default async () => {
   console.log('Getting products')
