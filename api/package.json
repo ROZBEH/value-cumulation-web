@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@redwoodjs/api": "^3.4.0",
+    "@redwoodjs/cli": "^3.8.0",
     "@redwoodjs/graphql-server": "^3.4.0",
     "@stripe/stripe-js": "^1.36.0",
     "@xstate/immer": "^0.3.1",
