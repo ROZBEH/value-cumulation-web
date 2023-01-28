@@ -55,7 +55,6 @@ const ResetPasswordPage = ({ resetToken }) => {
 
   const [errors, setErrors] = useState({})
   const checkErrors = (password) => {
-    console.log('inside check errors')
     const length = password.length >= 8
     const uppercase = /[A-Z]/.test(password)
     const lowercase = /[a-z]/.test(password)
