@@ -9,7 +9,7 @@
   title = "Value Cumulation"
   port = 8910
   apiUrl = "/.netlify/functions"
-  includeEnvironmentVariables = [] # any ENV vars that should be available to the web side, see https://redwoodjs.com/docs/environment-variables#web
+  includeEnvironmentVariables = ['FINANCIAL_API_KEY','OPENAI_API_KEY','PINECONE_API_KEY','SEC_API_KEY','SESSION_SECRET','DATABASE_URL','STRIPE_PK','STRIPE_SK','STRIPE_WEBHOOK_SK','STRIPE_WEBHOOK_SECRET','SMTP_HOST','SMTP_PORT','APP_NAME','SMTP_USER','SMTP_PASS','REDIRECT_URL','AUTH_EMAIL_FROM'] # any ENV vars that should be available to the web side, see https://redwoodjs.com/docs/environment-variables#web
 [api]
   port = 8911
 [browser]
