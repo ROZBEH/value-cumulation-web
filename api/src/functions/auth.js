@@ -188,7 +188,10 @@ export const handler = async (event, context) => {
         html: verificationEmail.htmlBody(user),
       })
 
-      return user
+      const msg =
+        'Thanks for signing up. Please check your email to verify your account.'
+
+      return msg
     },
 
     passwordValidation: (password) => {
