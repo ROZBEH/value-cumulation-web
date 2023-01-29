@@ -73,7 +73,7 @@ const SignupPage = () => {
     } else if (error === 'number') {
       return 'Password must contain at least one number'
     } else if (error === 'special') {
-      return 'Password must contain at least one special character'
+      return 'Password must contain at least one special character (!@#$%^()&*)'
     } else if (error === 'whitespace') {
       return 'Password must not contain any whitespace'
     }
@@ -105,6 +105,7 @@ const SignupPage = () => {
       toast.success('Welcome!')
     }
   }
+  console.log('errors', errors)
 
   return (
     <>
@@ -183,10 +184,13 @@ const SignupPage = () => {
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="new-password"
+                    onChange={(e) => {
+                      checkErrors(e.target.value)
+                    }}
                     validation={{
-                      validate: (password) => {
-                        checkErrors(password)
-                      },
+                      // validate: (password) => {
+                      //   checkErrors(password)
+                      // },
                       required: {
                         value: true,
                         message: 'Password is required',
@@ -198,21 +202,20 @@ const SignupPage = () => {
                   {Object.keys(errors).map((error, index) => {
                     let color = errors[error] ? 'green' : 'red'
                     return (
-                      <div key={index}>
-                        <div
-                          className={
-                            color == 'red'
-                              ? 'rw-field-error'
-                              : 'rw-field-verified'
-                          }
-                        >
-                          {color === 'green' ? (
-                            <DoneIcon style={{ color: color }} />
-                          ) : (
-                            <CloseIcon style={{ color: color }} />
-                          )}
-                          {errMsg(error)}
-                        </div>
+                      <div
+                        key={index}
+                        className={
+                          color == 'red'
+                            ? 'rw-field-error'
+                            : 'rw-field-verified'
+                        }
+                      >
+                        {color === 'green' ? (
+                          <DoneIcon style={{ color: color }} />
+                        ) : (
+                          <CloseIcon style={{ color: color }} />
+                        )}
+                        {errMsg(error)}
                       </div>
                     )
                   })}
