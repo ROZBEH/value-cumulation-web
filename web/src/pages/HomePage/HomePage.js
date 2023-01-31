@@ -46,8 +46,8 @@ TabPanel.propTypes = {
 }
 
 const HomePage = () => {
-  const [value, setValue] = React.useState(0)
   // const { isAuthenticated, currentUser, _logOut } = useAuth()
+  const [value, setValue] = React.useState(0)
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
