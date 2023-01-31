@@ -32,9 +32,9 @@ const Routes = () => {
         <Route path="/about" page={AboutPage} name="about" />
         <Route path="/contact" page={ContactPage} name="contact" />
         <Route path="/drafts" page={ContactPage} name="drafts" />
-        {/* <Private unauthenticated="login"> */}
-        <Route path="/profile" page={ProfilePage} name="profile" />
-        {/* </Private> */}
+        <Private unauthenticated="login">
+          <Route path="/profile" page={ProfilePage} name="profile" />
+        </Private>
 
         {/* Wrap the following around anything that you'd like to make it private and need authentication
         <Private unauthenticated="about"> </Private> */}

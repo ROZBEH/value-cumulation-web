@@ -28,10 +28,12 @@ const Product = () => {
   const clearCart = useClearCart()
   const onCheckout = () => {
     // clear the cart if there are still stuff from previous session
+    console.log('clicked')
     clearCart()
     getProducts({
       variables: { type: 'recurring' },
     }).then((res) => {
+      console.log('res >', res)
       addToCart(res.data.products[0])
       checkout()
     })
