@@ -33,7 +33,6 @@ const Product = () => {
     getProducts({
       variables: { type: 'recurring' },
     }).then((res) => {
-      console.log('res >', res)
       addToCart(res.data.products[0])
       checkout()
     })

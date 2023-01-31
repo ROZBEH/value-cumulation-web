@@ -46,9 +46,6 @@ TabPanel.propTypes = {
 }
 
 const HomePage = () => {
-  console.log('print stripe env var')
-  console.log('process.env = ', process.env)
-  console.log('process.env.STRIPE_PK = ', process.env.STRIPE_PK)
   const [value, setValue] = React.useState(0)
   // const { isAuthenticated, currentUser, _logOut } = useAuth()
 
