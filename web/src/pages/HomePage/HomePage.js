@@ -5,7 +5,7 @@ Copyright (c) 2022 Value Cumulation
 Notice: All code and information in this repository is the property of Value Cumulation.
 You are strictly prohibited from distributing or using this repository unless otherwise stated.
  */
-
+require('dotenv').config()
 import * as React from 'react'
 
 import { Tabs, Tab, Box } from '@mui/material'
@@ -48,6 +48,7 @@ TabPanel.propTypes = {
 
 const HomePage = () => {
   console.log('print stripe env var')
+  console.log('process.env = ', process.env)
   console.log('process.env.STRIPE_PK = ', process.env.STRIPE_PK)
   const [value, setValue] = React.useState(0)
   // const { isAuthenticated, currentUser, _logOut } = useAuth()
