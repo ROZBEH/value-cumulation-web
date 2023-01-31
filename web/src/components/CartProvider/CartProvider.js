@@ -158,6 +158,7 @@ const CartProvider = ({ children }) => {
 
           // Redirect user to Stripe Checkout page
           const stripe = await loadStripe(process.env.STRIPE_PK)
+          console.log('stripe = ', stripe)
 
           await stripe.redirectToCheckout({
             sessionId: id,
