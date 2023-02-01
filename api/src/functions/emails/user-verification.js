@@ -1,5 +1,5 @@
+import { userNameWithFallback } from 'src/functions/emails/username'
 import { logger } from 'src/lib/logger'
-import { userNameWithFallback } from 'src/lib/username'
 
 const email = {
   subject: () => 'Verify Email',

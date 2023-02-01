@@ -10,10 +10,10 @@ import { randomUUID } from 'crypto'
 
 import { DbAuthHandler, PasswordValidationError } from '@redwoodjs/api'
 
-import { email as verificationEmail } from 'src/emails/user-verification'
+import { sendEmail } from 'src/functions/emails/mailer'
+import { email as verificationEmail } from 'src/functions/emails/user-verification'
 import { db } from 'src/lib/db'
 // import { logger } from 'src/lib/logger'
-import { sendEmail } from 'src/lib/mailer'
 import { stripe } from 'src/lib/stripe'
 
 export const handler = async (event, context) => {
