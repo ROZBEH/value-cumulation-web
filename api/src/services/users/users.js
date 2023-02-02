@@ -6,9 +6,9 @@ Notice: All code and information in this repository is the property of Value Cum
 You are strictly prohibited from distributing or using this repository unless otherwise stated.
  */
 
-import { email as verificationEmail } from 'src/functions/emails/user-verification'
 import { db } from 'src/lib/db'
-import { sendEmail } from 'src/functions/emails/mailer'
+import { verificationEmail } from 'src/lib/email-verification'
+import { sendEmail } from 'src/lib/mailer'
 
 export const users = () => {
   return db.user.findMany()
