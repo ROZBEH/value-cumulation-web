@@ -49,7 +49,7 @@ export const handler = async (event, context) => {
     // You could use this return value to, for example, show the email
     // address in a toast message so the user will know it worked and where
     // to look for the email.
-    handler: (user) => {
+    handler: async (user) => {
       const resetLink = `${process.env.REDIRECT_URL}/reset-password?resetToken=${user.resetToken}`
       const message = {
         to: user.email,
@@ -183,7 +183,7 @@ export const handler = async (event, context) => {
         },
       })
 
-      sendEmail({
+      await sendEmail({
         to: user.email,
         subject: verificationEmail.subject(),
         html: verificationEmail.htmlBody(user),

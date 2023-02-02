@@ -56,7 +56,7 @@ export const verifyReset = async ({ email }) => {
     where: { email },
   })
   if (user?.verifyToken) {
-    sendEmail({
+    await sendEmail({
       to: user.email,
       subject: verificationEmail.subject(),
       html: verificationEmail.htmlBody(user),
