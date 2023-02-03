@@ -55,7 +55,9 @@ export const verifyReset = async ({ email }) => {
   const user = await db.user.findUnique({
     where: { email },
   })
+  console.log('Before user?.verifyToken if condition')
   if (user?.verifyToken) {
+    console.log('Inside user?.verifyToken if condition')
     await sendEmail({
       to: user.email,
       subject: verificationEmail.subject(),
