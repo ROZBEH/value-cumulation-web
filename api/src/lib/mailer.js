@@ -32,10 +32,10 @@ export async function sendEmail({ to, subject, text, html }) {
     },
     (err, info) => {
       if (err) {
-        logger.error('Error sending email: ', err)
+        console.log('Error sending email: ', err)
       } else {
-        logger.info('Email sent envelope:', info.envelope)
-        logger.info('Email sent messageId:', info.messageId)
+        console.log('Email sent envelope:', info.envelope)
+        console.log('Email sent messageId:', info.messageId)
       }
     }
   )
