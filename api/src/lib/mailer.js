@@ -6,6 +6,11 @@ export async function sendEmail({ to, subject, text, html }) {
   //   if (process.env.DISABLE_EMAIL === 'true') {
   //     return
   //   }
+  console.log('Inside sendEmail function')
+  console.log('process.env.SMTP_HOST: ', process.env.SMTP_HOST)
+  console.log('process.env.SMTP_PORT: ', process.env.SMTP_PORT)
+  console.log('process.env.SMTP_USER: ', process.env.SMTP_USER)
+
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: process.env.SMTP_PORT,
@@ -15,6 +20,7 @@ export async function sendEmail({ to, subject, text, html }) {
       pass: process.env.SMTP_PASS,
     },
   })
+  console.log('Before transporter.sendMail')
 
   return transporter.sendMail(
     {
@@ -24,13 +30,12 @@ export async function sendEmail({ to, subject, text, html }) {
       text,
       html,
     },
-    (error) => {
-      if (error) {
-        logger.error(
-          `Failed to send '${subject}' email, check SMTP configuration`
-        )
-        logger.debug('This error can be ignored in development')
-        logger.error(error)
+    (err, info) => {
+      if (err) {
+        logger.error('Error sending email: ', err)
+      } else {
+        logger.info('Email sent envelope:', info.envelope)
+        logger.info('Email sent messageId:', info.messageId)
       }
     }
   )
