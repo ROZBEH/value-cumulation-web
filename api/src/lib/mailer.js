@@ -22,7 +22,7 @@ export async function sendEmail({ to, subject, text, html }) {
   })
   console.log('Before transporter.sendMail')
 
-  return transporter.sendMail(
+  transporter.sendMail(
     {
       from: process.env.AUTH_EMAIL_FROM,
       to: Array.isArray(to) ? to : [to],
