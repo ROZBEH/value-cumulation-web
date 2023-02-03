@@ -182,12 +182,13 @@ export const handler = async (event, context) => {
           // name: userAttributes.name
         },
       })
-
+      console.log(' Before signup email')
       await sendEmail({
         to: user.email,
         subject: verificationEmail.subject(),
         html: verificationEmail.htmlBody(user),
       })
+      console.log('After signup email')
 
       const msg =
         'Thanks for signing up. Please check your email to verify your account.'
