@@ -54,7 +54,7 @@ export const schema = gql`
     createUser(input: CreateUserInput!): User! @requireAuth
     updateUser(id: String!, input: UpdateUserInput!): User! @requireAuth
     deleteUser(id: String!): User! @requireAuth
-    verifyReset(email: String!): String! @requireAuth
-    verifyEmail(token: String!): Boolean! @requireAuth
+    verifyReset(email: String!): String! @skipAuth
+    verifyEmail(token: String!): Boolean! @skipAuth
   }
 `
