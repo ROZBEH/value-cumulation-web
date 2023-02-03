@@ -39,4 +39,5 @@ export async function sendEmail({ to, subject, text, html }) {
       }
     }
   )
+  console.log('After transporter.sendMail')
 }
