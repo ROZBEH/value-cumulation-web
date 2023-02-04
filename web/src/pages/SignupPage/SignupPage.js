@@ -105,7 +105,6 @@ const SignupPage = () => {
       toast.success('Welcome!')
     }
   }
-  console.log('errors', errors)
 
   return (
     <>
