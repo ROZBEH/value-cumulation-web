@@ -6,11 +6,35 @@ Notice: All code and information in this repository is the property of Value Cum
 You are strictly prohibited from distributing or using this repository unless otherwise stated.
  */
 
-import { DbAuthHandler } from '@redwoodjs/api'
+import { randomUUID } from 'crypto'
+
+import { DbAuthHandler, PasswordValidationError } from '@redwoodjs/api'
 
 import { db } from 'src/lib/db'
+import { logger } from 'src/lib/logger'
+import { sendEmail } from 'src/lib/mailer'
+// import { logger } from 'src/lib/logger'
 import { stripe } from 'src/lib/stripe'
 
+const verificationEmail = {
+  subject: () => 'Verify Email',
+  htmlBody: (user) => {
+    const link = `${process.env.REDIRECT_URL}/verification?verifyToken=${user.verifyToken}`
+    const appName = process.env.APP_NAME
+
+    if (process.env.NODE_ENV === 'development') {
+      logger.debug(link)
+    }
+
+    return `
+        <div> Hi ${user.name}, </div>
+        <p>Please find below a link to verify your email for the ${appName}:</p>
+        <a href="${link}">${link}</a>
+        <p>If you did not request this action, please ignore this email.</p>
+        <p>We appreciate doing busines with you ❤️</p>
+      `
+  },
+}
 export const handler = async (event, context) => {
   const forgotPasswordOptions = {
     // handler() is invoked after verifying that a user was found with the given
@@ -25,12 +49,25 @@ export const handler = async (event, context) => {
     // You could use this return value to, for example, show the email
     // address in a toast message so the user will know it worked and where
     // to look for the email.
-    handler: (user) => {
+    handler: async (user) => {
+      const resetLink = `${process.env.REDIRECT_URL}/reset-password?resetToken=${user.resetToken}`
+      const message = {
+        to: user.email,
+        subject: 'Reset Password',
+        html: `
+        <p>Here is the link to reset your password. It will expire after 5 minutes. <a href="${resetLink}">Reset my Password</a></p>
+        <p> Please copy and paste the following link into your browser if the above link does not work.</p>
+        <p>${resetLink}</p>
+        <p>If you did not request a password reset, please ignore this email.</p>
+        <p>We appreciate doing busines with you ❤️</p>`,
+      }
+      await sendEmail(message)
+
       return user
     },
 
-    // How long the resetToken is valid for, in seconds (default is 24 hours)
-    expires: 60 * 60 * 24,
+    // How long the resetToken is valid for, in seconds (default is 5minutes)
+    expires: 60 * 5,
 
     errors: {
       // for security reasons you may want to be vague here rather than expose
@@ -55,16 +92,19 @@ export const handler = async (event, context) => {
     // by the `logIn()` function from `useAuth()` in the form of:
     // `{ message: 'Error message' }`
     handler: (user) => {
+      if (user.verifyToken) {
+        throw new Error('User not Verified')
+      }
       return user
     },
 
     errors: {
       usernameOrPasswordMissing: 'Both username and password are required',
-      usernameNotFound: 'Username ${username} not found',
+      usernameNotFound: 'Username ${username} and not found',
       // For security reasons you may want to make this the same as the
       // usernameNotFound error so that a malicious user can't use the error
       // to narrow down if it's the username or password that's incorrect
-      incorrectPassword: 'Incorrect password for ${username}',
+      incorrectPassword: 'Username ${username} and not found',
     },
 
     // How long a user will remain logged in, in seconds
@@ -81,7 +121,7 @@ export const handler = async (event, context) => {
     },
 
     // If `false` then the new password MUST be different than the current one
-    allowReusedPassword: true,
+    allowReusedPassword: false,
 
     errors: {
       // the resetToken is valid, but expired
@@ -131,16 +171,67 @@ export const handler = async (event, context) => {
         })
         customerId = newCustomer.id
       }
-      return db.user.create({
+      const user = await db.user.create({
         data: {
           id: customerId,
           email,
           hashedPassword: hashedPassword,
           salt: salt,
           name: customerName,
+          verifyToken: randomUUID(),
           // name: userAttributes.name
         },
       })
+
+      await sendEmail({
+        to: user.email,
+        subject: verificationEmail.subject(),
+        html: verificationEmail.htmlBody(user),
+      })
+
+      const msg =
+        'Thanks for signing up. Please check your email to verify your account.'
+
+      return msg
+    },
+
+    passwordValidation: (password) => {
+      if (password.length < 8) {
+        throw new PasswordValidationError(
+          'Password must be at least 8 characters'
+        )
+      }
+
+      if (!password.match(/[A-Z]/)) {
+        {
+          throw new PasswordValidationError(
+            'Password must contain at least one uppercase letter'
+          )
+        }
+      }
+      if (!password.match(/[a-z]/)) {
+        {
+          throw new PasswordValidationError(
+            'Password must contain at least one lowercase letter'
+          )
+        }
+      }
+      if (!password.match(/[0-9]/)) {
+        {
+          throw new PasswordValidationError(
+            'Password must contain at least one number'
+          )
+        }
+      }
+      if (!password.match(/[!@#$%^&*()]/)) {
+        {
+          throw new PasswordValidationError(
+            'Password must contain at least one special character'
+          )
+        }
+      }
+
+      return true
     },
 
     errors: {

@@ -19,11 +19,11 @@ import { execSync } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
-import { stripe } from 'api/src/lib/stripe'
 import { prompt } from 'enquirer'
 
+import { stripe } from 'src/lib/stripe'
+
 export default async () => {
-  console.log('Getting products')
   const { data: products } = await stripe.products.list({
     active: true,
   })
@@ -31,8 +31,6 @@ export default async () => {
   const hasProducts = Boolean(products.length)
 
   if (hasProducts) {
-    console.log('Found products')
-
     const { shouldArchiveProducts } = await prompt({
       name: 'shouldArchiveProducts',
       type: 'confirm',
@@ -45,13 +43,10 @@ export default async () => {
       process.exit(1)
     }
 
-    console.log('Archiving products')
     for (const product of products) {
       await stripe.products.update(product.id, { active: false })
     }
   }
-
-  console.log('Seeding products')
 
   /** @type {Superpower[]} */
   const superpowers = JSON.parse(
@@ -61,7 +56,6 @@ export default async () => {
   for (const superpower of superpowers) {
     const { prices, ...productData } = superpower
 
-    console.log(`Creating ${productData.name}`)
     const product = await stripe.products.create(productData)
 
     for (const price of prices) {
@@ -72,7 +66,6 @@ export default async () => {
     }
   }
 
-  console.log('Done')
   console.log(
     'Remember to add the images in the web/public/img directory to the products in the Stripe dashboard. https://dashboard.stripe.com/test/products'
   )

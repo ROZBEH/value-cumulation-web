@@ -5,7 +5,6 @@ Copyright (c) 2022 Value Cumulation
 Notice: All code and information in this repository is the property of Value Cumulation.
 You are strictly prohibited from distributing or using this repository unless otherwise stated.
  */
-
 import * as React from 'react'
 
 import { Tabs, Tab, Box } from '@mui/material'
@@ -47,8 +46,8 @@ TabPanel.propTypes = {
 }
 
 const HomePage = () => {
-  const [value, setValue] = React.useState(0)
   // const { isAuthenticated, currentUser, _logOut } = useAuth()
+  const [value, setValue] = React.useState(0)
 
   const handleChange = (event, newValue) => {
     setValue(newValue)

@@ -7,6 +7,8 @@ You are strictly prohibited from distributing or using this repository unless ot
  */
 
 import { db } from 'src/lib/db'
+import { verificationEmail } from 'src/lib/email-verification'
+import { sendEmail } from 'src/lib/mailer'
 
 export const users = () => {
   return db.user.findMany()
@@ -47,6 +49,39 @@ export const deleteUser = ({ id }) => {
   return db.user.delete({
     where: { id },
   })
+}
+
+export const verifyReset = async ({ email }) => {
+  const user = await db.user.findUnique({
+    where: { email },
+  })
+
+  if (user?.verifyToken) {
+    await sendEmail({
+      to: user.email,
+      subject: verificationEmail.subject(),
+      html: verificationEmail.htmlBody(user),
+    })
+  }
+  return email
+}
+
+export const verifyEmail = async ({ token }) => {
+  if (token === null) return true
+  const user = await db.user.findFirst({
+    where: { verifyToken: token },
+  })
+  if (user) {
+    await db.user.update({
+      where: { id: user.id },
+      data: {
+        verifyToken: null,
+      },
+    })
+    return true
+  } else {
+    return false
+  }
 }
 
 export const deleteAllFavoritesUser = ({ id }) => {

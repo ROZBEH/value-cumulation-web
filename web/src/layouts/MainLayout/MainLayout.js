@@ -51,7 +51,7 @@ const MainLayout = ({ children }) => {
                 Logout
               </button>
             </div>
-          ) : !loading? (
+          ) : !loading ? (
             <div className="block mt-4 sm:inline-block sm:mt-0 text-base text-lime-700 mr-8">
               <button
                 type="button"
@@ -60,7 +60,7 @@ const MainLayout = ({ children }) => {
                 <Link to={routes.login()}>Login</Link>
               </button>
             </div>
-          ): null}
+          ) : null}
         </nav>
       </header>
       <main>{children}</main>
