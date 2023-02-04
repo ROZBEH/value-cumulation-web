@@ -61,7 +61,7 @@ export const handler = async (event, context) => {
         <p>If you did not request a password reset, please ignore this email.</p>
         <p>We appreciate doing busines with you ❤️</p>`,
       }
-      sendEmail(message)
+      await sendEmail(message)
 
       return user
     },
