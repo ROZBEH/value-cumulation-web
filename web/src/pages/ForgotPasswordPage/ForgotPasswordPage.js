@@ -29,7 +29,11 @@ const ForgotPasswordPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
+    toast.loading('Sending you verification email', {
+      duration: Infinity,
+    })
     const response = await forgotPassword(data.username)
+    toast.dismiss()
 
     if (response.error) {
       toast.error(response.error)
