@@ -1,16 +1,6 @@
 import * as nodemailer from 'nodemailer'
 
-import { logger } from 'src/lib/logger'
-
 export async function sendEmail({ to, subject, text, html }) {
-  //   if (process.env.DISABLE_EMAIL === 'true') {
-  //     return
-  //   }
-  console.log('Inside sendEmail function')
-  console.log('process.env.SMTP_HOST: ', process.env.SMTP_HOST)
-  console.log('process.env.SMTP_PORT: ', process.env.SMTP_PORT)
-  console.log('process.env.SMTP_USER: ', process.env.SMTP_USER)
-
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: process.env.SMTP_PORT,
@@ -20,7 +10,6 @@ export async function sendEmail({ to, subject, text, html }) {
       pass: process.env.SMTP_PASS,
     },
   })
-  console.log('Before transporter.sendMail')
 
   let info = await transporter.sendMail({
     from: process.env.AUTH_EMAIL_FROM,
@@ -29,8 +18,6 @@ export async function sendEmail({ to, subject, text, html }) {
     text,
     html,
   })
-
-  console.log('info after transporter.sendMail: ', info)
 
   if (info.messageId) {
     return {
