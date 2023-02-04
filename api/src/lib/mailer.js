@@ -22,22 +22,25 @@ export async function sendEmail({ to, subject, text, html }) {
   })
   console.log('Before transporter.sendMail')
 
-  transporter.sendMail(
-    {
-      from: process.env.AUTH_EMAIL_FROM,
-      to: Array.isArray(to) ? to : [to],
-      subject,
-      text,
-      html,
-    },
-    (err, info) => {
-      if (err) {
-        console.log('Error sending email: ', err)
-      } else {
-        console.log('Email sent envelope:', info.envelope)
-        console.log('Email sent messageId:', info.messageId)
-      }
+  let info = await transporter.sendMail({
+    from: process.env.AUTH_EMAIL_FROM,
+    to: Array.isArray(to) ? to : [to],
+    subject,
+    text,
+    html,
+  })
+
+  console.log('info after transporter.sendMail: ', info)
+
+  if (info.messageId) {
+    return {
+      statusCode: 200,
+      body: nodemailer.getTestMessageUrl(info),
     }
-  )
-  console.log('After transporter.sendMail')
+  }
+
+  return {
+    statusCode: 400,
+    body: 'Oops',
+  }
 }
