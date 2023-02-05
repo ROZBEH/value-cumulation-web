@@ -21,7 +21,7 @@ export const contact = ({ id }) => {
   })
 }
 
-export const createContact = ({ input }) => {
+export const createContact = async ({ input }) => {
   validate(input.email, 'email', { email: true })
   const message = {
     to: 'rouzbeh.asghari@gmail.com',
@@ -32,7 +32,7 @@ export const createContact = ({ input }) => {
     <p>Message: ${input.message}</p>`,
   }
 
-  sendEmail(message)
+  await sendEmail(message)
   return db.contact.create({
     data: input,
   })

@@ -28,17 +28,17 @@ const ContactPage = () => {
   const formMethods = useForm({ mode: 'onBlur' })
   // for displaying the contact name after submission
   const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
-    onCompleted: (data) => {
-      toast.dismiss()
-      var contactName = data.createContact.name.split(' ')[0].toUpperCase()
-      toast.success(`Thank you for your submission ${contactName}!`)
-      formMethods.reset()
-    },
+    // onCompleted: (data) => {
+    //   formMethods.reset()
+    // },
   })
   const onSubmit = (data) => {
     spreeSubmit(data)
-    toast.loading('Submitting your request')
     create({ variables: { input: data } })
+    toast.success(
+      `Thank you for your submission ${data.name.split(/(\s+)/)[0]}`
+    )
+    formMethods.reset()
   }
 
   return (
