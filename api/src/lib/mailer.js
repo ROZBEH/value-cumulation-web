@@ -11,7 +11,7 @@ export async function sendEmail({ to, subject, text, html }) {
     },
   })
 
-  let info = await transporter.sendMail({
+  const info = await transporter.sendMail({
     from: process.env.AUTH_EMAIL_FROM,
     to: Array.isArray(to) ? to : [to],
     subject,

@@ -9,6 +9,7 @@ You are strictly prohibited from distributing or using this repository unless ot
 import { validate } from '@redwoodjs/api'
 
 import { db } from 'src/lib/db'
+import { sendEmail } from 'src/lib/mailer'
 
 export const contacts = () => {
   return db.contact.findMany()
@@ -20,8 +21,18 @@ export const contact = ({ id }) => {
   })
 }
 
-export const createContact = ({ input }) => {
+export const createContact = async ({ input }) => {
   validate(input.email, 'email', { email: true })
+  const message = {
+    to: 'rouzbeh.asghari@gmail.com',
+    subject: 'Contact Us form submission',
+    html: `
+    <p>Name: ${input.name}</p>
+    <p>Email: ${input.email}</p>
+    <p>Message: ${input.message}</p>`,
+  }
+
+  await sendEmail(message)
   return db.contact.create({
     data: input,
   })

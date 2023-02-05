@@ -100,11 +100,11 @@ export const handler = async (event, context) => {
 
     errors: {
       usernameOrPasswordMissing: 'Both username and password are required',
-      usernameNotFound: 'Username ${username} and not found',
+      usernameNotFound: 'Invalid username or password',
       // For security reasons you may want to make this the same as the
       // usernameNotFound error so that a malicious user can't use the error
       // to narrow down if it's the username or password that's incorrect
-      incorrectPassword: 'Username ${username} and not found',
+      incorrectPassword: 'Invalid username or password',
     },
 
     // How long a user will remain logged in, in seconds
