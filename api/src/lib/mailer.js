@@ -10,7 +10,7 @@ export async function sendEmail({ to, subject, text, html }) {
       pass: process.env.SMTP_PASS,
     },
   })
-
+  console.log('before sending email')
   let info = await transporter.sendMail({
     from: process.env.AUTH_EMAIL_FROM,
     to: Array.isArray(to) ? to : [to],
@@ -18,6 +18,9 @@ export async function sendEmail({ to, subject, text, html }) {
     text,
     html,
   })
+
+  console.log('After sending email')
+  console.log('Info: ', info)
 
   if (info.messageId) {
     return {
