@@ -13,6 +13,7 @@ import { TailSpin } from 'react-loader-spinner'
 import { useRecoilValue, useRecoilState } from 'recoil'
 
 import { useAuth } from '@redwoodjs/auth'
+import { Link, routes } from '@redwoodjs/router'
 
 import { STARTUP_QUERY } from 'src/commons/gql'
 import { Content } from 'src/components/Content/Content'
@@ -67,6 +68,14 @@ export const Financials = () => {
     return (
       <div className="mx-96">
         <Content />
+        <div className="flex flex-col mx-40 my-10">
+          <button
+            type="button"
+            className="text-gray-900 w-48 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-md px-3 py-2 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+          >
+            <Link to={routes.signup()}>Let's Begin Here</Link>
+          </button>
+        </div>
       </div>
     )
   }
