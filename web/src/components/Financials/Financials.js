@@ -13,7 +13,7 @@ import { TailSpin } from 'react-loader-spinner'
 import { useRecoilValue, useRecoilState } from 'recoil'
 
 import { useAuth } from '@redwoodjs/auth'
-import { Link, routes } from '@redwoodjs/router'
+// import { Link, routes } from '@redwoodjs/router'
 
 import { STARTUP_QUERY } from 'src/commons/gql'
 import { Content } from 'src/components/Content/Content'
@@ -22,7 +22,7 @@ import { PlotFundamentals } from 'src/components/PlotFundamentals/PlotFundamenta
 import { UserAddedMetric } from 'src/components/UserAddedMetric'
 import 'src/components/Financials/Financials.css'
 import {
-  userFavMetrics as userFavMetricsAtom,
+  // userFavMetrics as userFavMetricsAtom,
   calledCompanies as calledCompaniesAtom,
   plottingData as plottingDataAtom,
   loadingFinancials as loadingFinancialsAtom,
@@ -32,17 +32,17 @@ import {
 
 export const Financials = () => {
   const { isAuthenticated, currentUser, _logOut } = useAuth()
-  const [_, setUserFavMetrics] = useRecoilState(userFavMetricsAtom)
+  // const [_, setUserFavMetrics] = useRecoilState(userFavMetricsAtom)
 
   const [getCompanies, { _loading, _error, _data }] = useLazyQuery(
     STARTUP_QUERY,
     {
       onCompleted: (data) => {
         setCompanyList(data.companyslist)
-        var favMetrics = data.user.favorites.map(function (fav) {
-          return fav.name
-        })
-        setUserFavMetrics(favMetrics)
+        // var favMetrics = data.user.favorites.map(function (fav) {
+        //   return fav.name
+        // })
+        // setUserFavMetrics(favMetrics)
       },
     }
   )
@@ -58,27 +58,30 @@ export const Financials = () => {
 
   // Get the list of available companies on startup
   useEffect(() => {
-    if (isAuthenticated) {
-      getCompanies({
-        variables: { id: currentUser.id },
-      })
-    }
+    // if (isAuthenticated) {
+    //   getCompanies({
+    //     variables: { id: currentUser.id },
+    //   })
+    getCompanies()
+    // getCompanies({
+    //   variables: { id: currentUser.id },
+    // })
   }, [getCompanies, isAuthenticated, currentUser])
-  if (!isAuthenticated) {
-    return (
-      <div className="mx-96">
-        <Content />
-        <div className="flex flex-col mx-40 my-10">
-          <button
-            type="button"
-            className="text-gray-900 w-48 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-md px-3 py-2 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-          >
-            <Link to={routes.signup()}>Let's Begin Here</Link>
-          </button>
-        </div>
-      </div>
-    )
-  }
+  // if (!isAuthenticated) {
+  //   return (
+  //     <div className="mx-96">
+  //       <Content />
+  //       <div className="flex flex-col mx-40 my-10">
+  //         <button
+  //           type="button"
+  //           className="text-gray-900 w-48 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-md px-3 py-2 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+  //         >
+  //           <Link to={routes.signup()}>Let's Begin Here</Link>
+  //         </button>
+  //       </div>
+  //     </div>
+  //   )
+  // }
 
   return (
     <>
