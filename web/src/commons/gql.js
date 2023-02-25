@@ -7,7 +7,7 @@ You are strictly prohibited from distributing or using this repository unless ot
  */
 
 export const STARTUP_QUERY = gql`
-  query ($id: String!) {
+  query {
     companyslist {
       symbol
       name
@@ -16,6 +16,11 @@ export const STARTUP_QUERY = gql`
       exchangeShortName
       type
     }
+  }
+`
+
+export const USER_QUERY = gql`
+  query ($id: String!) {
     user(id: $id) {
       email
       favorites {
