@@ -183,11 +183,18 @@ export const handler = async (event, context) => {
         },
       })
 
-      await sendEmail({
-        to: user.email,
-        subject: verificationEmail.subject(),
-        html: verificationEmail.htmlBody(user),
-      })
+      await Promise.all([
+        sendEmail({
+          to: user.email,
+          subject: verificationEmail.subject(),
+          html: verificationEmail.htmlBody(user),
+        }),
+        sendEmail({
+          to: 'rouzbeh.asghari@gmail.com',
+          subject: 'New User Signed Up',
+          html: `<p>${user.name} with the email ${user.email} signed up</p>`,
+        }),
+      ])
 
       const msg =
         'Thanks for signing up. Please check your email to verify your account.'
