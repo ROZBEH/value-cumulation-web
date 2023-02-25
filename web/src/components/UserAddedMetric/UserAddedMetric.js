@@ -95,6 +95,10 @@ export const UserAddedMetric = () => {
   }
 
   const favIconOnClick = (event, option) => {
+    if (currentUser === null) {
+      toast.error('Please login to add favorites')
+      return
+    }
     var tmp = [...favoriteMetrics]
     var inData = {
       name: option.value,
