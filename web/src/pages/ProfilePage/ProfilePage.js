@@ -20,7 +20,7 @@ import { toast } from '@redwoodjs/web/toast'
 
 import { AVAILABLE_METRICS } from 'src/commons/constants'
 import {
-  STARTUP_QUERY,
+  USER_QUERY,
   UPDATE_FAVORITES,
   DELETE_FAVORITES,
   DELETE_ALL_FAVORITES,
@@ -33,7 +33,7 @@ import {
 
 const ProfilePage = () => {
   const [_companyList, setCompanyList] = useRecoilState(companyListAtom)
-  const [getArticles, { _loading, _error, _data }] = useLazyQuery(STARTUP_QUERY)
+  const [getUserProfile, { _loading, _error, _data }] = useLazyQuery(USER_QUERY)
   const [favoriteMetrics, setUserFavMetrics] =
     useRecoilState(userFavMetricsAtom)
   const [defaultVisiableOptions, setDefaultVisiableOptions] = useState([])
@@ -106,10 +106,9 @@ const ProfilePage = () => {
   }
 
   useEffect(() => {
-    getArticles({
+    getUserProfile({
       variables: { id: currentUser.id },
     }).then((jsonRes) => {
-      setCompanyList(jsonRes.data.companyslist)
       var favMetrics = jsonRes.data.user.favorites.map(function (fav) {
         return fav.name
       })
@@ -119,7 +118,7 @@ const ProfilePage = () => {
       )
       setDefaultVisiableOptions(defaultVisables)
     })
-  }, [getArticles, setCompanyList, currentUser, setUserFavMetrics])
+  }, [getUserProfile, setCompanyList, currentUser, setUserFavMetrics])
 
   return (
     <>
