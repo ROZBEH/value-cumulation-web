@@ -75,8 +75,8 @@ export const Mainsubmission = () => {
           return { ...currentState, [query]: tmpSectorComp }
         })
       },
-      notifyOnNetworkStatusChange: true,
-      fetchPolicy: 'network-only',
+      // notifyOnNetworkStatusChange: true,
+      // fetchPolicy: 'network-only',
     }
   )
 
@@ -175,8 +175,7 @@ export const Mainsubmission = () => {
     tmpValue[index] = values
     setValueTicker(tmpValue)
     let plotData
-    console.log('reason: ', reason)
-    console.log('pltData: ', pltData)
+
     if (reason === 'selectOption') {
       if (
         Object.keys(pltData).length != 0 &&
@@ -190,16 +189,6 @@ export const Mainsubmission = () => {
       getFunamentals({
         variables: { ticker: values.symbol },
       }).then((fundamentalanalysis) => {
-        console.log(
-          'fundamentalanalysis: ',
-          fundamentalanalysis.data.getFundamentals
-        )
-        getGPTResSector({
-          variables: { query: values.symbol },
-        })
-        getGPTResSentiment({
-          variables: { query: `I  didn't liked last years result` },
-        })
         plotData = JSON.parse(JSON.stringify(pltData))
         plotData = postProcess(
           fundamentalanalysis.data.getFundamentals,
@@ -250,6 +239,12 @@ export const Mainsubmission = () => {
           [plotData['netIncome']['nameCompany'].slice(-1)]: secReportCompany,
         }))
         setPltData(plotData)
+        getGPTResSector({
+          variables: { query: values.symbol },
+        })
+        getGPTResSentiment({
+          variables: { query: `I  didn't liked last years result` },
+        })
       })
     } else if (reason === 'clear') {
       let tmpSectorComp = { ...sectorCompanies }
