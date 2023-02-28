@@ -12,7 +12,7 @@ import { useLazyQuery } from '@apollo/react-hooks'
 import { TailSpin } from 'react-loader-spinner'
 import { useRecoilValue, useRecoilState } from 'recoil'
 
-import { useAuth } from '@redwoodjs/auth'
+// import { useAuth } from '@redwoodjs/auth'
 // import { Link, routes } from '@redwoodjs/router'
 
 import { STARTUP_QUERY } from 'src/commons/gql'
@@ -31,7 +31,7 @@ import {
 } from 'src/recoil/atoms'
 
 export const Financials = () => {
-  const { isAuthenticated, currentUser, _logOut } = useAuth()
+  // const { isAuthenticated, currentUser, _logOut } = useAuth()
   // const [_, setUserFavMetrics] = useRecoilState(userFavMetricsAtom)
 
   const [getCompanies, { _loading, _error, _data }] = useLazyQuery(
@@ -66,7 +66,7 @@ export const Financials = () => {
     // getCompanies({
     //   variables: { id: currentUser.id },
     // })
-  }, [getCompanies, isAuthenticated, currentUser])
+  }, [getCompanies])
   // if (!isAuthenticated) {
   //   return (
   //     <div className="mx-96">
