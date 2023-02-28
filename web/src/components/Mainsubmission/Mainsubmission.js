@@ -175,6 +175,8 @@ export const Mainsubmission = () => {
     tmpValue[index] = values
     setValueTicker(tmpValue)
     let plotData
+    console.log('reason: ', reason)
+    console.log('pltData: ', pltData)
     if (reason === 'selectOption') {
       if (
         Object.keys(pltData).length != 0 &&
@@ -188,6 +190,10 @@ export const Mainsubmission = () => {
       getFunamentals({
         variables: { ticker: values.symbol },
       }).then((fundamentalanalysis) => {
+        console.log(
+          'fundamentalanalysis: ',
+          fundamentalanalysis.data.getFundamentals
+        )
         getGPTResSector({
           variables: { query: values.symbol },
         })
