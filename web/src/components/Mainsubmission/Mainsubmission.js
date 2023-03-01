@@ -164,37 +164,24 @@ export const Mainsubmission = () => {
   }
 
   // Query the API for financial data of a company that the user has selected
-  const [getFunamentals, { loading: loadingFundamentals }] =
-    useLazyQuery(COMPANY_QUERY)
+  const [getFunamentals, { loading: loadingFundamentals }] = useLazyQuery(
+    COMPANY_QUERY,
+    {
+      onCompleted: (fundamentalanalysis) => {
+        let plotData
+        if (
+          Object.keys(pltData).length != 0 &&
+          pltData['netIncome']['nameCompany'].includes(
+            fundamentalanalysis.companyName
+          )
+        ) {
+          errors = 'Company already added, pick another company'
+          return
+        }
+        // Add this company to the list of companies that has been called
 
-  const myChangeFunc = async (_event, values, reason, _details, index) => {
-    // If the user has selected a company(selectOption), then query the API
-    // for the financial data. And if the user has removed the company(clear),
-    // then remove the company from the plotData
-    var tmpValue = [...valueTicker]
-    tmpValue[index] = values
-    setValueTicker(tmpValue)
-    let plotData
-
-    if (reason === 'selectOption') {
-      if (
-        Object.keys(pltData).length != 0 &&
-        pltData['netIncome']['nameCompany'].includes(values.name)
-      ) {
-        errors = 'Company already added, pick another company'
-        return
-      }
-      // Add this company to the list of companies that has been called
-      setCalledCompanies((currentState) => [...currentState, values])
-      getFunamentals({
-        variables: { ticker: values.symbol },
-      }).then((fundamentalanalysis) => {
         plotData = JSON.parse(JSON.stringify(pltData))
-        plotData = postProcess(
-          fundamentalanalysis.data.getFundamentals,
-          plotData
-        )
-
+        plotData = postProcess(fundamentalanalysis.getFundamentals, plotData)
         // Clean up the SEC report data and save it as an object
         // The format of the report will be
         /*
@@ -216,8 +203,7 @@ export const Mainsubmission = () => {
 
         }
         */
-        const tmpSECReports =
-          fundamentalanalysis.data.getFundamentals.secReports
+        const tmpSECReports = fundamentalanalysis.getFundamentals.secReports
         const secReportCompany = {}
         for (let i = 0; i < tmpSECReports.length; i++) {
           if (tmpSECReports[i].type in secReportCompany) {
@@ -239,13 +225,63 @@ export const Mainsubmission = () => {
           [plotData['netIncome']['nameCompany'].slice(-1)]: secReportCompany,
         }))
         setPltData(plotData)
-        getGPTResSector({
-          variables: { query: values.symbol },
-        })
-        getGPTResSentiment({
-          variables: { query: `I  didn't liked last years result` },
-        })
+      },
+    }
+  )
+
+  const myChangeFunc = async (_event, values, reason, _details, index) => {
+    // If the user has selected a company(selectOption), then query the API
+    // for the financial data. And if the user has removed the company(clear),
+    // then remove the company from the plotData
+    var tmpValue = [...valueTicker]
+    tmpValue[index] = values
+    setValueTicker(tmpValue)
+    let plotData
+
+    if (reason === 'selectOption') {
+      // Add this company to the list of companies that has been called
+      setCalledCompanies((currentState) => [...currentState, values])
+      getFunamentals({
+        variables: { ticker: values.symbol },
       })
+      getGPTResSector({
+        variables: { query: values.symbol },
+      })
+      getGPTResSentiment({
+        variables: { query: `I  didn't liked last years result` },
+      })
+      //     const tmpSECReports =
+      //       fundamentalanalysis.data.getFundamentals.secReports
+      //     const secReportCompany = {}
+      //     for (let i = 0; i < tmpSECReports.length; i++) {
+      //       if (tmpSECReports[i].type in secReportCompany) {
+      //         secReportCompany[tmpSECReports[i].type].push({
+      //           link: tmpSECReports[i]['finalLink'],
+      //           fillingDate: tmpSECReports[i]['fillingDate'],
+      //         })
+      //       } else {
+      //         secReportCompany[tmpSECReports[i].type] = [
+      //           {
+      //             link: tmpSECReports[i]['finalLink'],
+      //             fillingDate: tmpSECReports[i]['fillingDate'],
+      //           },
+      //         ]
+      //       }
+      //     }
+      //     setSECReports((secReport) => ({
+      //       ...secReport,
+      //       [plotData['netIncome']['nameCompany'].slice(-1)]: secReportCompany,
+      //     }))
+      //     setPltData(plotData)
+      //     console.log('going to call getGPTResSector')
+      //     getGPTResSector({
+      //       variables: { query: values.symbol },
+      //     })
+      //     console.log('going to call getGPTResSentiment')
+      //     getGPTResSentiment({
+      //       variables: { query: `I  didn't liked last years result` },
+      //     })
+      //   })
     } else if (reason === 'clear') {
       let tmpSectorComp = { ...sectorCompanies }
       delete tmpSectorComp[valueTicker.slice(-1)[0].symbol]
