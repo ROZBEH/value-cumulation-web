@@ -8,6 +8,10 @@ You are strictly prohibited from distributing or using this repository unless ot
 
 import { RecoilRoot } from 'recoil'
 
+import '@fontsource/roboto/300.css'
+import '@fontsource/roboto/400.css'
+import '@fontsource/roboto/500.css'
+import '@fontsource/roboto/700.css'
 import { AuthProvider } from '@redwoodjs/auth'
 import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'

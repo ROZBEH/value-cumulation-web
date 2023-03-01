@@ -1752,6 +1752,11 @@
   dependencies:
     "@floating-ui/dom" "^1.0.5"
 
+"@fontsource/roboto@^4.5.8":
+  version "4.5.8"
+  resolved "https://registry.yarnpkg.com/@fontsource/roboto/-/roboto-4.5.8.tgz#56347764786079838faf43f0eeda22dd7328437f"
+  integrity sha512-CnD7zLItIzt86q4Sj3kZUiLcBk1dSk81qcqgMGaZe7SQ1P8hFNxhMl5AZthK1zrDM5m74VVhaOpuMGIL4gagaA==
+
 "@formspree/react@^2.4.1":
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/@formspree/react/-/react-2.4.1.tgz#c6ee262f63443006fc43902fd08ec1a43bfb51c3"
