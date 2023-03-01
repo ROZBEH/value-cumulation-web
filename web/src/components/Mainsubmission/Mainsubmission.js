@@ -320,7 +320,7 @@ export const Mainsubmission = () => {
                   variant="standard"
                   fullWidth
                   // placeholder="Enter Company Name"
-                  label="Type Company Name"
+                  label="Type Company Name or Ticker"
                   error={errors ? true : false}
                   helperText={errors}
                   InputProps={{
