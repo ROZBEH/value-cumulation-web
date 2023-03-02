@@ -325,6 +325,8 @@ export const Mainsubmission = () => {
       <div className="searchbar-company">
         {counterArr.map((item, index) => (
           <Autocomplete
+            loading={loadingSuggestion}
+            autoHighlight={true}
             key={index}
             freeSolo // for removing the dropdown arrow
             onBlur={() => {
@@ -359,6 +361,13 @@ export const Mainsubmission = () => {
                   label="Type Company Name or Ticker"
                   error={errors ? true : false}
                   helperText={errors}
+                  // onKeyDown={(e) => {
+                  //   if (e.code.toLowerCase() === 'enter' && e.target.value) {
+                  //     console.log('e = ', e)
+                  //     console.log('e.target.value = ', e.target.value)
+                  //     // onChangeTextField(e.target.value)
+                  //   }
+                  // }}
                   InputProps={{
                     ...params.InputProps,
                     endAdornment: (
