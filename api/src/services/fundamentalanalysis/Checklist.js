@@ -12,6 +12,7 @@ import { DataFrame } from 'data-forge'
 import {
   discountedCashFlowModelCalculator,
   terminalValueCalculator,
+  median,
 } from './utilities.js'
 
 export class Checklist {
@@ -330,7 +331,7 @@ export class Checklist {
     })
   }
 
-  meanNetIncomeGrowthRate = (years = 10) => {
+  meanNetIncomeGrowthRate = (years = 20) => {
     /* The average rate of change in net income over the years */
     const netIncomeDelta = this.metricDelta(
       this.dfIncomeStatement,
@@ -338,25 +339,62 @@ export class Checklist {
       years
     )
     const netIncome = this.dfIncomeStatement.getSeries('netIncome').toArray()
-    const growthRate = netIncomeDelta.map(function (n, i) {
+    var growthRate = netIncomeDelta.map(function (n, i) {
       return n / netIncome[1 + i]
     })
-
-    return [growthRate.reduce((a, b) => a + b, 0) / years]
+    // smooth the net income growth rate
+    const growthMedian = median(growthRate)
+    growthRate = growthRate.map((item) => {
+      if (item > 1.0 && item > growthMedian) {
+        return growthMedian
+      } else {
+        return item
+      }
+    })
+    // So we'll calculate the average growth rate over the last 10 years, then the last 10 years starting from
+    // from last year. Then the last 10 years starting from 2 years ago and so on.
+    const avgPeriod = 10
+    const netIncomeGrowthRate = []
+    for (let i = 0; i < avgPeriod; i++) {
+      netIncomeGrowthRate.push(
+        growthRate.slice(i, i + avgPeriod).reduce((a, b) => a + b, 0) /
+          avgPeriod
+      )
+    }
+    return netIncomeGrowthRate
   }
 
-  meanFCFGrowthRate = (years = 10) => {
+  meanFCFGrowthRate = (years = 20) => {
     /* The average rate of change in free cash flow over the years */
     const fcfDelta = this.metricDelta(
       this.dfCashFlowStatement,
       'freeCashFlow',
       years
     )
+    // Calculate the growth rate over a 10 year period
     const fcf = this.freeCashFlow(years + 1).slice(1, years + 1)
-    const fcfGrowth = fcfDelta.map(function (n, i) {
+    var fcfGrowth = fcfDelta.map(function (n, i) {
       return n / fcf[i]
     })
-    return [fcfGrowth.reduce((a, b) => a + b, 0) / years]
+    // smooth the growth rate
+    const growthMedian = median(fcfGrowth)
+    fcfGrowth = fcfGrowth.map((item) => {
+      if (item > 1.0 && item > growthMedian) {
+        return growthMedian
+      } else {
+        return item
+      }
+    })
+    // So we'll calculate the average growth rate over the last 10 years, then the last 10 years starting from
+    // from last year. Then the last 10 years starting from 2 years ago and so on.
+    const avgPeriod = 10
+    const fcfGrowthRate = []
+    for (let i = 0; i < avgPeriod; i++) {
+      fcfGrowthRate.push(
+        fcfGrowth.slice(i, i + avgPeriod).reduce((a, b) => a + b, 0) / avgPeriod
+      )
+    }
+    return fcfGrowthRate
   }
 
   intrinsicValue = (
@@ -375,35 +413,44 @@ export class Checklist {
      confidence: How much confident are you with these numbers. A value between 0 and 1
      growth_multiple: Do you want to consider the MIN of (FCF, net_income) as your
         growth rate or the MAX of these two values? */
-    const meanFCFGrowthRate = this.meanFCFGrowthRate(years)[0]
-    const meanNetIncomeGrowthRate = this.meanNetIncomeGrowthRate(years)[0]
-    var growthRate = Math.max(meanFCFGrowthRate, meanNetIncomeGrowthRate)
-    if (growthMultiple === 'MIN') {
-      growthRate = Math.min(meanFCFGrowthRate, meanNetIncomeGrowthRate)
+    var intrinsicValue = []
+    const meanFCFGrowthRate = this.meanFCFGrowthRate(years * 2)
+    const meanNetIncomeGrowthRate = this.meanNetIncomeGrowthRate(years * 2)
+
+    for (let i = 0; i < years; i++) {
+      var growthRate = Math.max(
+        meanFCFGrowthRate[i],
+        meanNetIncomeGrowthRate[i]
+      )
+      if (growthMultiple === 'MIN') {
+        growthRate = Math.min(meanFCFGrowthRate[i], meanNetIncomeGrowthRate[i])
+      }
+
+      // if the company has a negative growth rate
+      if (growthRate < 0) {
+        growthRate = 0
+      }
+      // Discounted Cash flow model
+      const DCF = discountedCashFlowModelCalculator(
+        this.freeCashFlow(years)[i],
+        years,
+        growthRate,
+        dRate
+      )
+      const fcfYearN =
+        this.freeCashFlow(years)[i] * ((1 + growthRate) / (1 + dRate)) ** years
+      const terminalValue = terminalValueCalculator(
+        fcfYearN,
+        terminalGrowthRate,
+        dRate
+      )
+      if (includeTerminalValue) {
+        intrinsicValue.push((terminalValue + DCF) * confidence)
+      } else {
+        intrinsicValue.push(DCF * confidence)
+      }
     }
 
-    // if the company has a negative growth rate
-    if (growthRate < 0) {
-      growthRate = 0
-    }
-    // Discounted Cash flow model
-    const DCF = discountedCashFlowModelCalculator(
-      this.freeCashFlow(years)[0],
-      years,
-      growthRate,
-      dRate
-    )
-    const fcfYearN =
-      this.freeCashFlow(years)[0] * ((1 + growthRate) / (1 + dRate)) ** years
-    const terminalValue = terminalValueCalculator(
-      fcfYearN,
-      terminalGrowthRate,
-      dRate
-    )
-    if (includeTerminalValue) {
-      return [(terminalValue + DCF) * confidence]
-    } else {
-      return [DCF * confidence]
-    }
+    return intrinsicValue
   }
 }
