@@ -27,13 +27,14 @@ export const createSubscription = async ({ input }) => {
   await db.user.update({
     where: { id: userId },
     data: {
-      subscriptions: {
+      subscription: {
         connect: {
           id: newSubscription.id,
         },
       },
     },
   })
+  return newSubscription
 }
 
 export const updateSubscription = ({ id, input }) => {

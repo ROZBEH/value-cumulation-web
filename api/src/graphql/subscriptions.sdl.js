@@ -4,7 +4,7 @@ export const schema = gql`
     subscriptionName: String!
     price: Float!
     interval: Interval!
-    users: [User]!
+    # users: [User]!
     createdAt: DateTime!
   }
 

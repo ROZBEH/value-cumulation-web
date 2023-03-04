@@ -34,7 +34,7 @@ enum Interval {
 }
 
 model Subscription {
-  id               String   @id
+  id               String   @id @default(cuid())
   subscriptionName String // a descriptive name for the subscription plan
   price            Float
   interval         Interval // a custom type defining the interval of the subscription, e.g. 'monthly', 'yearly', etc.
