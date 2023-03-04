@@ -107,6 +107,11 @@ export const Mainsubmission = () => {
     let tmpSectorComp = { ...sectorCompanies }
     if (counterCompany > 1) {
       // remove the last item from the array
+      if (valueTicker.slice(-1)[0] == null) {
+        setCounterCompany(counterCompany - 1)
+        setValueTicker(valueTicker.slice(0, -1))
+        return
+      }
       delete tmpSectorComp[valueTicker.slice(-1)[0].symbol]
       setSectorCompanies(tmpSectorComp)
       setCalledCompanies((currentState) => currentState.slice(0, -1))
@@ -283,6 +288,10 @@ export const Mainsubmission = () => {
       //     })
       //   })
     } else if (reason === 'clear') {
+      // The user entered a company that there was no match for
+      if (valueTicker.slice(-1)[0].symbol == null) {
+        return
+      }
       let tmpSectorComp = { ...sectorCompanies }
       delete tmpSectorComp[valueTicker.slice(-1)[0].symbol]
       setSectorCompanies(tmpSectorComp)
@@ -325,6 +334,7 @@ export const Mainsubmission = () => {
       <div className="searchbar-company">
         {counterArr.map((item, index) => (
           <Autocomplete
+            noOptionsText="No company found"
             loading={loadingSuggestion}
             autoHighlight={true}
             key={index}
@@ -348,7 +358,14 @@ export const Mainsubmission = () => {
             sx={{ width: 1000 }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
             options={suggestions}
-            getOptionLabel={(option) => `${option.name} (${option.symbol})`}
+            getOptionLabel={(option) => {
+              if (option && option.name) {
+                return `${option.name} (${option.symbol})`
+              } else {
+                errors = 'No company found. Pick a valid name or ticker'
+                return ''
+              }
+            }}
             renderInput={(params) => {
               return (
                 <TextField
