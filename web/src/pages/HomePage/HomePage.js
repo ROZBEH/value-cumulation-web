@@ -48,7 +48,7 @@ TabPanel.propTypes = {
 }
 
 const HomePage = () => {
-  const { isAuthenticated, currentUser, _logOut } = useAuth()
+  const { isAuthenticated, _currentUser, _logOut } = useAuth()
   const [value, setValue] = React.useState(0)
 
   const handleChange = (event, newValue) => {
@@ -75,7 +75,12 @@ const HomePage = () => {
         >
           <Tab label="Financials" />
           <Tab label="SEC Reports" />
-          <Tab label="Sector Comparison" />
+          <Tab
+            // style={{ minWidth: '2%' }}
+            // variant="fullWidth"
+            label="Sector Comparison(AI Powered)"
+            wrapped
+          />
           <Tab label="Company Finder" />
         </Tabs>
       </Box>
