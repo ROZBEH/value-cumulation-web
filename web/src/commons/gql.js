@@ -128,3 +128,13 @@ export const FILTERED_COMPANIES = gql`
     }
   }
 `
+
+export const ADD_SUBSCRIPTION = gql`
+  mutation createUserSubscription($input: CreateSubscriptionInput!) {
+    createSubscription(input: $input) {
+      subscriptionName
+      price
+      interval
+    }
+  }
+`
