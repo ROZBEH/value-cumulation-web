@@ -28,8 +28,13 @@ const BillingPortal = (props) => {
       }
     `
   )
+  function timeout(delay) {
+    return new Promise((res) => setTimeout(res, delay))
+  }
 
   const onUserButtonClick = async () => {
+    toast.success('Opening in a new window tab')
+    await timeout(2000) //for 1 sec delay
     try {
       const {
         data: {
@@ -40,7 +45,8 @@ const BillingPortal = (props) => {
       })
 
       // Redirect user to Stripe customer portal
-      window.location.assign(url)
+      // window.location.assign(url)
+      window.open(url, '_blank')
     } catch (e) {
       toast.error("Couldn't create a session at this time")
     }
@@ -55,23 +61,18 @@ const BillingPortal = (props) => {
   }
 
   return (
-    <>
-      {/* <Button
-        aria-label="Start billing portal session"
-        variant="icon"
-        onClick={onUserButtonClick}
-        {...props}
-      >
-        <User style={{ color: 'var(--primary)' }} />
-      </Button> */}
-      <Tooltip title="Manage Subscription">
-        <Subscriptions
-          className="cursor-pointer"
-          onClick={onUserButtonClick}
-          fontSize="medium"
-        />
-      </Tooltip>
-    </>
+    <div className="flex flex-row">
+      <div>Modify Subscription</div>
+      <div>
+        <Tooltip title="Manage Subscription">
+          <Subscriptions
+            className="cursor-pointer"
+            onClick={onUserButtonClick}
+            fontSize="medium"
+          />
+        </Tooltip>
+      </div>
+    </div>
   )
 }
 

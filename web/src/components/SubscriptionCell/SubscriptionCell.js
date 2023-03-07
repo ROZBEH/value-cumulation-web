@@ -11,6 +11,7 @@ export const QUERY = gql`
   query SubscriptionHistory($userId: ID!) {
     subscriptionHistory: subscriptionHistory(userId: $userId) {
       hadSubscription
+      status
     }
   }
 `

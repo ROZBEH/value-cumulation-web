@@ -39,18 +39,17 @@ const Product = () => {
   }
 
   return (
-    <div>
-      {/* <Button className="mx-1" onClick={onCheckout}>
-        <Subscriptions />
-        Manage Subscription
-      </Button> */}
-      <Tooltip title="Manage Subscription">
-        <Subscriptions
-          className="cursor-pointer"
-          onClick={onCheckout}
-          fontSize="medium"
-        />
-      </Tooltip>
+    <div className="flex flex-row">
+      <div>Start Free Trial</div>
+      <div>
+        <Tooltip title="Manage Subscription">
+          <Subscriptions
+            className="cursor-pointer"
+            onClick={onCheckout}
+            fontSize="medium"
+          />
+        </Tooltip>
+      </div>
     </div>
     // <Wrapper
     //   onClick={() => onCheckout({ id, name, description, price, image, type })}
