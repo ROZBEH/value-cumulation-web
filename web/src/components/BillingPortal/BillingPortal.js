@@ -34,7 +34,7 @@ const BillingPortal = (props) => {
 
   const onUserButtonClick = async () => {
     toast.success('Opening in a new window tab')
-    await timeout(2000) //for 1 sec delay
+    await timeout(3000) //for 2 seconds delay
     try {
       const {
         data: {

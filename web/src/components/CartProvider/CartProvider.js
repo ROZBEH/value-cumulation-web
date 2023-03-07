@@ -97,6 +97,9 @@ const cartMachine = createMachine(
 const CartContext = createContext({})
 
 const CartProvider = ({ children }) => {
+  function timeout(delay) {
+    return new Promise((res) => setTimeout(res, delay))
+  }
   const [checkout] = useMutation(
     gql`
       mutation Checkout(
@@ -106,6 +109,7 @@ const CartProvider = ({ children }) => {
       ) {
         checkout(mode: $mode, cart: $cart, customerId: $customerId) {
           id
+          url
         }
       }
     `
@@ -150,18 +154,27 @@ const CartProvider = ({ children }) => {
           }
 
           // Create checkout session and return session id
-          const {
-            data: {
-              checkout: { id },
-            },
-          } = await checkout(checkoutPayload)
+          try {
+            const {
+              data: {
+                checkout: { id, url },
+              },
+            } = await checkout(checkoutPayload)
 
-          // Redirect user to Stripe Checkout page
-          const stripe = await loadStripe(process.env.STRIPE_PK)
+            // Redirect user to Stripe Checkout page
+            // const stripe = await loadStripe(process.env.STRIPE_PK)
+            // open a new tab. The above line will redirect the current tab
+            toast.success('Redirecting to Stripe Checkout')
 
-          await stripe.redirectToCheckout({
-            sessionId: id,
-          })
+            await timeout(3000) //for 2 seconds delay
+            window.open(url, '_blank')
+          } catch (e) {
+            toast.error('Error in redirecting to Stripe Checkout')
+          }
+
+          // await stripe.redirectToCheckout({
+          //   sessionId: id,
+          // })
         },
       },
     },
