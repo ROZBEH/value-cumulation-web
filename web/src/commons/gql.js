@@ -138,3 +138,12 @@ export const ADD_SUBSCRIPTION = gql`
     }
   }
 `
+
+export const SUBS_HISTORY = gql`
+  query SubscriptionHistory($userId: ID!) {
+    subscriptionHistory: subscriptionHistory(userId: $userId) {
+      hadSubscription
+      status
+    }
+  }
+`
