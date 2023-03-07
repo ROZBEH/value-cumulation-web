@@ -21,6 +21,25 @@ model User {
   verifyToken         String?
   resetTokenExpiresAt DateTime?
   favoriteMetrics     FavoriteMetricOnUser[]
+  createdAt           DateTime               @default(now())
+  subscription        Subscription?          @relation(fields: [subscriptionId], references: [id])
+  subscriptionId      String?
+}
+
+enum Interval {
+  MONTHLY
+  YEARLY
+  QUARTERLY
+  WEEKLY
+}
+
+model Subscription {
+  id               String   @id @default(cuid())
+  subscriptionName String // a descriptive name for the subscription plan
+  price            Float
+  interval         Interval // a custom type defining the interval of the subscription, e.g. 'monthly', 'yearly', etc.
+  users            User[] // a relation to the User model
+  createdAt        DateTime @default(now())
 }
 
 model FavoriteMetric {

@@ -13,6 +13,7 @@ export const schema = gql`
 
   type SubHistory {
     hadSubscription: Boolean!
+    status: String!
   }
 
   type Query {

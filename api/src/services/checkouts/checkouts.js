@@ -25,19 +25,24 @@ export const checkout = async ({ mode, cart, customerId }, { context }) => {
     quantity: product.quantity,
   }))
 
-  return stripe.checkout.sessions.create({
+  const resCheckoutSession = await stripe.checkout.sessions.create({
     // See https://stripe.com/docs/payments/checkout/custom-success-page#modify-success-url.
     success_url: `${context.event.headers.referer}`,
     // For cancelling the checkout, we'll just redirect back to the mainpage
     // In order to redirect to a different page, simply change the URL below to something
     // else, like /canceled `${context.event.headers.referer}faiure`
     cancel_url: `${context.event.headers.referer}`,
+    subscription_data: {
+      trial_period_days: 14,
+    },
     // eslint-disable-next-line camelcase
     line_items,
     mode,
     payment_method_types: ['card'],
     customer: customerId,
   })
+
+  return resCheckoutSession
 }
 
 export const getSession = async ({ id }) => {

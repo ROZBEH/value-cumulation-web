@@ -26,9 +26,17 @@ export const subscriptionHistory = async ({ userId }) => {
     customer: userId,
   })
   // If the user has subscribed to any plans, return the plan information
+  const subStatus = customerSubscription.data.map((sub) => sub.status)
+
   if (customerSubscription.data.length > 0) {
-    return { hadSubscription: true }
+    return {
+      hadSubscription: true,
+      status: subStatus.length == 0 ? '' : subStatus[0],
+    }
   } else {
-    return { hadSubscription: false }
+    return {
+      hadSubscription: false,
+      status: subStatus.length == 0 ? '' : subStatus[0],
+    }
   }
 }

@@ -6,6 +6,7 @@ Notice: All code and information in this repository is the property of Value Cum
 You are strictly prohibited from distributing or using this repository unless otherwise stated.
  */
 import { handleStripeWebhooks } from 'src/lib/stripe'
+import { createSubscription } from 'src/services/subscriptions/subscriptions'
 import { handleDBSync } from 'src/services/users'
 
 /**
@@ -42,7 +43,48 @@ export const handler = async (event, context) => {
       if (results) {
         console.log('Database has been synced successfully')
       }
+      return JSON.parse(e.body)
     },
+    'customer.subscription.created': async (e) => {
+      const {
+        data: { object },
+      } = JSON.parse(e.body)
+      var interval
+      if (object.plan.interval.toUpperCase() === 'MONTH') {
+        interval = 'MONTHLY'
+      } else if (object.plan.interval.toUpperCase() === 'YEAR') {
+        interval = 'YEARLY'
+      } else if (object.plan.interval.toUpperCase() === 'WEEK') {
+        interval = 'WEEKLY'
+      } else if (object.plan.interval.toUpperCase() === 'DAY') {
+        interval = 'DAILY'
+      } else {
+        // raise error
+        throw new Error(`Unrecognized interval: ${object.plan.interval}`)
+      }
+      const subscriberInfo = {
+        subscriptionName: object.plan.product,
+        price: object.plan.amount,
+        interval,
+        userId: object.customer,
+      }
+      console.log('subscriberInfo: ', subscriberInfo)
+      try {
+        // Update the subscription table for the user
+        const results = await createSubscription({ input: subscriberInfo })
+        if (results) {
+          console.log('Database has been synced successfully')
+        }
+      } catch (err) {
+        console.log('error: ', err)
+      }
+
+      return JSON.parse(e.body)
+    },
+    'customer.subscription.updated': async (e) => JSON.parse(e.body),
+    'customer.subscription.deleted': async (e) => JSON.parse(e.body),
+    'customer.subscription.resumed': async (e) => JSON.parse(e.body),
+    'customer.subscription.trial_will_end': async (e) => JSON.parse(e.body),
   })
 
   return {
