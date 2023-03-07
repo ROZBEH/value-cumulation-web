@@ -6,19 +6,21 @@ Notice: All code and information in this repository is the property of Value Cum
 You are strictly prohibited from distributing or using this repository unless otherwise stated.
  */
 import * as React from 'react'
+import { useEffect } from 'react'
 
+import { useLazyQuery } from '@apollo/react-hooks'
 import { Tabs, Tab, Box } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import PropTypes from 'prop-types'
 
 import { useAuth } from '@redwoodjs/auth'
-// import { Link, routes } from '@redwoodjs/router'
 
+import { SUBS_HISTORY } from 'src/commons/gql'
 import { Companyfinder } from 'src/components/Companyfinder/Companyfinder'
 import { Financials } from 'src/components/Financials/Financials'
-// import ProductsCell from 'src/components/ProductsCell'
 import { SECLinks } from 'src/components/SECLinks/SECLinks'
 import { Sector } from 'src/components/Sector/Sector'
+import SubscriptionCell from 'src/components/SubscriptionCell'
 import { TabSignup } from 'src/pages/HomePage/TabSignup'
 
 function TabPanel(props) {
@@ -48,12 +50,48 @@ TabPanel.propTypes = {
 }
 
 const HomePage = () => {
-  const { isAuthenticated, _currentUser, _logOut } = useAuth()
+  const { isAuthenticated, currentUser, _logOut } = useAuth()
   const [value, setValue] = React.useState(0)
+  // set the react state for the subscription history
+  const [subscriptionHistory, setSubscriptionHistory] = React.useState({})
+  const [subsHistory] = useLazyQuery(SUBS_HISTORY, {
+    onCompleted: (data) => {
+      setSubscriptionHistory(data.subscriptionHistory)
+    },
+  })
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
+
+  const renderPanel = (isAuthenticated, subscriptionHistory, panelType) => {
+    if (
+      isAuthenticated &&
+      subscriptionHistory &&
+      subscriptionHistory.hadSubscription &&
+      ['active', 'trialing'].includes(subscriptionHistory.status)
+    ) {
+      return panelType == 'companyFinder' ? <Companyfinder /> : <Sector />
+    } else if (isAuthenticated && subscriptionHistory) {
+      return (
+        <div>
+          <div className="mb-4">
+            To enjoy all the amazing features of our product, you can start a
+            free trial or renew your subscription today.
+          </div>
+          <SubscriptionCell userId={currentUser.id} />
+        </div>
+      )
+    } else if (!isAuthenticated) {
+      return <TabSignup />
+    }
+  }
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      subsHistory({ variables: { userId: currentUser.id } })
+    }
+  }, [isAuthenticated, subsHistory, currentUser])
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -91,10 +129,10 @@ const HomePage = () => {
         <SECLinks />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        {isAuthenticated ? <Sector /> : <TabSignup />}
+        {renderPanel(isAuthenticated, subscriptionHistory, 'sector')}
       </TabPanel>
       <TabPanel value={value} index={3}>
-        {isAuthenticated ? <Companyfinder /> : <TabSignup />}
+        {renderPanel(isAuthenticated, subscriptionHistory, 'companyFinder')}
       </TabPanel>
 
       {/* <ProductsCell type={'recurring'} /> */}
