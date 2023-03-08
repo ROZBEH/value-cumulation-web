@@ -95,6 +95,11 @@ export const getFilteredCompanies = async ({ input }) => {
     }
 
     for (const metric of input) {
+      if (metric.name === 'burnRatio') {
+        console.log('exchangeRate: ' + exchangeRate)
+        console.log("company['burnRatio']:", company['burnRatio'])
+        console.log('company =', company)
+      }
       if (company[metric.name] * exchangeRate > metric.value) {
         // pass
       } else {
@@ -103,14 +108,20 @@ export const getFilteredCompanies = async ({ input }) => {
     }
 
     // All the tests passed, time to save their data
-    filteredCompaniesData.push({
-      ticker: company.symbol,
-      name: companyList[company.symbol][1],
-      metrics: input.map((metric) => metric.name),
-      values: input.map((metric) => {
-        return company[metric.name] * exchangeRate
-      }),
-    })
+    // Only add the company if it is not already in the array
+    var index = filteredCompaniesData.findIndex(
+      (x) => x.name == companyList[company.symbol][1]
+    )
+    if (index === -1) {
+      filteredCompaniesData.push({
+        ticker: company.symbol,
+        name: companyList[company.symbol][1],
+        metrics: input.map((metric) => metric.name),
+        values: input.map((metric) => {
+          return company[metric.name] * exchangeRate
+        }),
+      })
+    }
     return true
   })
 
