@@ -30,6 +30,7 @@ export const Metricsearch = (props) => {
     <div className="flex">
       <div className="w-full">
         <Autocomplete
+          autoHighlight={true}
           freeSolo={true}
           value={props.value}
           inputValue={inputValue}
@@ -111,6 +112,7 @@ export const Metricsearch = (props) => {
           InputProps={{
             inputProps: {
               min: 0.0,
+              step: 0.01,
             },
           }}
           helperText={`Enter Numerical Values`}
