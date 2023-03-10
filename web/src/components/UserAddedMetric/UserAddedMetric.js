@@ -26,7 +26,7 @@ import {
 } from 'src/recoil/atoms'
 
 export const UserAddedMetric = () => {
-  const { _isAuthenticated, currentUser, _logOut } = useAuth()
+  const { isAuthenticated, currentUser, _logOut } = useAuth()
   const [updateFavoriteDB, { _loading, _error }] = useMutation(
     UPDATE_FAVORITES,
     {
@@ -55,10 +55,15 @@ export const UserAddedMetric = () => {
     useState(defaultVisables)
 
   const loadFavoriteMetrics = () => {
+    if (!isAuthenticated) {
+      toast.error('Please Login to add favorites')
+      return
+    }
     if (favoriteMetrics.length === 0) {
       toast.error(
         'You have no favorites yet.\n Please add some by clicking on ❤️'
       )
+      return
     }
     var tmp = AVAILABLE_METRICS.filter((item) =>
       favoriteMetrics.includes(item.value)
