@@ -93,7 +93,7 @@ export const handler = async (event, context) => {
     // `{ message: 'Error message' }`
     handler: (user) => {
       if (user.verifyToken) {
-        throw new Error('User not Verified')
+        throw new Error('Please check your email to verify your account.')
       }
       return user
     },
@@ -196,8 +196,7 @@ export const handler = async (event, context) => {
         }),
       ])
 
-      const msg =
-        'Thanks for signing up. Please check your email to verify your account.'
+      const msg = '🙏 Please check your email to verify your account.'
 
       return msg
     },
