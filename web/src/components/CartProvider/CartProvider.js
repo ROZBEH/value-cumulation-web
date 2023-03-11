@@ -11,12 +11,12 @@ import { loadStripe } from '@stripe/stripe-js'
 import { assign } from '@xstate/immer'
 import { useSelector } from '@xstate/react'
 import { useInterpret } from '@xstate/react'
+import { toast } from 'react-toastify'
 import { createMachine } from 'xstate'
 
 import { useAuth } from '@redwoodjs/auth'
 import { useLocation } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
-import { toast } from '@redwoodjs/web/toast'
 
 const cartMachine = createMachine(
   {

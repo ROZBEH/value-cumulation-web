@@ -12,11 +12,11 @@ import { makeStyles, Chip, Tooltip } from '@material-ui/core'
 import { Favorite, CancelRounded } from '@material-ui/icons'
 import { Autocomplete, TextField } from '@mui/material'
 import classNames from 'classnames'
+import { toast } from 'react-toastify'
 import { useRecoilState } from 'recoil'
 
 import { useAuth } from '@redwoodjs/auth'
 import { useMutation } from '@redwoodjs/web'
-import { toast } from '@redwoodjs/web/toast'
 
 import { AVAILABLE_METRICS } from 'src/commons/constants'
 import { UPDATE_FAVORITES, DELETE_FAVORITES } from 'src/commons/gql'

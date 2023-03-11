@@ -5,16 +5,28 @@ Copyright (c) 2022 Value Cumulation
 Notice: All code and information in this repository is the property of Value Cumulation.
 You are strictly prohibited from distributing or using this repository unless otherwise stated.
  */
+import { ToastContainer } from 'react-toastify'
+
+import 'react-toastify/dist/ReactToastify.css'
 import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
-import { Toaster } from '@redwoodjs/web/toast'
-
 // import Cart from 'src/components/Cart'
 const MainLayout = ({ children }) => {
   const { isAuthenticated, currentUser, logOut, loading } = useAuth()
   return (
     <>
-      <Toaster toastOptions={{ className: 'rw-toast', duration: 4000 }} />
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <header className="bg-slate-100 sticky top-0 z-50 rounded-b-xl">
         <nav className="flex items-center justify-between flex-wrap bg-gold-800 p-6">
           <div>
