@@ -7,6 +7,7 @@ You are strictly prohibited from distributing or using this repository unless ot
  */
 
 import { useForm as useSpreeForm } from '@formspree/react'
+import { toast } from 'react-toastify'
 
 import {
   FieldError,
@@ -19,7 +20,6 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 import { MetaTags, useMutation } from '@redwoodjs/web'
-import { toast, Toaster } from '@redwoodjs/web/toast'
 
 import { CREATE_CONTACT } from 'src/commons/gql'
 
@@ -46,7 +46,6 @@ const ContactPage = () => {
       <MetaTags title="Contact" description="Contact page" />
 
       <main className="rw-main">
-        <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
         <div className="rw-scaffold rw-login-container">
           <div className="rw-segment">
             <header className="rw-segment-header">

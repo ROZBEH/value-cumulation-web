@@ -40,10 +40,13 @@ import {
   secReports as secReportsAtom,
   valueTicker as valueTickerAtom,
   inputValueTicker as inputValueTickerAtom,
+  currentSearchBox as currentSearchBoxAtom,
 } from 'src/recoil/atoms'
 import { sectorCompanies as sectorCompaniesAtom } from 'src/recoil/sectorAtom'
 import './Mainsubmission.css'
-
+Array.prototype.insert = function (index, ...items) {
+  this.splice(index, 0, ...items)
+}
 export const Mainsubmission = () => {
   const [calledCompanies, setCalledCompanies] =
     useRecoilState(calledCompaniesAtom)
@@ -60,6 +63,8 @@ export const Mainsubmission = () => {
   const loadingSuggestion = companyList.length === 0
   const [inputValueTicker, setInputValueTicker] =
     useRecoilState(inputValueTickerAtom)
+  const [currentSearchBox, setCurrentSearchBox] =
+    useRecoilState(currentSearchBoxAtom)
   const _formCustomMethods = useForm({ mode: 'onBlur' })
   const [getGPTResSector, { loading: loadingGPTSector }] = useLazyQuery(
     GPT_QUERY_SECTOR,
@@ -172,21 +177,13 @@ export const Mainsubmission = () => {
   const [getFunamentals, { loading: loadingFundamentals }] = useLazyQuery(
     COMPANY_QUERY,
     {
-      onCompleted: (fundamentalanalysis) => {
-        let plotData
-        if (
-          Object.keys(pltData).length != 0 &&
-          pltData['netIncome']['nameCompany'].includes(
-            fundamentalanalysis.companyName
-          )
-        ) {
-          errors = 'Company already added, pick another company'
-          return
-        }
+      onCompleted: async (fundamentalanalysis) => {
         // Add this company to the list of companies that has been called
-
-        plotData = JSON.parse(JSON.stringify(pltData))
-        plotData = postProcess(fundamentalanalysis.getFundamentals, plotData)
+        let plotData = postProcess(
+          fundamentalanalysis.getFundamentals,
+          JSON.parse(JSON.stringify(pltData)),
+          currentSearchBox
+        )
         // Clean up the SEC report data and save it as an object
         // The format of the report will be
         /*
@@ -241,11 +238,21 @@ export const Mainsubmission = () => {
     var tmpValue = [...valueTicker]
     tmpValue[index] = values
     setValueTicker(tmpValue)
+    setCurrentSearchBox(index)
     let plotData
 
     if (reason === 'selectOption') {
       // Add this company to the list of companies that has been called
-      setCalledCompanies((currentState) => [...currentState, values])
+      // setCalledCompanies((currentState) => [...currentState, values])
+      if (calledCompanies.some((obj) => obj.name === values.name)) {
+        alert('Company already picked')
+        return
+      }
+      setCalledCompanies((currentState) => {
+        const newState = [...currentState]
+        newState.splice(index, 0, values)
+        return newState
+      })
       getFunamentals({
         variables: { ticker: values.symbol },
       })
@@ -255,45 +262,19 @@ export const Mainsubmission = () => {
       getGPTResSentiment({
         variables: { query: `I  didn't liked last years result` },
       })
-      //     const tmpSECReports =
-      //       fundamentalanalysis.data.getFundamentals.secReports
-      //     const secReportCompany = {}
-      //     for (let i = 0; i < tmpSECReports.length; i++) {
-      //       if (tmpSECReports[i].type in secReportCompany) {
-      //         secReportCompany[tmpSECReports[i].type].push({
-      //           link: tmpSECReports[i]['finalLink'],
-      //           fillingDate: tmpSECReports[i]['fillingDate'],
-      //         })
-      //       } else {
-      //         secReportCompany[tmpSECReports[i].type] = [
-      //           {
-      //             link: tmpSECReports[i]['finalLink'],
-      //             fillingDate: tmpSECReports[i]['fillingDate'],
-      //           },
-      //         ]
-      //       }
-      //     }
-      //     setSECReports((secReport) => ({
-      //       ...secReport,
-      //       [plotData['netIncome']['nameCompany'].slice(-1)]: secReportCompany,
-      //     }))
-      //     setPltData(plotData)
-      //     console.log('going to call getGPTResSector')
-      //     getGPTResSector({
-      //       variables: { query: values.symbol },
-      //     })
-      //     console.log('going to call getGPTResSentiment')
-      //     getGPTResSentiment({
-      //       variables: { query: `I  didn't liked last years result` },
-      //     })
-      //   })
     } else if (reason === 'clear') {
       // The user entered a company that there was no match for
       if (valueTicker.slice(-1)[0].symbol == null) {
         return
       }
       let tmpSectorComp = { ...sectorCompanies }
-      delete tmpSectorComp[valueTicker.slice(-1)[0].symbol]
+      //
+      //
+      //
+      //   'valueTicker.slice(-1)[0].symbol:',
+      //   valueTicker.slice(-1)[0].symbol
+      // )
+      delete tmpSectorComp[valueTicker[index].symbol]
       setSectorCompanies(tmpSectorComp)
       var tmpCalledCompanies = [...calledCompanies]
       tmpCalledCompanies.splice(index, 1)
@@ -380,8 +361,8 @@ export const Mainsubmission = () => {
                   helperText={errors}
                   // onKeyDown={(e) => {
                   //   if (e.code.toLowerCase() === 'enter' && e.target.value) {
-                  //     console.log('e = ', e)
-                  //     console.log('e.target.value = ', e.target.value)
+                  //
+                  //
                   //     // onChangeTextField(e.target.value)
                   //   }
                   // }}

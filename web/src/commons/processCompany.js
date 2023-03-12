@@ -43,7 +43,7 @@ export function popCompany(plotData, index) {
   return plotData
 }
 
-export function postProcess(data, plotData, strokeWidth) {
+export function postProcess(data, plotData, index, strokeWidth) {
   // Brining the data into a format that is recognizable by rechart
   // Data format for plotData is in the following format:
   // {
@@ -67,7 +67,6 @@ export function postProcess(data, plotData, strokeWidth) {
   const metricNames = data.metricNames
   const metricsDescription = data.metricsDescription
   const yearsArray = data.years
-  let index
   for (var i = 0; i < metricsArrays.length; i++) {
     if (!(metricNames[i] in plotData)) {
       plotData[metricNames[i]] = {}
@@ -83,7 +82,6 @@ export function postProcess(data, plotData, strokeWidth) {
       plotData[metricNames[i]]['nameCompany'].push(nameCompany)
       plotData[metricNames[i]]['strokeWidth'].push(strokeWidth)
     }
-    index = Object.keys(plotData[metricNames[i]]['companyOrder']).length / 2
     plotData[metricNames[i]]['companyOrder'][index] = nameCompany
     plotData[metricNames[i]]['companyOrder'][nameCompany] = index
 

@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from 'react'
 import CloseIcon from '@mui/icons-material/Close'
 import DoneIcon from '@mui/icons-material/Done'
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
 import { useAuth } from '@redwoodjs/auth'
 import {
@@ -22,7 +23,6 @@ import {
 } from '@redwoodjs/forms'
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
-import { toast, Toaster } from '@redwoodjs/web/toast'
 
 const ResetPasswordPage = ({ resetToken }) => {
   const { isAuthenticated, reauthenticate, validateResetToken, resetPassword } =
@@ -120,7 +120,6 @@ const ResetPasswordPage = ({ resetToken }) => {
       <MetaTags title="Reset Password" />
 
       <main className="rw-main">
-        <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
         <div className="rw-scaffold rw-login-container">
           <div className="rw-segment">
             <header className="rw-segment-header">

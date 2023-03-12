@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
 
+import { toast } from 'react-toastify'
+
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags, useMutation } from '@redwoodjs/web'
-import { toast } from '@redwoodjs/web/dist/toast'
 
 const VERIFY_TOKEN_MUTATION = gql`
   mutation VerifyEmailMutation($token: String!) {

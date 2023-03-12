@@ -12,11 +12,11 @@ import { makeStyles, Chip, Tooltip } from '@material-ui/core'
 import { Favorite, CancelRounded } from '@material-ui/icons'
 import { Autocomplete, TextField } from '@mui/material'
 import classNames from 'classnames'
+import { toast } from 'react-toastify'
 import { useRecoilState } from 'recoil'
 
 import { useAuth } from '@redwoodjs/auth'
 import { useMutation } from '@redwoodjs/web'
-import { toast } from '@redwoodjs/web/toast'
 
 import { AVAILABLE_METRICS } from 'src/commons/constants'
 import { UPDATE_FAVORITES, DELETE_FAVORITES } from 'src/commons/gql'
@@ -26,7 +26,7 @@ import {
 } from 'src/recoil/atoms'
 
 export const UserAddedMetric = () => {
-  const { _isAuthenticated, currentUser, _logOut } = useAuth()
+  const { isAuthenticated, currentUser, _logOut } = useAuth()
   const [updateFavoriteDB, { _loading, _error }] = useMutation(
     UPDATE_FAVORITES,
     {
@@ -55,10 +55,15 @@ export const UserAddedMetric = () => {
     useState(defaultVisables)
 
   const loadFavoriteMetrics = () => {
+    if (!isAuthenticated) {
+      toast.error('Please Login to add favorites')
+      return
+    }
     if (favoriteMetrics.length === 0) {
       toast.error(
         'You have no favorites yet.\n Please add some by clicking on ❤️'
       )
+      return
     }
     var tmp = AVAILABLE_METRICS.filter((item) =>
       favoriteMetrics.includes(item.value)

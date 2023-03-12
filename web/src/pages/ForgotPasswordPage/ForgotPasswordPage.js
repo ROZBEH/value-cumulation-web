@@ -8,11 +8,12 @@ You are strictly prohibited from distributing or using this repository unless ot
 
 import { useEffect, useRef } from 'react'
 
+import { toast } from 'react-toastify'
+
 import { useAuth } from '@redwoodjs/auth'
 import { Form, Label, TextField, Submit, FieldError } from '@redwoodjs/forms'
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
-import { toast, Toaster } from '@redwoodjs/web/toast'
 
 const ForgotPasswordPage = () => {
   const { isAuthenticated, forgotPassword } = useAuth()
@@ -53,7 +54,6 @@ const ForgotPasswordPage = () => {
       <MetaTags title="Forgot Password" />
 
       <main className="rw-main">
-        <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
         <div className="rw-scaffold rw-login-container">
           <div className="rw-segment">
             <header className="rw-segment-header">

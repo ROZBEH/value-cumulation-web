@@ -28,6 +28,12 @@ export const counterCompany = atom({
   default: 1,
 })
 
+// Show which searchbar is currently being typed by the user
+export const currentSearchBox = atom({
+  key: 'currentSearchBox',
+  default: 0,
+})
+
 // Saves the current text in the searchbar as user types
 export const textPrompt = atom({
   key: 'textPrompt',

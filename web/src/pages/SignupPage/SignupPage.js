@@ -12,6 +12,7 @@ import { useForm as useSpreeForm } from '@formspree/react'
 import CloseIcon from '@mui/icons-material/Close'
 import DoneIcon from '@mui/icons-material/Done'
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
 import { useAuth } from '@redwoodjs/auth'
 import {
@@ -24,7 +25,6 @@ import {
 } from '@redwoodjs/forms'
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
-import { toast, Toaster } from '@redwoodjs/web/toast'
 
 const SignupPage = () => {
   const [_spreeState, spreeSubmit] = useSpreeForm('xvongzpq')
@@ -111,7 +111,6 @@ const SignupPage = () => {
       <MetaTags title="Signup" />
 
       <main className="rw-main">
-        <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
         <div className="rw-scaffold rw-login-container">
           <div className="rw-segment">
             <header className="rw-segment-header">
