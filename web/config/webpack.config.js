@@ -1,9 +1,8 @@
 const configDir = __dirname
 
 module.exports = (config) => {
-  config.module.rules[0].oneOf[5] = {
-    test: /(\.scss|\.css)$/,
-    sideEffects: true,
+  config.module.rules[0].oneOf.unshift({
+    test: /(ReactToastify\.css|\.css)$/,
     use: [
       'style-loader',
       { loader: 'css-loader', options: { importLoaders: 1 } },
@@ -16,7 +15,7 @@ module.exports = (config) => {
         },
       },
     ],
-  }
+  })
 
   return config
 }
