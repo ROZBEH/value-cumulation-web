@@ -2,7 +2,7 @@ const configDir = __dirname
 
 module.exports = (config) => {
   config.module.rules[0].oneOf[5] = {
-    test: /\.css$/,
+    test: /(\.scss|\.css)$/,
     sideEffects: true,
     use: [
       'style-loader',
