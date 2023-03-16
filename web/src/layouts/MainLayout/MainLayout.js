@@ -7,7 +7,7 @@ You are strictly prohibited from distributing or using this repository unless ot
  */
 import { ToastContainer } from 'react-toastify'
 
-import 'react-toastify/dist/ReactToastify.css'
+import 'react-toastify/dist/ReactToastify.min.css'
 import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
 // import Cart from 'src/components/Cart'
