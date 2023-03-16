@@ -5,7 +5,12 @@ module.exports = (config) => {
     test: /(ReactToastify\.css|\.css)$/,
     use: [
       'style-loader',
-      { loader: 'css-loader', options: { importLoaders: 1 } },
+      {
+        loader: 'css-loader',
+        options: {
+          importLoaders: 1,
+        },
+      },
       {
         loader: 'postcss-loader',
         options: {
