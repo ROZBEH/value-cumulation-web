@@ -21,7 +21,13 @@ export const products = async ({ type = 'one_time' }) => {
       product: product.id,
     })
 
-    const price = prices.data[0]
+    // if env is prod get the live price otherwise test
+    let price
+    if (process.env.NODE_ENV === 'production') {
+      price = prices.data.some((price) => price.livemode === true)
+    } else {
+      price = prices.data.some((price) => price.livemode === false)
+    }
 
     // ignore prices with the "wrong" type
     if (typeof price !== 'undefined') {
@@ -35,6 +41,8 @@ export const products = async ({ type = 'one_time' }) => {
       })
     }
   }
+
+  console.log('itemList = ', itemList)
 
   return itemList
 }
