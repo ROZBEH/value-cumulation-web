@@ -1,32 +1,30 @@
 const configDir = __dirname
 
 module.exports = (config) => {
-  // Modify the existing CSS rule to include postcss-loader
-  config.module.rules[0].oneOf[5].use.push({
-    loader: 'postcss-loader',
-    options: {
-      postcssOptions: {
-        config: `${configDir}/postcss.config.js`,
-      },
-    },
-  })
-
-  // Add new rule to handle ReactToastify.css and other CSS files
-  config.module.rules[0].oneOf.unshift({
-    test: /(ReactToastify\.css|\.css)$/,
+  config.module.rules[0].oneOf[5] = {
+    test: /\.css$/,
+    exclude: /node_modules/,
+    sideEffects: true,
     use: [
       'style-loader',
       { loader: 'css-loader', options: { importLoaders: 1 } },
       {
         loader: 'postcss-loader',
         options: {
-          postcssOptions: {
-            config: `${configDir}/postcss.config.js`,
+          config: {
+            path: configDir,
           },
         },
       },
     ],
-  })
+  }
+  // adding another rule for the css files
+  config.module.rules[0].oneOf[6] = {
+    test: /\.css$/i,
+    sideEffects: false,
+    include: /node_modules/,
+    use: ['style-loader', 'css-loader'],
+  }
 
   return config
 }
