@@ -5,9 +5,10 @@ Copyright (c) 2022 Value Cumulation
 Notice: All code and information in this repository is the property of Value Cumulation.
 You are strictly prohibited from distributing or using this repository unless otherwise stated.
  */
+// Normal import wasn't working, so I had to use the path like below
+import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
 
-import 'react-toastify/dist/ReactToastify.min.css'
 import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
 // import Cart from 'src/components/Cart'

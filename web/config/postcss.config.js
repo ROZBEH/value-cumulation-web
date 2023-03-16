@@ -5,7 +5,6 @@ const purgecss = require('@fullhuman/postcss-purgecss')({
     path.resolve(__dirname, '..', 'src', '**', '!(*.test).js'),
     path.resolve(__dirname, '..', 'src', '**', '*.html'),
   ],
-  whitelist: ['react-toastify/*', 'react-toastify/*/*', 'react-toastify/*/*/*'],
   // This extractor is used for tailwind classes.
   // Read more here: https://tailwindcss.com/docs/controlling-file-size/
   defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],

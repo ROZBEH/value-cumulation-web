@@ -5,7 +5,7 @@ module.exports = (config) => {
     test: /\.css$/,
     sideEffects: true,
     use: [
-      'style-loader',
+      { loader: 'style-loader' },
       { loader: 'css-loader', options: { importLoaders: 1 } },
       {
         loader: 'postcss-loader',
