@@ -21,8 +21,13 @@ export const products = async ({ type = 'one_time' }) => {
       product: product.id,
     })
 
-    const price = prices.data[0]
-
+    // if env is prod get the live price otherwise test
+    let price
+    if (process.env.NODE_ENV === 'production') {
+      price = prices.data.filter((price) => price.livemode === true)[0]
+    } else {
+      price = prices.data.filter((price) => price.livemode === false)[0]
+    }
     // ignore prices with the "wrong" type
     if (typeof price !== 'undefined') {
       itemList.push({
