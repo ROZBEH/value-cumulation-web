@@ -28,7 +28,6 @@ export const products = async ({ type = 'one_time' }) => {
     } else {
       price = prices.data.filter((price) => price.livemode === false)[0]
     }
-
     // ignore prices with the "wrong" type
     if (typeof price !== 'undefined') {
       itemList.push({

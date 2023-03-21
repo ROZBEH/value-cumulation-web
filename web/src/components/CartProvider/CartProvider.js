@@ -7,7 +7,7 @@ You are strictly prohibited from distributing or using this repository unless ot
  */
 import { createContext, useContext } from 'react'
 
-import { loadStripe } from '@stripe/stripe-js'
+// import { loadStripe } from '@stripe/stripe-js'
 import { assign } from '@xstate/immer'
 import { useSelector } from '@xstate/react'
 import { useInterpret } from '@xstate/react'
@@ -157,7 +157,7 @@ const CartProvider = ({ children }) => {
           try {
             const {
               data: {
-                checkout: { id, url },
+                checkout: { url },
               },
             } = await checkout(checkoutPayload)
 
@@ -169,7 +169,9 @@ const CartProvider = ({ children }) => {
             await timeout(3000) //for 2 seconds delay
             window.open(url, '_blank')
           } catch (e) {
-            toast.error('Error in redirecting to Stripe Checkout')
+            toast.error(
+              'Error in redirecting to Stripe Checkout. If the issue persists, please contact us at help@valuecumulation.com'
+            )
           }
 
           // await stripe.redirectToCheckout({
