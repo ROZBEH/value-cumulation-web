@@ -12,7 +12,6 @@ import { useLazyQuery } from '@apollo/react-hooks'
 import { TailSpin } from 'react-loader-spinner'
 import { useRecoilValue, useRecoilState } from 'recoil'
 
-// import { useAuth } from '@redwoodjs/auth'
 // import { Link, routes } from '@redwoodjs/router'
 
 import { STARTUP_QUERY } from 'src/commons/gql'
