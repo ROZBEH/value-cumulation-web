@@ -92,9 +92,9 @@ export const handler = async (event, context) => {
     // by the `logIn()` function from `useAuth()` in the form of:
     // `{ message: 'Error message' }`
     handler: (user) => {
-      if (user.verifyToken) {
-        throw new Error('Please check your email to verify your account.')
-      }
+      // if (user.verifyToken) {
+      //   throw new Error('Please check your email to verify your account.')
+      // }
       return user
     },
 
@@ -198,7 +198,8 @@ export const handler = async (event, context) => {
 
       const msg = '🙏 Please check your email to verify your account.'
 
-      return msg
+      // return msg
+      return user
     },
 
     passwordValidation: (password) => {
