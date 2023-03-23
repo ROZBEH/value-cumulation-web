@@ -16,14 +16,6 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
 import {
-  // Form,
-  // Submit,
-  useForm,
-  // TextField
-  // TextField as RwTextField,
-} from '@redwoodjs/forms'
-
-import {
   COMPANY_QUERY,
   GPT_QUERY_SECTOR,
   GPT_QUERY_SENTIMENT,
@@ -65,7 +57,6 @@ export const Mainsubmission = () => {
     useRecoilState(inputValueTickerAtom)
   const [currentSearchBox, setCurrentSearchBox] =
     useRecoilState(currentSearchBoxAtom)
-  const _formCustomMethods = useForm({ mode: 'onBlur' })
   const [getGPTResSector, { loading: loadingGPTSector }] = useLazyQuery(
     GPT_QUERY_SECTOR,
     {
