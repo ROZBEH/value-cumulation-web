@@ -36,9 +36,7 @@ import {
 } from 'src/recoil/atoms'
 import { sectorCompanies as sectorCompaniesAtom } from 'src/recoil/sectorAtom'
 import './Mainsubmission.css'
-Array.prototype.insert = function (index, ...items) {
-  this.splice(index, 0, ...items)
-}
+
 export const Mainsubmission = () => {
   const [calledCompanies, setCalledCompanies] =
     useRecoilState(calledCompaniesAtom)
