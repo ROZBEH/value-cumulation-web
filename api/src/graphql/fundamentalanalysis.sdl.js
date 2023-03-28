@@ -24,4 +24,7 @@ export const schema = gql`
   type Query {
     getFundamentals(ticker: String!): FetchMetrics! @skipAuth
   }
+  type Query {
+    getFundamentalsGroup(tickers: [String!]!): [FetchMetrics!]! @skipAuth
+  }
 `
