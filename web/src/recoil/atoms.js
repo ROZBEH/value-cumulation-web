@@ -25,7 +25,7 @@ export const metrics = atom({
 // A counter that keeps track of the number of searchbars
 export const counterCompany = atom({
   key: 'counterCompany',
-  default: 1,
+  default: 2,
 })
 
 // Show which searchbar is currently being typed by the user
@@ -43,12 +43,27 @@ export const textPrompt = atom({
 // Value and inputValue for mainSubmission autocomplete searchbar
 export const valueTicker = atom({
   key: 'valueTicker',
-  default: [''],
+  default: [
+    {
+      exchange: 'NASDAQ Global Select',
+      exchangeShortName: 'NASDAQ',
+      name: 'Apple Inc.',
+      symbol: 'AAPL',
+      type: 'stock',
+    },
+    {
+      exchange: 'NASDAQ Global Select',
+      exchangeShortName: 'NASDAQ',
+      name: 'Microsoft Corporation',
+      symbol: 'MSFT',
+      type: 'stock',
+    },
+  ],
 })
 
 export const inputValueTicker = atom({
   key: 'inputValueTicker',
-  default: [''],
+  default: ['', ''],
 })
 
 // List of companies to be suggested to the user based
