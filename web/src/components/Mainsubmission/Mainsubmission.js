@@ -35,12 +35,13 @@ import {
   currentSearchBox as currentSearchBoxAtom,
 } from 'src/recoil/atoms'
 import { sectorCompanies as sectorCompaniesAtom } from 'src/recoil/sectorAtom'
+
 import './Mainsubmission.css'
 
 export const Mainsubmission = () => {
   const [calledCompanies, setCalledCompanies] =
     useRecoilState(calledCompaniesAtom)
-  const [_loadingFinancials, setLoading] = useRecoilState(loadingFinancialsAtom)
+  const [loadingFinancials, setLoading] = useRecoilState(loadingFinancialsAtom)
   const companyList = useRecoilValue(companyListAtom)
   const [pltData, setPltData] = useRecoilState(plottingDataAtom)
   const [textPrompt, setPrompt] = useRecoilState(textPromptAtom)
@@ -48,11 +49,11 @@ export const Mainsubmission = () => {
   const [counterCompany, setCounterCompany] = useRecoilState(counterCompanyAtom)
   const [_secReport, setSECReports] = useRecoilState(secReportsAtom)
   const [valueTicker, setValueTicker] = useRecoilState(valueTickerAtom)
+  const [inputValueTicker, setInputValueTicker] =
+    useRecoilState(inputValueTickerAtom)
   const [sectorCompanies, setSectorCompanies] =
     useRecoilState(sectorCompaniesAtom)
   const loadingSuggestion = companyList.length === 0
-  const [inputValueTicker, setInputValueTicker] =
-    useRecoilState(inputValueTickerAtom)
   const [currentSearchBox, setCurrentSearchBox] =
     useRecoilState(currentSearchBoxAtom)
   const [getGPTResSector, { loading: loadingGPTSector }] = useLazyQuery(
@@ -168,54 +169,13 @@ export const Mainsubmission = () => {
     {
       onCompleted: async (fundamentalanalysis) => {
         // Add this company to the list of companies that has been called
-        let plotData = postProcess(
+        postProcess(
           fundamentalanalysis.getFundamentals,
-          JSON.parse(JSON.stringify(pltData)),
-          currentSearchBox
+          currentSearchBox,
+          pltData,
+          setPltData,
+          setSECReports
         )
-        // Clean up the SEC report data and save it as an object
-        // The format of the report will be
-        /*
-        {
-          'APPLE': {'10K': { 'link':[l1, l2, ...],
-                              'fillingDate': [d1, d2, ...]
-                            },
-                    '10Q': { 'link':[l1, l2, ...],
-                              'fillingDate': [d1, d2, ...],
-                          },
-                    },
-          'GOOGLE': {'10K': { 'link':[l1, l2, ...]
-                              'fillingDate': [d1, d2, ...]
-                            },
-                    '10Q': { 'link':[l1, l2, ...],
-                              'fillingDate': [d1, d2, ...],
-                          },
-                    },
-
-        }
-        */
-        const tmpSECReports = fundamentalanalysis.getFundamentals.secReports
-        const secReportCompany = {}
-        for (let i = 0; i < tmpSECReports.length; i++) {
-          if (tmpSECReports[i].type in secReportCompany) {
-            secReportCompany[tmpSECReports[i].type].push({
-              link: tmpSECReports[i]['finalLink'],
-              fillingDate: tmpSECReports[i]['fillingDate'],
-            })
-          } else {
-            secReportCompany[tmpSECReports[i].type] = [
-              {
-                link: tmpSECReports[i]['finalLink'],
-                fillingDate: tmpSECReports[i]['fillingDate'],
-              },
-            ]
-          }
-        }
-        setSECReports((secReport) => ({
-          ...secReport,
-          [plotData['netIncome']['nameCompany'].slice(-1)]: secReportCompany,
-        }))
-        setPltData(plotData)
       },
     }
   )
@@ -257,12 +217,6 @@ export const Mainsubmission = () => {
         return
       }
       let tmpSectorComp = { ...sectorCompanies }
-      //
-      //
-      //
-      //   'valueTicker.slice(-1)[0].symbol:',
-      //   valueTicker.slice(-1)[0].symbol
-      // )
       delete tmpSectorComp[valueTicker[index].symbol]
       setSectorCompanies(tmpSectorComp)
       var tmpCalledCompanies = [...calledCompanies]
@@ -293,13 +247,6 @@ export const Mainsubmission = () => {
   }, [setLoading, loadingFundamentals, loadingGPTSector])
 
   return (
-    // <>
-    //   <Form
-    //     formMethods={formCustomMethods}
-    //     // error={error}
-    //     // onSubmit={submitTicker}
-    //     style={{ fontSize: '2rem' }}
-    //   >
     <>
       <div className="searchbar-company">
         {counterArr.map((item, index) => (
@@ -321,9 +268,11 @@ export const Mainsubmission = () => {
               myChangeFunc(event, values, reason, details, index)
             }
             onInputChange={(_e, newInputValue) => {
-              var tmpInputValue = [...inputValueTicker]
-              tmpInputValue[index] = newInputValue
-              setInputValueTicker(tmpInputValue)
+              setInputValueTicker((prevInputValue) => {
+                const newArray = [...prevInputValue]
+                newArray[index] = newInputValue
+                return newArray
+              })
             }}
             sx={{ width: 1000 }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -348,13 +297,6 @@ export const Mainsubmission = () => {
                   label="Type Company Name or Ticker"
                   error={errors ? true : false}
                   helperText={errors}
-                  // onKeyDown={(e) => {
-                  //   if (e.code.toLowerCase() === 'enter' && e.target.value) {
-                  //
-                  //
-                  //     // onChangeTextField(e.target.value)
-                  //   }
-                  // }}
                   InputProps={{
                     ...params.InputProps,
                     endAdornment: (
@@ -371,8 +313,6 @@ export const Mainsubmission = () => {
             }}
           />
         ))}
-
-        {/* // </Form> */}
 
         <Tooltip title="Add Company">
           <button
