@@ -19,7 +19,7 @@ export const metricBox = atom({
 // Create an atom for the list of metrics to be added to the plot
 export const metrics = atom({
   key: 'metrics',
-  default: ['netIncome', 'freeCashFlow'],
+  default: ['netIncome', 'freeCashFlow', 'grossProfitMargin', 'priceToEarning'],
 })
 
 // A counter that keeps track of the number of searchbars
@@ -117,7 +117,22 @@ export const companyList = atom({
 // This will keep track of the list of companies that the user has picked
 export const calledCompanies = atom({
   key: 'calledCompanies',
-  default: [],
+  default: [
+    {
+      exchange: 'NASDAQ Global Select',
+      exchangeShortName: 'NASDAQ',
+      name: 'Apple Inc.',
+      symbol: 'AAPL',
+      type: 'stock',
+    },
+    {
+      exchange: 'NASDAQ Global Select',
+      exchangeShortName: 'NASDAQ',
+      name: 'Microsoft Corporation',
+      symbol: 'MSFT',
+      type: 'stock',
+    },
+  ],
 })
 
 export const userFavMetrics = atom({

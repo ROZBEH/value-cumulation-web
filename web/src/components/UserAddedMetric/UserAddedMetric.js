@@ -49,7 +49,11 @@ export const UserAddedMetric = () => {
 
   // make cash flow and net income default visible
   const defaultVisables = AVAILABLE_METRICS.filter(
-    (item) => item.value === 'netIncome' || item.value === 'freeCashFlow'
+    (item) =>
+      item.value === 'netIncome' ||
+      item.value === 'freeCashFlow' ||
+      item.value === 'grossProfitMargin' ||
+      item.value === 'priceToEarning'
   )
   const [defaultVisiableOptions, setDefaultVisiableOptions] =
     useState(defaultVisables)
