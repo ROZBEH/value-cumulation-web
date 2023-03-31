@@ -156,6 +156,7 @@ export function postProcess(
     ...secReport,
     [plotData['netIncome']['nameCompany'].slice(-1)]: secReportCompany,
   }))
-  setPltData(plotData)
-  return <> </>
+  setPltData((pltData) => ({ ...plotData }))
+
+  return plotData
 }
