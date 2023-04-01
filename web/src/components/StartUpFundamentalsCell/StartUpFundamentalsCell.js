@@ -1,12 +1,14 @@
 import { useQuery } from '@apollo/client'
 import { TailSpin } from 'react-loader-spinner'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 
 import { postProcess } from 'src/commons/processCompany'
 import {
   plottingData as plottingDataAtom,
   secReports as secReportsAtom,
+  companyList as companyListAtom,
 } from 'src/recoil/atoms'
+import { sectorCompanies as sectorCompaniesAtom } from 'src/recoil/sectorAtom'
 
 export const QUERY = gql`
   query StartUpFundamentalsQuery($tickers: [String!]!) {
@@ -27,6 +29,17 @@ export const QUERY = gql`
       }
       years
     }
+    gptIntelligenceGroup(query: $tickers) {
+      query
+      response {
+        symbol
+        name
+        price
+        exchange
+        exchangeShortName
+        type
+      }
+    }
   }
 `
 
@@ -45,6 +58,9 @@ export const Failure = ({ error }) => (
 export const Success = ({ _groupFundamentals }) => {
   const [pltData, setPltData] = useRecoilState(plottingDataAtom)
   const [_secReport, setSECReports] = useRecoilState(secReportsAtom)
+  const companyList = useRecoilValue(companyListAtom)
+  const [sectorCompanies, setSectorCompanies] =
+    useRecoilState(sectorCompaniesAtom)
   const { loading, error } = useQuery(QUERY, {
     variables: { tickers: ['AAPL', 'MSFT'] },
     onCompleted: (data) => {
@@ -63,6 +79,17 @@ export const Success = ({ _groupFundamentals }) => {
             setSECReports
           ))
       )
+      // Now set the list of sector companies
+      const query = data.gptIntelligenceGroup.query
+
+      query.forEach((subQuery, index) => {
+        setSectorCompanies((currentState) => {
+          return {
+            ...currentState,
+            [subQuery]: data.gptIntelligenceGroup.response[index],
+          }
+        })
+      })
     },
   })
   if (loading) return <Loading />
