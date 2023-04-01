@@ -61,13 +61,13 @@ export const Mainsubmission = () => {
     {
       onCompleted: (data) => {
         // First filter the list of available companies for GPT suggestions
-        const tmpSectorComp = companyList.filter((company) =>
-          data.gptIntelligence.response.some((res) => res === company.symbol)
-        )
+        // const tmpSectorComp = companyList.filter((company) =>
+        //   data.gptIntelligence.response.some((res) => res === company.symbol)
+        // )
         // Now set the list of sector companies
         const query = data.gptIntelligence.query
         setSectorCompanies((currentState) => {
-          return { ...currentState, [query]: tmpSectorComp }
+          return { ...currentState, [query]: data.gptIntelligence.response }
         })
       },
       // notifyOnNetworkStatusChange: true,
