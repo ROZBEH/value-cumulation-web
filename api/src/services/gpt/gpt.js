@@ -8,14 +8,10 @@ You are strictly prohibited from distributing or using this repository unless ot
 
 import { companyslist } from 'src/services/searchbar/searchbar.js'
 
-import { fineTuneData } from './fineTuneData.js'
-
 const { Configuration, OpenAIApi } = require('openai')
 // const OpenAI = require('openai-api')
 
 export const gptIntelligence = async (inputQuery) => {
-  const query = 'Q: ' + inputQuery.query
-  // const OPENAI_API_KEY = process.env.OPENAI_API_KEY
   const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
   })
