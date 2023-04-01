@@ -1,4 +1,5 @@
 import { useQuery } from '@apollo/client'
+import { TailSpin } from 'react-loader-spinner'
 import { useRecoilState } from 'recoil'
 
 import { postProcess } from 'src/commons/processCompany'
@@ -29,7 +30,11 @@ export const QUERY = gql`
   }
 `
 
-export const Loading = () => <div>Loading...</div>
+export const Loading = () => (
+  <div className="loader-content">
+    <TailSpin color="#15518e" height="40" width="40" className="tail-spinner" />{' '}
+  </div>
+)
 
 export const Empty = () => <div>Empty</div>
 
@@ -44,7 +49,6 @@ export const Success = ({ _groupFundamentals }) => {
     variables: { tickers: ['AAPL', 'MSFT'] },
     onCompleted: (data) => {
       // if it already has data, then don't do anything
-      console.log('data.groupFundamentals = ', data.groupFundamentals)
       if (pltData && Object.keys(pltData).length > 0) {
         return
       }
