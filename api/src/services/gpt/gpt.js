@@ -6,6 +6,8 @@ Notice: All code and information in this repository is the property of Value Cum
 You are strictly prohibited from distributing or using this repository unless otherwise stated.
  */
 
+import { companyslist } from 'src/services/searchbar/searchbar.js'
+
 import { fineTuneData } from './fineTuneData.js'
 
 const OpenAI = require('openai-api')
@@ -17,7 +19,7 @@ export const gptIntelligence = async (inputQuery) => {
 
   // For API reference please checkout the following link
   // https://beta.openai.com/docs/api-reference/completions/create
-  const gptResponse = await openai.complete({
+  const gptPromise = await openai.complete({
     engine: 'text-davinci-003',
     // engine: 'text-curie-001',
     // engine: 'text-ada-001',
@@ -28,6 +30,12 @@ export const gptIntelligence = async (inputQuery) => {
     frequency_penalty: 2.0,
     stop: ['Q: ', '\n'],
   })
+  const promises = []
+  promises.push(gptPromise)
+  promises.push(companyslist())
+  const promiseResults = await Promise.all(promises)
+  const gptResponse = promiseResults[0]
+  const companyList = promiseResults[1]
   const apiRes = gptResponse.data.choices[0].text
   var apiResArrStr = apiRes.split('A: ')[1]
   apiResArrStr = apiResArrStr.substr(1, apiResArrStr.length - 2)
@@ -35,9 +43,29 @@ export const gptIntelligence = async (inputQuery) => {
   // filter the apiResArr to remove the ticker if it exists
   apiResArr = apiResArr.filter((item) => item !== inputQuery.query)
 
+  const Res = companyList.filter((company) =>
+    apiResArr.some((res) => res === company.symbol)
+  )
+
   return {
     query: inputQuery.query,
-    response: apiResArr,
+    response: Res,
+  }
+}
+
+export const gptIntelligenceGroup = async (inputQuery) => {
+  // call the gptIntelligence function for each query
+  const queryArr = inputQuery.query
+  const gptResponseArr = []
+  for (let i = 0; i < queryArr.length; i++) {
+    const gptResponse = await gptIntelligence({
+      query: queryArr[i],
+    })
+    gptResponseArr.push(gptResponse.response)
+  }
+  return {
+    query: queryArr,
+    response: gptResponseArr,
   }
 }
 
