@@ -19,7 +19,7 @@ export const gptIntelligence = async (inputQuery) => {
 
   // For API reference please checkout the following link
   // https://beta.openai.com/docs/api-reference/completions/create
-  const gptPromise = await openai.complete({
+  const gptPromise = openai.complete({
     engine: 'text-davinci-003',
     // engine: 'text-curie-001',
     // engine: 'text-ada-001',
@@ -56,13 +56,21 @@ export const gptIntelligence = async (inputQuery) => {
 export const gptIntelligenceGroup = async (inputQuery) => {
   // call the gptIntelligence function for each query
   const queryArr = inputQuery.query
-  const gptResponseArr = []
-  for (let i = 0; i < queryArr.length; i++) {
-    const gptResponse = await gptIntelligence({
-      query: queryArr[i],
-    })
-    gptResponseArr.push(gptResponse.response)
-  }
+  // const gptResponseArr = []
+  const promises = []
+  queryArr.forEach((query) => {
+    promises.push(gptIntelligence({ query }))
+  })
+  const promiseResults = await Promise.all(promises)
+  const gptResponseArr = promiseResults.map((res) => res.response)
+
+  // for (let i = 0; i < queryArr.length; i++) {
+  //   const gptResponse = await gptIntelligence({
+  //     query: queryArr[i],
+  //   })
+  //   gptResponseArr.push(gptResponse.response)
+  // }
+
   return {
     query: queryArr,
     response: gptResponseArr,
