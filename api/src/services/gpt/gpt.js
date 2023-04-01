@@ -10,25 +10,36 @@ import { companyslist } from 'src/services/searchbar/searchbar.js'
 
 import { fineTuneData } from './fineTuneData.js'
 
-const OpenAI = require('openai-api')
+const { Configuration, OpenAIApi } = require('openai')
+// const OpenAI = require('openai-api')
 
 export const gptIntelligence = async (inputQuery) => {
   const query = 'Q: ' + inputQuery.query
-  const OPENAI_API_KEY = process.env.OPENAI_API_KEY
-  const openai = new OpenAI(OPENAI_API_KEY)
+  // const OPENAI_API_KEY = process.env.OPENAI_API_KEY
+  const configuration = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY,
+  })
+  const openai = new OpenAIApi(configuration)
 
   // For API reference please checkout the following link
   // https://beta.openai.com/docs/api-reference/completions/create
-  const gptPromise = openai.complete({
-    engine: 'text-davinci-003',
-    // engine: 'text-curie-001',
-    // engine: 'text-ada-001',
-    prompt: fineTuneData + query + '\n',
-    max_tokens: 100,
-    temperature: 1,
-    presence_penalty: 2.0,
-    frequency_penalty: 2.0,
-    stop: ['Q: ', '\n'],
+  const messages = [
+    {
+      role: 'system',
+      content: `Give your response comma separated. Don't explain. If the user asked companies similar to AAPL, then you name 4 companies in the form of MSFT, TSLA, META, INTL`,
+    },
+    { role: 'user', content: 'Companies similar to PFE' },
+    {
+      role: 'assistant',
+      content: 'JNJ, MRK, GSK, ABBV',
+    },
+    { role: 'user', content: 'Companies similar to ' + inputQuery.query },
+  ]
+  const gptPromise = openai.createChatCompletion({
+    model: 'gpt-4',
+    messages,
+    max_tokens: 20,
+    temperature: 0.5,
   })
   const promises = []
   promises.push(gptPromise)
@@ -36,10 +47,7 @@ export const gptIntelligence = async (inputQuery) => {
   const promiseResults = await Promise.all(promises)
   const gptResponse = promiseResults[0]
   const companyList = promiseResults[1]
-  const apiRes = gptResponse.data.choices[0].text
-  var apiResArrStr = apiRes.split('A: ')[1]
-  apiResArrStr = apiResArrStr.substr(1, apiResArrStr.length - 2)
-  var apiResArr = apiResArrStr.split(', ')
+  var apiResArr = gptResponse.data.choices[0].message.content.split(', ')
   // filter the apiResArr to remove the ticker if it exists
   apiResArr = apiResArr.filter((item) => item !== inputQuery.query)
 
