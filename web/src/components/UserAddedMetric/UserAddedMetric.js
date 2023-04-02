@@ -179,47 +179,55 @@ export const UserAddedMetric = () => {
 
   return (
     <>
-      <Autocomplete
-        clearIcon={
-          <Tooltip title="Clear all Metric">
-            <CancelRounded />
+      <div className="flex flex-row mt-5 mb-10">
+        <div className="">
+          <Autocomplete
+            clearIcon={
+              <Tooltip title="Clear all Metric">
+                <CancelRounded />
+              </Tooltip>
+            }
+            renderTags={(value, getTagProps) =>
+              updateUserPickedMetrics(value, getTagProps)
+            }
+            multiple
+            onChange={myChangeFunc}
+            id="tags-standard"
+            filterSelectedOptions
+            options={AVAILABLE_METRICS}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            getOptionLabel={(option) => option.title}
+            value={defaultVisiableOptions}
+            renderInput={(params) => {
+              return (
+                <TextField
+                  fullWidth={true}
+                  inputProps={{
+                    className: buttonColor.input,
+                  }}
+                  {...params}
+                  variant="outlined"
+                  helperText="Add More Metrics"
+                  placeholder="Add More Metrics"
+                />
+              )
+            }}
+          />
+        </div>
+        <div className="self-center ml-5 mb-3">
+          <Tooltip title="Click to Load Favorites">
+            <button
+              className="disabled:bg-gainsboro whitespace-nowrap rounded-lg bg-green-300 border border-gray-300 text-xs px-2 py-1.5 cursor-pointer"
+              onClick={loadFavoriteMetrics}
+              name="comparisonMode"
+              // disabled={favoriteMetrics.length === 0}
+            >
+              {' '}
+              Load Favorites
+            </button>
           </Tooltip>
-        }
-        className="!w-4/5 !mb-5 !mt-2.5"
-        renderTags={(value, getTagProps) =>
-          updateUserPickedMetrics(value, getTagProps)
-        }
-        multiple
-        onChange={myChangeFunc}
-        id="tags-standard"
-        filterSelectedOptions
-        options={AVAILABLE_METRICS}
-        isOptionEqualToValue={(option, value) => option.id === value.id}
-        getOptionLabel={(option) => option.title}
-        value={defaultVisiableOptions}
-        renderInput={(params) => {
-          return (
-            <TextField
-              inputProps={{ className: buttonColor.input }}
-              className="!w-4/5 !mb-4"
-              {...params}
-              variant="standard"
-              placeholder="Add More Metrics"
-            />
-          )
-        }}
-      />
-      <Tooltip title="Click to Load Favorites">
-        <button
-          className="disabled:bg-gainsboro rounded-lg bg-green-300 border border-gray-300 text-xs px-2 py-1.5 cursor-pointer ml-1"
-          onClick={loadFavoriteMetrics}
-          name="comparisonMode"
-          // disabled={favoriteMetrics.length === 0}
-        >
-          {' '}
-          Load Favorites
-        </button>
-      </Tooltip>
+        </div>
+      </div>
     </>
   )
 }

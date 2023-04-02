@@ -70,7 +70,15 @@ export const Financials = () => {
 
   return (
     <>
-      <div className="grid grid-rows-3 grid-cols-2">
+      <div className="flex flex-col">
+        <div className="mx-2 my-5">
+          <Mainsubmission />
+        </div>
+        <div className="items-center mx-2 mt-5 mb-10">
+          <UserAddedMetric />
+        </div>
+      </div>
+      {/* <div className="grid grid-rows-3 grid-cols-2">
         <div className="col-span-1 flex mx-2">
           <Mainsubmission />
         </div>
@@ -80,7 +88,7 @@ export const Financials = () => {
         <div className="row-span-1 col-span-1 flex items-center mx-2">
           <UserAddedMetric />
         </div>
-      </div>
+      </div> */}
       {loadingFinancials && (
         <div className="loader">
           <div className="loader-content">
@@ -112,6 +120,9 @@ export const Financials = () => {
       {Object.keys(plottingData).length == 0 && (
         <StartUpFundamentals tickers={['AAPL', 'MSFT']} />
       )}
+      <div>
+        <Content />
+      </div>
     </>
   )
 }
