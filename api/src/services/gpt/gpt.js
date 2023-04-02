@@ -5,7 +5,6 @@ Copyright (c) 2022 Value Cumulation
 Notice: All code and information in this repository is the property of Value Cumulation.
 You are strictly prohibited from distributing or using this repository unless otherwise stated.
  */
-
 import { companyslist } from 'src/services/searchbar/searchbar.js'
 
 const { Configuration, OpenAIApi } = require('openai')
@@ -57,23 +56,38 @@ export const gptIntelligence = async (inputQuery) => {
   }
 }
 
-export const gptIntelligenceGroup = async (inputQuery) => {
+export const gptIntelligenceGroup = async (inputQuery, info) => {
   // call the gptIntelligence function for each query
   const queryArr = inputQuery.query
-  // const gptResponseArr = []
+  var companyList
+  const startUPComps = ['AAPL', 'MSFT']
+
+  if (queryArr.every((val, index) => val === startUPComps[index])) {
+    const apiResArr = [
+      ['MSFT', 'TSLA', 'META', 'INTL'],
+      ['AAPL', 'TSLA', 'META', 'INTL'],
+    ]
+
+    companyList = await companyslist()
+
+    const Res = apiResArr.map((arr) =>
+      companyList.filter((company) =>
+        arr.some((symbol) => symbol === company.symbol)
+      )
+    )
+
+    return {
+      query: inputQuery.query,
+      response: Res,
+    }
+  }
+
   const promises = []
   queryArr.forEach((query) => {
     promises.push(gptIntelligence({ query }))
   })
   const promiseResults = await Promise.all(promises)
   const gptResponseArr = promiseResults.map((res) => res.response)
-
-  // for (let i = 0; i < queryArr.length; i++) {
-  //   const gptResponse = await gptIntelligence({
-  //     query: queryArr[i],
-  //   })
-  //   gptResponseArr.push(gptResponse.response)
-  // }
 
   return {
     query: queryArr,
