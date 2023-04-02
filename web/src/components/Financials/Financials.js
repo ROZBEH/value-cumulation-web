@@ -121,7 +121,7 @@ export const Financials = () => {
       {Object.keys(plottingData).length == 0 && (
         <StartUpFundamentals tickers={['AAPL', 'MSFT']} />
       )}
-      <div>
+      <div className="flex justify-center">
         <Content />
       </div>
     </>
