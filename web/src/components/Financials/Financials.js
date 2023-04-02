@@ -28,6 +28,7 @@ import {
   loadingFinancials as loadingFinancialsAtom,
   metrics as metricsAtom,
   companyList as companyListAtom,
+  currentSearchBox as currentSearchBoxAtom,
 } from 'src/recoil/atoms'
 
 export const Financials = () => {
@@ -50,6 +51,7 @@ export const Financials = () => {
   // const { _loading, _error, data } = useQuery(STARTUP_QUERY, {
   //   variables: { id: currentUser.id },
   // })
+  const currentSearchBox = useRecoilValue(currentSearchBoxAtom)
   const calledCompanies = useRecoilValue(calledCompaniesAtom)
   const plottingData = useRecoilValue(plottingDataAtom)
   const [_companyList, setCompanyList] = useRecoilState(companyListAtom)
@@ -100,8 +102,7 @@ export const Financials = () => {
             />
             <div className="loader-message">
               {' '}
-              Fetching Data for{' '}
-              {calledCompanies[calledCompanies.length - 1].name}
+              Fetching Data for {calledCompanies[currentSearchBox].name}
             </div>
           </div>
         </div>

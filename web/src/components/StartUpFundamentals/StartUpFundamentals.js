@@ -1,4 +1,5 @@
 import { useQuery } from '@apollo/client'
+import { Skeleton } from '@mui/material'
 import { TailSpin } from 'react-loader-spinner'
 import { useRecoilState } from 'recoil'
 
@@ -44,7 +45,21 @@ export const QUERY = gql`
 
 export const Loading = () => (
   <div className="loader-content">
-    <TailSpin color="#15518e" height="40" width="40" className="tail-spinner" />{' '}
+    {/* <TailSpin color="#15518e" height="40" width="40" className="tail-spinner" />{' '} */}
+    <Skeleton
+      animation="wave"
+      variant="rounded"
+      width={400}
+      height={185}
+      className="mr-24"
+    />
+    <Skeleton
+      animation="wave"
+      variant="rounded"
+      width={400}
+      height={185}
+      className="ml-24"
+    />
   </div>
 )
 
