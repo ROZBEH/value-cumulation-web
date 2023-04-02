@@ -1,12 +1,11 @@
 import { useQuery } from '@apollo/client'
 import { TailSpin } from 'react-loader-spinner'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 
 import { postProcess } from 'src/commons/processCompany'
 import {
   plottingData as plottingDataAtom,
   secReports as secReportsAtom,
-  companyList as companyListAtom,
 } from 'src/recoil/atoms'
 import { sectorCompanies as sectorCompaniesAtom } from 'src/recoil/sectorAtom'
 
@@ -55,14 +54,14 @@ export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
-export const Success = ({ _groupFundamentals }) => {
+export const StartUpFundamentals = ({ tickers }) => {
   const [pltData, setPltData] = useRecoilState(plottingDataAtom)
   const [_secReport, setSECReports] = useRecoilState(secReportsAtom)
-  const companyList = useRecoilValue(companyListAtom)
-  const [sectorCompanies, setSectorCompanies] =
+  const [_sectorCompanies, setSectorCompanies] =
     useRecoilState(sectorCompaniesAtom)
+
   const { loading, error } = useQuery(QUERY, {
-    variables: { tickers: ['AAPL', 'MSFT'] },
+    variables: { tickers: tickers },
     onCompleted: (data) => {
       // if it already has data, then don't do anything
       if (pltData && Object.keys(pltData).length > 0) {

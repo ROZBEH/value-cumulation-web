@@ -18,7 +18,7 @@ import { STARTUP_QUERY } from 'src/commons/gql'
 import { Content } from 'src/components/Content/Content'
 import { Mainsubmission } from 'src/components/Mainsubmission/Mainsubmission'
 import { PlotFundamentals } from 'src/components/PlotFundamentals/PlotFundamentals'
-import StartUpFundamentalsCell from 'src/components/StartUpFundamentalsCell'
+import { StartUpFundamentals } from 'src/components/StartUpFundamentals/StartUpFundamentals'
 import { UserAddedMetric } from 'src/components/UserAddedMetric'
 import 'src/components/Financials/Financials.css'
 import {
@@ -109,7 +109,9 @@ export const Financials = () => {
             plottingData={plottingData}
           />
         ))}
-      <StartUpFundamentalsCell tickers={['AAPL', 'MSFT']} />
+      {Object.keys(plottingData).length == 0 && (
+        <StartUpFundamentals tickers={['AAPL', 'MSFT']} />
+      )}
     </>
   )
 }
