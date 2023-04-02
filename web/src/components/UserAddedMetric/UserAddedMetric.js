@@ -128,6 +128,7 @@ export const UserAddedMetric = () => {
   }
 
   const updateUserPickedMetrics = (values, getTagProps) => {
+    console.log('getTagProps = ', getTagProps)
     {
       return values.map((option, index) => {
         return (
@@ -141,12 +142,13 @@ export const UserAddedMetric = () => {
               }),
             }}
             label={`${option.title}`}
-            {...getTagProps({ index })}
+            // {...getTagProps({ index })}
             deleteIcon={
               <Tooltip title="Remove Metric">
                 <CancelRounded />
               </Tooltip>
             }
+            onDelete={onDelete(option.title)}
             icon={
               <Tooltip title="Add to Favorite">
                 <Favorite
@@ -176,20 +178,25 @@ export const UserAddedMetric = () => {
     },
   })
   const buttonColor = useStyles()
+  const [value, setValue] = useState([])
+  const onDelete = (title) => () => {
+    setDefaultVisiableOptions((value) => value.filter((v) => v.title !== title))
+  }
 
   return (
     <>
-      <div className="flex flex-row mt-5 mb-10">
-        <div className="">
+      <div className="flex flex-row mt-5 mb-3">
+        <div className="w-96">
           <Autocomplete
             clearIcon={
               <Tooltip title="Clear all Metric">
                 <CancelRounded />
               </Tooltip>
             }
-            renderTags={(value, getTagProps) =>
-              updateUserPickedMetrics(value, getTagProps)
-            }
+            // renderTags={(value, getTagProps) =>
+            //   updateUserPickedMetrics(value, getTagProps)
+            // }
+            renderTags={() => null}
             multiple
             onChange={myChangeFunc}
             id="tags-standard"
@@ -207,14 +214,14 @@ export const UserAddedMetric = () => {
                   }}
                   {...params}
                   variant="outlined"
-                  helperText="Add More Metrics"
-                  placeholder="Add More Metrics"
+                  placeholder="Starting typing to add metrics"
                 />
               )
             }}
           />
         </div>
-        <div className="self-center ml-5 mb-3">
+
+        <div className="self-center ml-5">
           <Tooltip title="Click to Load Favorites">
             <button
               className="disabled:bg-gainsboro whitespace-nowrap rounded-lg bg-green-300 border border-gray-300 text-xs px-2 py-1.5 cursor-pointer"
@@ -227,6 +234,9 @@ export const UserAddedMetric = () => {
             </button>
           </Tooltip>
         </div>
+      </div>
+      <div className="mb-10">
+        {updateUserPickedMetrics(defaultVisiableOptions.reverse())}
       </div>
     </>
   )
