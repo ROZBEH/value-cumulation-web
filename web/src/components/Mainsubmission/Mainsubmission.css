@@ -7,9 +7,10 @@ body {
 }
 
 .text-field-searchbar{
-  width: 25% !important;
+  width: 35% !important;
   float: left !important;
-  margin-right: 10px !important;
+  margin-right: 40px !important;
+  margin-top: 10px !important;
 }
 
 /* .searchbar-company {
