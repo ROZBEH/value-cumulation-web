@@ -127,3 +127,13 @@ export const getFundamentals = async ({ ticker }) => {
     years: apiResult.years,
   }
 }
+
+export const getFundamentalsGroup = async ({ tickers }) => {
+  const promises = []
+  tickers.forEach((ticker) => {
+    promises.push(getFundamentals({ ticker }))
+  })
+  const groupResult = await Promise.all(promises)
+
+  return groupResult
+}

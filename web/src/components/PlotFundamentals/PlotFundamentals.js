@@ -64,52 +64,50 @@ export const PlotFundamentals = (props) => {
 
   return (
     <div className="main-div-linechart">
-      <section>
-        <div className="ml-80 text-sm">
-          {plotData.metricName}{' '}
-          <Infopop text={plotData.description} title={plotData.metricName} />
-        </div>
-        <LineChart
-          intractive={true}
-          data={plotData.data}
-          align="right"
-          width={600}
-          height={250}
-          margin={{ top: 20, right: 50, left: 20, bottom: 20 }}
-          className="line-chart"
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <YAxis
-            tickFormatter={DataFormater}
-            className="y-axis-chart"
-            // label={
-            //   <text x={200} y={0} dx={50} dy={15} offset={0} angle={-90}>
-            //     {plotData.metricName}
-            //   </text>
-            // }
-          />
-          <XAxis className="x-axis-chart" interval={0} dataKey="name" />
-          <Legend />
+      <div className="ml-80 text-sm">
+        {plotData.metricName}{' '}
+        <Infopop text={plotData.description} title={plotData.metricName} />
+      </div>
+      <LineChart
+        intractive={true}
+        data={plotData.data}
+        align="right"
+        width={650}
+        height={300}
+        margin={{ top: 10, right: 17, left: 17, bottom: 20 }}
+        className="line-chart"
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <YAxis
+          tickFormatter={DataFormater}
+          className="y-axis-chart"
+          // label={
+          //   <text x={200} y={0} dx={50} dy={15} offset={0} angle={-90}>
+          //     {plotData.metricName}
+          //   </text>
+          // }
+        />
+        <XAxis className="x-axis-chart" interval={0} dataKey="name" />
+        <Legend />
 
-          {/* The following allows multiple lines to be plotted in the same
+        {/* The following allows multiple lines to be plotted in the same
           LineChart */}
-          {plotData.nameCompany.map((name, index) => (
-            <Line
-              strokeWidth={plotData.strokeWidth[plotData.companyOrder[name]]}
-              datasetFill={true}
-              key={index}
-              isAnimationActive={false}
-              type="monotone"
-              dataKey={name}
-              stroke={stroke[plotData.companyOrder[name]]}
-            />
-          ))}
-          <Tooltip
-            content={(active, payload) => CustomTooltip(active, payload)}
+        {plotData.nameCompany.map((name, index) => (
+          <Line
+            strokeWidth={plotData.strokeWidth[plotData.companyOrder[name]]}
+            datasetFill={true}
+            key={index}
+            isAnimationActive={false}
+            type="monotone"
+            dataKey={name}
+            stroke={stroke[plotData.companyOrder[name]]}
           />
-          <Brush dataKey="name" height={40} />
-        </LineChart>
-      </section>
+        ))}
+        <Tooltip
+          content={(active, payload) => CustomTooltip(active, payload)}
+        />
+        <Brush dataKey="name" height={40} />
+      </LineChart>
     </div>
   )
 }

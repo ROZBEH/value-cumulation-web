@@ -91,7 +91,14 @@ export const GPT_QUERY_SECTOR = gql`
   query ($query: String!) {
     gptIntelligence(query: $query) {
       query
-      response
+      response {
+        symbol
+        name
+        price
+        exchange
+        exchangeShortName
+        type
+      }
     }
   }
 `
