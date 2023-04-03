@@ -56,7 +56,7 @@ export const gptIntelligence = async (inputQuery) => {
   }
 }
 
-export const gptIntelligenceGroup = async (inputQuery, info) => {
+export const gptIntelligenceGroup = async (inputQuery, _info) => {
   // call the gptIntelligence function for each query
   const queryArr = inputQuery.query
   var companyList
