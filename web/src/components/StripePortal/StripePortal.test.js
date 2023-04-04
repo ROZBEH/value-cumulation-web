@@ -1,14 +1,14 @@
 import { render } from '@redwoodjs/testing/web'
 
-import Product from './Product'
+import StripePortal from './StripePortal'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
 
-describe('Product', () => {
+describe('StripePortal', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<Product />)
+      render(<StripePortal />)
     }).not.toThrow()
   })
 })

@@ -64,3 +64,39 @@ export const getSession = async ({ id }) => {
     customerSignedUp: isSignedUp,
   }
 }
+
+export const createCheckoutSession = async ({ priceId, userId }) => {
+  // requireAuth()
+
+  // Optional: Retrieve or create a user in your database
+  // const user = await db.user.findUnique({ where: { id: userId } });
+
+  const session = await stripe.checkout.sessions.create({
+    mode: 'subscription',
+    payment_method_types: ['card'],
+    line_items: [
+      {
+        price: priceId,
+        quantity: 1,
+      },
+    ],
+    success_url: 'http://localhost:8910/',
+    cancel_url: 'http://localhost:8910/',
+    subscription_data: {
+      trial_period_days: 14,
+    },
+
+    customer: userId,
+  })
+
+  return { sessionId: session.id }
+}
+
+export const createBillingPortalSession = async ({ customerId, returnUrl }) => {
+  const portalSession = await stripe.billingPortal.sessions.create({
+    customer: customerId,
+    return_url: returnUrl,
+  })
+
+  return { url: portalSession.url }
+}

@@ -1,14 +1,14 @@
 import { render } from '@redwoodjs/testing/web'
 
-import CartProvider from './CartProvider'
+import StripeCheckout from './StripeCheckout'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
 
-describe('CartProvider', () => {
+describe('StripeCheckout', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<CartProvider />)
+      render(<StripeCheckout />)
     }).not.toThrow()
   })
 })

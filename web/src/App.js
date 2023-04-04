@@ -6,6 +6,8 @@ Notice: All code and information in this repository is the property of Value Cum
 You are strictly prohibited from distributing or using this repository unless otherwise stated.
  */
 
+import { Elements } from '@stripe/react-stripe-js'
+import { loadStripe } from '@stripe/stripe-js'
 import { RecoilRoot } from 'recoil'
 
 import '@fontsource/roboto/300.css'
@@ -22,13 +24,17 @@ import Routes from 'src/Routes'
 import './scaffold.css'
 import './index.css'
 
+const stripePromise = loadStripe(process.env.STRIPE_PK)
+
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodProvider titleTemplate="%PageTitle">
       <AuthProvider type="dbAuth">
         <RedwoodApolloProvider>
           <RecoilRoot>
-            <Routes />
+            <Elements stripe={stripePromise}>
+              <Routes />
+            </Elements>
           </RecoilRoot>
         </RedwoodApolloProvider>
       </AuthProvider>

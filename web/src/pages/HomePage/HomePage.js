@@ -134,8 +134,6 @@ const HomePage = () => {
       <TabPanel value={value} index={3}>
         {renderPanel(isAuthenticated, subscriptionHistory, 'companyFinder')}
       </TabPanel>
-
-      {/* <ProductsCell type={'recurring'} /> */}
     </Box>
   )
 }
