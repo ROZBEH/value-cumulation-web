@@ -146,6 +146,7 @@ export const CREATE_CHECKOUT_SESSION = gql`
   mutation CreateCheckoutSession($priceId: String!, $userId: String!) {
     createCheckoutSession(priceId: $priceId, userId: $userId) {
       sessionId
+      sessionUrl
     }
   }
 `
