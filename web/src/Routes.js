@@ -17,12 +17,11 @@ You are strictly prohibited from distributing or using this repository unless ot
 
 import { Router, Private, Route, Set } from '@redwoodjs/router'
 
-import CartProvider from 'src/components/CartProvider'
 import MainLayout from 'src/layouts/MainLayout'
 const Routes = () => {
   return (
     <Router>
-      <Set wrap={[CartProvider, MainLayout]}>
+      <Set wrap={[MainLayout]}>
         <Route path="/login" page={LoginPage} name="login" />
         <Route path="/signup" page={SignupPage} name="signup" />
         <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
