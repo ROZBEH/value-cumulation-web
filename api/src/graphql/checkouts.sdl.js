@@ -8,6 +8,7 @@ You are strictly prohibited from distributing or using this repository unless ot
 export const schema = gql`
   type StripeSession {
     sessionId: String!
+    sessionUrl: String!
   }
 
   type BillingPortalSession {

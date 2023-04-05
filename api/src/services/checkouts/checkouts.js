@@ -89,7 +89,7 @@ export const createCheckoutSession = async ({ priceId, userId }) => {
     customer: userId,
   })
 
-  return { sessionId: session.id }
+  return { sessionId: session.id, sessionUrl: session.url }
 }
 
 export const createBillingPortalSession = async ({ customerId, returnUrl }) => {
