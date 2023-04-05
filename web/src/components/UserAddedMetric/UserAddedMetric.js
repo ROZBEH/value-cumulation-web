@@ -127,8 +127,7 @@ export const UserAddedMetric = () => {
     }
   }
 
-  const updateUserPickedMetrics = (values, getTagProps) => {
-    console.log('getTagProps = ', getTagProps)
+  const updateUserPickedMetrics = (values, _getTagProps) => {
     {
       return values.map((option, index) => {
         return (
