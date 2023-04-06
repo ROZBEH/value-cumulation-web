@@ -20,10 +20,12 @@ export const schema = gql`
   type Result {
     query: String!
     response: [companyFormat!]!
+    error: String
   }
   type ResultGroup {
     query: [String!]!
     response: [[companyFormat!]!]!
+    error: String
   }
   type Sentiment {
     query: String!
