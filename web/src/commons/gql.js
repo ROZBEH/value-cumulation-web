@@ -99,6 +99,7 @@ export const GPT_QUERY_SECTOR = gql`
         exchangeShortName
         type
       }
+      error
     }
   }
 `

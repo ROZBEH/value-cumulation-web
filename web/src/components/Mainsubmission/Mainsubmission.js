@@ -66,6 +66,9 @@ export const Mainsubmission = () => {
         // )
         // Now set the list of sector companies
         const query = data.gptIntelligence.query
+        if (data.gptIntelligence.error) {
+          console.log(data.gptIntelligence.error)
+        }
         setSectorCompanies((currentState) => {
           return { ...currentState, [query]: data.gptIntelligence.response }
         })
