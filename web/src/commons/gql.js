@@ -91,7 +91,14 @@ export const GPT_QUERY_SECTOR = gql`
   query ($query: String!) {
     gptIntelligence(query: $query) {
       query
-      response
+      response {
+        symbol
+        name
+        price
+        exchange
+        exchangeShortName
+        type
+      }
     }
   }
 `
@@ -101,19 +108,6 @@ export const GPT_QUERY_SENTIMENT = gql`
     gptSentiment(query: $query) {
       query
       sentiment
-    }
-  }
-`
-
-export const PRODUCTS_QUERY = gql`
-  query Products($type: ProductType) {
-    products(type: $type) {
-      id
-      name
-      description
-      image
-      price
-      type
     }
   }
 `
@@ -144,6 +138,26 @@ export const SUBS_HISTORY = gql`
     subscriptionHistory: subscriptionHistory(userId: $userId) {
       hadSubscription
       status
+    }
+  }
+`
+
+export const CREATE_CHECKOUT_SESSION = gql`
+  mutation CreateCheckoutSession($priceId: String!, $userId: String!) {
+    createCheckoutSession(priceId: $priceId, userId: $userId) {
+      sessionId
+      sessionUrl
+    }
+  }
+`
+
+export const CREATE_BILLING_PORTAL_SESSION = gql`
+  mutation CreateBillingPortalSession(
+    $customerId: String!
+    $returnUrl: String!
+  ) {
+    createBillingPortalSession(customerId: $customerId, returnUrl: $returnUrl) {
+      url
     }
   }
 `

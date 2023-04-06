@@ -49,7 +49,11 @@ export const UserAddedMetric = () => {
 
   // make cash flow and net income default visible
   const defaultVisables = AVAILABLE_METRICS.filter(
-    (item) => item.value === 'netIncome' || item.value === 'freeCashFlow'
+    (item) =>
+      item.value === 'netIncome' ||
+      item.value === 'freeCashFlow' ||
+      item.value === 'grossProfitMargin' ||
+      item.value === 'priceToEarning'
   )
   const [defaultVisiableOptions, setDefaultVisiableOptions] =
     useState(defaultVisables)
@@ -123,7 +127,7 @@ export const UserAddedMetric = () => {
     }
   }
 
-  const updateUserPickedMetrics = (values, getTagProps) => {
+  const updateUserPickedMetrics = (values, _getTagProps) => {
     {
       return values.map((option, index) => {
         return (
@@ -137,12 +141,13 @@ export const UserAddedMetric = () => {
               }),
             }}
             label={`${option.title}`}
-            {...getTagProps({ index })}
+            // {...getTagProps({ index })}
             deleteIcon={
               <Tooltip title="Remove Metric">
                 <CancelRounded />
               </Tooltip>
             }
+            onDelete={onDelete(option.title)}
             icon={
               <Tooltip title="Add to Favorite">
                 <Favorite
@@ -172,50 +177,66 @@ export const UserAddedMetric = () => {
     },
   })
   const buttonColor = useStyles()
+  const [value, setValue] = useState([])
+  const onDelete = (title) => () => {
+    setDefaultVisiableOptions((value) => value.filter((v) => v.title !== title))
+  }
 
   return (
     <>
-      <Autocomplete
-        clearIcon={
-          <Tooltip title="Clear all Metric">
-            <CancelRounded />
+      <div className="flex flex-row mt-5 mb-3">
+        <div className="w-96">
+          <Autocomplete
+            clearIcon={
+              <Tooltip title="Clear all Metric">
+                <CancelRounded />
+              </Tooltip>
+            }
+            // renderTags={(value, getTagProps) =>
+            //   updateUserPickedMetrics(value, getTagProps)
+            // }
+            renderTags={() => null}
+            multiple
+            onChange={myChangeFunc}
+            id="tags-standard"
+            filterSelectedOptions
+            options={AVAILABLE_METRICS}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            getOptionLabel={(option) => option.title}
+            value={defaultVisiableOptions}
+            renderInput={(params) => {
+              return (
+                <TextField
+                  fullWidth={true}
+                  inputProps={{
+                    className: buttonColor.input,
+                  }}
+                  {...params}
+                  variant="outlined"
+                  placeholder="Starting typing to add metrics"
+                />
+              )
+            }}
+          />
+        </div>
+
+        <div className="self-center ml-5">
+          <Tooltip title="Click to Load Favorites">
+            <button
+              className="disabled:bg-gainsboro whitespace-nowrap rounded-lg bg-green-300 border border-gray-300 text-xs px-2 py-1.5 cursor-pointer"
+              onClick={loadFavoriteMetrics}
+              name="comparisonMode"
+              // disabled={favoriteMetrics.length === 0}
+            >
+              {' '}
+              Load Favorites
+            </button>
           </Tooltip>
-        }
-        className="!w-4/5 !mb-5 !mt-2.5"
-        renderTags={(value, getTagProps) =>
-          updateUserPickedMetrics(value, getTagProps)
-        }
-        multiple
-        onChange={myChangeFunc}
-        id="tags-standard"
-        filterSelectedOptions
-        options={AVAILABLE_METRICS}
-        isOptionEqualToValue={(option, value) => option.id === value.id}
-        getOptionLabel={(option) => option.title}
-        value={defaultVisiableOptions}
-        renderInput={(params) => {
-          return (
-            <TextField
-              inputProps={{ className: buttonColor.input }}
-              className="!w-4/5 !mb-4"
-              {...params}
-              variant="standard"
-              placeholder="Add More Metrics"
-            />
-          )
-        }}
-      />
-      <Tooltip title="Click to Load Favorites">
-        <button
-          className="disabled:bg-gainsboro rounded-lg bg-green-300 border border-gray-300 text-xs px-2 py-1.5 cursor-pointer ml-1"
-          onClick={loadFavoriteMetrics}
-          name="comparisonMode"
-          // disabled={favoriteMetrics.length === 0}
-        >
-          {' '}
-          Load Favorites
-        </button>
-      </Tooltip>
+        </div>
+      </div>
+      <div className="mb-10">
+        {updateUserPickedMetrics(defaultVisiableOptions.reverse())}
+      </div>
     </>
   )
 }

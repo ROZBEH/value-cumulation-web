@@ -9,9 +9,21 @@ You are strictly prohibited from distributing or using this repository unless ot
 export const schema = gql`
   # The following will return the input query as well as the
   # response provided by the API
+  type companyFormat {
+    symbol: String!
+    name: String!
+    price: String!
+    exchange: String!
+    exchangeShortName: String!
+    type: String!
+  }
   type Result {
     query: String!
-    response: [String!]!
+    response: [companyFormat!]!
+  }
+  type ResultGroup {
+    query: [String!]!
+    response: [[companyFormat!]!]!
   }
   type Sentiment {
     query: String!
@@ -20,6 +32,7 @@ export const schema = gql`
 
   type Query {
     gptIntelligence(query: String!): Result! @skipAuth
+    gptIntelligenceGroup(query: [String!]!): ResultGroup! @skipAuth
     gptSentiment(query: String!): Sentiment! @skipAuth
   }
 `

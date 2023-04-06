@@ -12,7 +12,7 @@ import { TailSpin } from 'react-loader-spinner'
 import { useRecoilValue, useRecoilState, useResetRecoilState } from 'recoil'
 
 import { COMPANY_QUERY } from 'src/commons/gql'
-import { postProcess } from 'src/commons/processCompany'
+import { preparePlotData } from 'src/commons/processCompany'
 import { PlotFundamentals } from 'src/components/PlotFundamentals/PlotFundamentals'
 import { SectorRadioButton } from 'src/components/SectorRadioButton/SectorRadioButton'
 import {
@@ -42,7 +42,7 @@ export const Sector = () => {
           variables: { ticker: thisSector[i].symbol },
         }).then((fundamentalanalysis) => {
           plotData = JSON.parse(JSON.stringify(plotData))
-          plotData = postProcess(
+          plotData = preparePlotData(
             fundamentalanalysis.data.getFundamentals,
             plotData,
             i
@@ -56,7 +56,7 @@ export const Sector = () => {
       fetchPolicy: 'no-cache',
     }).then((fundamentalanalysis) => {
       plotData = JSON.parse(JSON.stringify(plotData))
-      plotData = postProcess(
+      plotData = preparePlotData(
         fundamentalanalysis.data.getFundamentals,
         plotData,
         thisSector.length,

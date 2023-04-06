@@ -5,39 +5,93 @@ Copyright (c) 2022 Value Cumulation
 Notice: All code and information in this repository is the property of Value Cumulation.
 You are strictly prohibited from distributing or using this repository unless otherwise stated.
  */
+import { companyslist } from 'src/services/searchbar/searchbar.js'
 
-import { fineTuneData } from './fineTuneData.js'
-
-const OpenAI = require('openai-api')
+const { Configuration, OpenAIApi } = require('openai')
+// const OpenAI = require('openai-api')
 
 export const gptIntelligence = async (inputQuery) => {
-  const query = 'Q: ' + inputQuery.query
-  const OPENAI_API_KEY = process.env.OPENAI_API_KEY
-  const openai = new OpenAI(OPENAI_API_KEY)
+  const configuration = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY,
+  })
+  const openai = new OpenAIApi(configuration)
 
   // For API reference please checkout the following link
   // https://beta.openai.com/docs/api-reference/completions/create
-  const gptResponse = await openai.complete({
-    engine: 'text-davinci-003',
-    // engine: 'text-curie-001',
-    // engine: 'text-ada-001',
-    prompt: fineTuneData + query + '\n',
-    max_tokens: 100,
-    temperature: 1,
-    presence_penalty: 2.0,
-    frequency_penalty: 2.0,
-    stop: ['Q: ', '\n'],
+  const messages = [
+    {
+      role: 'system',
+      content: `Give your response comma separated. Don't explain. If the user asked companies similar to AAPL, then you name 4 companies in the form of MSFT, TSLA, META, INTL`,
+    },
+    { role: 'user', content: 'Companies similar to PFE' },
+    {
+      role: 'assistant',
+      content: 'JNJ, MRK, GSK, ABBV',
+    },
+    { role: 'user', content: 'Companies similar to ' + inputQuery.query },
+  ]
+  const gptPromise = openai.createChatCompletion({
+    model: 'gpt-4',
+    messages,
+    max_tokens: 20,
+    temperature: 0.5,
   })
-  const apiRes = gptResponse.data.choices[0].text
-  var apiResArrStr = apiRes.split('A: ')[1]
-  apiResArrStr = apiResArrStr.substr(1, apiResArrStr.length - 2)
-  var apiResArr = apiResArrStr.split(', ')
+  const promises = []
+  promises.push(gptPromise)
+  promises.push(companyslist())
+  const promiseResults = await Promise.all(promises)
+  const gptResponse = promiseResults[0]
+  const companyList = promiseResults[1]
+  var apiResArr = gptResponse.data.choices[0].message.content.split(', ')
   // filter the apiResArr to remove the ticker if it exists
   apiResArr = apiResArr.filter((item) => item !== inputQuery.query)
 
+  const Res = companyList.filter((company) =>
+    apiResArr.some((res) => res === company.symbol)
+  )
+
   return {
     query: inputQuery.query,
-    response: apiResArr,
+    response: Res,
+  }
+}
+
+export const gptIntelligenceGroup = async (inputQuery, info) => {
+  // call the gptIntelligence function for each query
+  const queryArr = inputQuery.query
+  var companyList
+  const startUPComps = ['AAPL', 'MSFT']
+
+  if (queryArr.every((val, index) => val === startUPComps[index])) {
+    const apiResArr = [
+      ['MSFT', 'TSLA', 'META', 'INTL'],
+      ['AAPL', 'TSLA', 'META', 'INTL'],
+    ]
+
+    companyList = await companyslist()
+
+    const Res = apiResArr.map((arr) =>
+      companyList.filter((company) =>
+        arr.some((symbol) => symbol === company.symbol)
+      )
+    )
+
+    return {
+      query: inputQuery.query,
+      response: Res,
+    }
+  }
+
+  const promises = []
+  queryArr.forEach((query) => {
+    promises.push(gptIntelligence({ query }))
+  })
+  const promiseResults = await Promise.all(promises)
+  const gptResponseArr = promiseResults.map((res) => res.response)
+
+  return {
+    query: queryArr,
+    response: gptResponseArr,
   }
 }
 

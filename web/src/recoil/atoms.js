@@ -19,13 +19,13 @@ export const metricBox = atom({
 // Create an atom for the list of metrics to be added to the plot
 export const metrics = atom({
   key: 'metrics',
-  default: ['netIncome', 'freeCashFlow'],
+  default: ['netIncome', 'freeCashFlow', 'grossProfitMargin', 'priceToEarning'],
 })
 
 // A counter that keeps track of the number of searchbars
 export const counterCompany = atom({
   key: 'counterCompany',
-  default: 1,
+  default: 2,
 })
 
 // Show which searchbar is currently being typed by the user
@@ -43,12 +43,27 @@ export const textPrompt = atom({
 // Value and inputValue for mainSubmission autocomplete searchbar
 export const valueTicker = atom({
   key: 'valueTicker',
-  default: [''],
+  default: [
+    {
+      exchange: 'NASDAQ Global Select',
+      exchangeShortName: 'NASDAQ',
+      name: 'Apple Inc.',
+      symbol: 'AAPL',
+      type: 'stock',
+    },
+    {
+      exchange: 'NASDAQ Global Select',
+      exchangeShortName: 'NASDAQ',
+      name: 'Microsoft Corporation',
+      symbol: 'MSFT',
+      type: 'stock',
+    },
+  ],
 })
 
 export const inputValueTicker = atom({
   key: 'inputValueTicker',
-  default: [''],
+  default: ['', ''],
 })
 
 // List of companies to be suggested to the user based
@@ -102,7 +117,22 @@ export const companyList = atom({
 // This will keep track of the list of companies that the user has picked
 export const calledCompanies = atom({
   key: 'calledCompanies',
-  default: [],
+  default: [
+    {
+      exchange: 'NASDAQ Global Select',
+      exchangeShortName: 'NASDAQ',
+      name: 'Apple Inc.',
+      symbol: 'AAPL',
+      type: 'stock',
+    },
+    {
+      exchange: 'NASDAQ Global Select',
+      exchangeShortName: 'NASDAQ',
+      name: 'Microsoft Corporation',
+      symbol: 'MSFT',
+      type: 'stock',
+    },
+  ],
 })
 
 export const userFavMetrics = atom({

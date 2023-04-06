@@ -43,7 +43,7 @@ export function popCompany(plotData, index) {
   return plotData
 }
 
-export function postProcess(data, plotData, index, strokeWidth) {
+export function preparePlotData(data, plotData, index, strokeWidth) {
   // Brining the data into a format that is recognizable by rechart
   // Data format for plotData is in the following format:
   // {
@@ -99,5 +99,64 @@ export function postProcess(data, plotData, index, strokeWidth) {
       })
     }
   }
+  return plotData
+}
+
+export function postProcess(
+  fudamentals,
+  currentSearchBox,
+  pltData,
+  setPltData,
+  setSECReports
+) {
+  let plotData = preparePlotData(
+    fudamentals,
+    JSON.parse(JSON.stringify(pltData)),
+    currentSearchBox
+  )
+  // Clean up the SEC report data and save it as an object
+  // The format of the report will be
+  /*
+  {
+    'APPLE': {'10K': { 'link':[l1, l2, ...],
+                        'fillingDate': [d1, d2, ...]
+                      },
+              '10Q': { 'link':[l1, l2, ...],
+                        'fillingDate': [d1, d2, ...],
+                    },
+              },
+    'GOOGLE': {'10K': { 'link':[l1, l2, ...]
+                        'fillingDate': [d1, d2, ...]
+                      },
+              '10Q': { 'link':[l1, l2, ...],
+                        'fillingDate': [d1, d2, ...],
+                    },
+              },
+
+  }
+  */
+  const tmpSECReports = fudamentals.secReports
+  const secReportCompany = {}
+  for (let i = 0; i < tmpSECReports.length; i++) {
+    if (tmpSECReports[i].type in secReportCompany) {
+      secReportCompany[tmpSECReports[i].type].push({
+        link: tmpSECReports[i]['finalLink'],
+        fillingDate: tmpSECReports[i]['fillingDate'],
+      })
+    } else {
+      secReportCompany[tmpSECReports[i].type] = [
+        {
+          link: tmpSECReports[i]['finalLink'],
+          fillingDate: tmpSECReports[i]['fillingDate'],
+        },
+      ]
+    }
+  }
+  setSECReports((secReport) => ({
+    ...secReport,
+    [plotData['netIncome']['nameCompany'].slice(-1)]: secReportCompany,
+  }))
+  setPltData((pltData) => ({ ...plotData }))
+
   return plotData
 }

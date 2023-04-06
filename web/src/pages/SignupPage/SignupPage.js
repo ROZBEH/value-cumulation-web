@@ -95,9 +95,10 @@ const SignupPage = () => {
     const response = await signUp({ ...data })
     toast.dismiss()
     if (response.message) {
-      setErrors({})
-      toast.success(response.message, { duration: 5000 })
-      navigate(routes.login())
+      toast(response.message)
+      // setErrors({})
+      // toast.success(response.message, { duration: 5000 })
+      // navigate(routes.login())
     } else if (response.error) {
       toast.error(response.error)
     } else {
