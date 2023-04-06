@@ -11,87 +11,136 @@ const { Configuration, OpenAIApi } = require('openai')
 // const OpenAI = require('openai-api')
 
 export const gptIntelligence = async (inputQuery) => {
-  const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
-  })
-  const openai = new OpenAIApi(configuration)
+  try {
+    const configuration = new Configuration({
+      // apiKey: 'process.env.OPENAI_',
+      apiKey: process.env.OPENAI_API_KEY,
+    })
+    const openai = new OpenAIApi(configuration)
 
-  // For API reference please checkout the following link
-  // https://beta.openai.com/docs/api-reference/completions/create
-  const messages = [
-    {
-      role: 'system',
-      content: `Give your response comma separated. Don't explain. If the user asked companies similar to AAPL, then you name 4 companies in the form of MSFT, TSLA, META, INTL`,
-    },
-    { role: 'user', content: 'Companies similar to PFE' },
-    {
-      role: 'assistant',
-      content: 'JNJ, MRK, GSK, ABBV',
-    },
-    { role: 'user', content: 'Companies similar to ' + inputQuery.query },
-  ]
-  const gptPromise = openai.createChatCompletion({
-    model: 'gpt-4',
-    messages,
-    max_tokens: 20,
-    temperature: 0.5,
-  })
-  const promises = []
-  promises.push(gptPromise)
-  promises.push(companyslist())
-  const promiseResults = await Promise.all(promises)
-  const gptResponse = promiseResults[0]
-  const companyList = promiseResults[1]
-  var apiResArr = gptResponse.data.choices[0].message.content.split(', ')
-  // filter the apiResArr to remove the ticker if it exists
-  apiResArr = apiResArr.filter((item) => item !== inputQuery.query)
-
-  const Res = companyList.filter((company) =>
-    apiResArr.some((res) => res === company.symbol)
-  )
-
-  return {
-    query: inputQuery.query,
-    response: Res,
-  }
-}
-
-export const gptIntelligenceGroup = async (inputQuery, info) => {
-  // call the gptIntelligence function for each query
-  const queryArr = inputQuery.query
-  var companyList
-  const startUPComps = ['AAPL', 'MSFT']
-
-  if (queryArr.every((val, index) => val === startUPComps[index])) {
-    const apiResArr = [
-      ['MSFT', 'TSLA', 'META', 'INTL'],
-      ['AAPL', 'TSLA', 'META', 'INTL'],
+    const messages = [
+      {
+        role: 'system',
+        content: `Give your response comma separated. Don't explain. If the user asked companies similar to AAPL, then you name 4 companies in the form of MSFT, TSLA, META, INTL`,
+      },
+      { role: 'user', content: 'Companies similar to PFE' },
+      {
+        role: 'assistant',
+        content: 'JNJ, MRK, GSK, ABBV',
+      },
+      { role: 'user', content: 'Companies similar to ' + inputQuery.query },
     ]
+    const gptPromise = openai.createChatCompletion({
+      model: 'gpt-4',
+      messages,
+      max_tokens: 20,
+      temperature: 0.5,
+    })
 
-    companyList = await companyslist()
+    const promises = []
+    promises.push(gptPromise)
+    promises.push(companyslist())
 
-    const Res = apiResArr.map((arr) =>
-      companyList.filter((company) =>
-        arr.some((symbol) => symbol === company.symbol)
+    const promiseResults = await Promise.allSettled(promises)
+
+    const gptResponseResult = promiseResults[0]
+    const companyListResult = promiseResults[1]
+
+    if (gptResponseResult.status === 'rejected') {
+      throw new Error('AI API call failed: ' + gptResponseResult.reason)
+    }
+
+    if (companyListResult.status === 'rejected') {
+      throw new Error(
+        'Company list API call failed: ' + companyListResult.reason
       )
+    }
+
+    const gptResponse = gptResponseResult.value
+    const companyList = companyListResult.value
+
+    var apiResArr = gptResponse.data.choices[0].message.content.split(', ')
+
+    apiResArr = apiResArr.filter((item) => item !== inputQuery.query)
+
+    const Res = companyList.filter((company) =>
+      apiResArr.some((res) => res === company.symbol)
     )
 
     return {
       query: inputQuery.query,
       response: Res,
+      error: null,
+    }
+  } catch (error) {
+    console.error('An error occurred:', error)
+    // Return an empty result with an error message
+    return {
+      query: inputQuery.query,
+      response: [],
+      error: error.message,
     }
   }
+}
 
-  const promises = []
-  queryArr.forEach((query) => {
-    promises.push(gptIntelligence({ query }))
-  })
-  const promiseResults = await Promise.all(promises)
-  const gptResponseArr = promiseResults.map((res) => res.response)
+export const gptIntelligenceGroup = async (inputQuery, _info) => {
+  try {
+    const queryArr = inputQuery.query
+    var companyList
+    const startUPComps = ['AAPL', 'MSFT']
 
-  return {
-    query: queryArr,
-    response: gptResponseArr,
+    if (queryArr.every((val, index) => val === startUPComps[index])) {
+      const apiResArr = [
+        ['MSFT', 'TSLA', 'META', 'INTL'],
+        ['AAPL', 'TSLA', 'META', 'INTL'],
+      ]
+
+      companyList = await companyslist()
+
+      const Res = apiResArr.map((arr) =>
+        companyList.filter((company) =>
+          arr.some((symbol) => symbol === company.symbol)
+        )
+      )
+
+      return {
+        query: inputQuery.query,
+        response: Res,
+        error: null,
+      }
+    }
+
+    const promises = []
+    queryArr.forEach((query) => {
+      promises.push(gptIntelligence({ query }))
+    })
+
+    const promiseResults = await Promise.allSettled(promises)
+
+    const gptResponseArr = promiseResults.map((result, index) => {
+      if (result.status === 'rejected') {
+        console.error(
+          `Error in gptIntelligence for query: ${queryArr[index]}`,
+          result.reason
+        )
+        return []
+      }
+      return result.value.response
+    })
+
+    return {
+      query: queryArr,
+      response: gptResponseArr,
+      error: null,
+    }
+  } catch (error) {
+    console.error('An error occurred:', error)
+    // Return an empty result with an error message
+    return {
+      query: inputQuery.query,
+      response: [],
+      error: error.message,
+    }
   }
 }
 

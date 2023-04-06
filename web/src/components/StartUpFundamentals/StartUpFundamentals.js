@@ -39,6 +39,7 @@ export const QUERY = gql`
         exchangeShortName
         type
       }
+      error
     }
   }
 `
@@ -115,6 +116,10 @@ export const StartUpFundamentals = ({ tickers }) => {
       const query = data.gptIntelligenceGroup.query
 
       query.forEach((subQuery, index) => {
+        // log the error for now
+        if (data.gptIntelligenceGroup.error) {
+          console.log(data.gptIntelligenceGroup.error)
+        }
         setSectorCompanies((currentState) => {
           return {
             ...currentState,

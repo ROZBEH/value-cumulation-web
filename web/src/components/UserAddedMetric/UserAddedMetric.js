@@ -223,7 +223,7 @@ export const UserAddedMetric = () => {
         <div className="self-center ml-5">
           <Tooltip title="Click to Load Favorites">
             <button
-              className="disabled:bg-gainsboro whitespace-nowrap rounded-lg bg-green-300 border border-gray-300 text-xs px-2 py-1.5 cursor-pointer"
+              className=" whitespace-nowrap rounded-lg bg-green-300 border border-gray-300 text-sm px-2 py-1 cursor-pointer"
               onClick={loadFavoriteMetrics}
               name="comparisonMode"
               // disabled={favoriteMetrics.length === 0}
