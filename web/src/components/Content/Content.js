@@ -5,7 +5,7 @@ Copyright (c) 2022 Value Cumulation
 Notice: All code and information in this repository is the property of Value Cumulation.
 You are strictly prohibited from distributing or using this repository unless otherwise stated.
  */
-
+import { VideoBackground } from 'src/components/VideoBackground/VideoBackground'
 export const Content = () => {
   return (
     <div className="flex flex-col mx-10 my-10">
@@ -39,6 +39,7 @@ export const Content = () => {
           Intuitive and friendly interface.
         </p>
       </div>
+      <VideoBackground />
     </div>
   )
 }
