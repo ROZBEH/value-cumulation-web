@@ -24,6 +24,8 @@ import { Infopop } from 'src/components/Infopop/Infopop'
 import './PlotFundamentals.css'
 
 export const PlotFundamentals = (props) => {
+  const [zooming, setZooming] = useState(false)
+
   const chartContainer = useRef(null)
   const [zoomLevel, setZoomLevel] = useState(1)
   const plotData = props.plottingData[props.metric]
@@ -71,37 +73,40 @@ export const PlotFundamentals = (props) => {
     )
   }
   const scrollSpeed = 0.05
-  const handleScroll = useCallback(
-    debounce((event) => {
-      console.log('scrolling')
-      const newZoomLevel =
-        event.deltaY < 0 ? zoomLevel + scrollSpeed : zoomLevel - scrollSpeed
+  const handleScroll = debounce((event) => {
+    const newZoomLevel =
+      event.deltaY < 0 ? zoomLevel + scrollSpeed : zoomLevel - scrollSpeed
 
-      if (newZoomLevel >= 0.5 && newZoomLevel <= 3) {
-        setZoomLevel(newZoomLevel)
+    if (newZoomLevel >= 0.5 && newZoomLevel <= 3) {
+      const visibleDataLength = Math.max(
+        1,
+        Math.round(dataLength / newZoomLevel)
+      )
 
-        const visibleDataLength = Math.max(
-          1,
-          Math.round(dataLength / newZoomLevel)
-        )
+      // Calculate the current mouse position in the chart
+      const boundingRect = chartContainer.current.getBoundingClientRect()
+      const mouseX = event.clientX - boundingRect.left
+      const marginLeft = 17
+      const marginRight = 17
+      const dataWidth =
+        chartContainer.current.clientWidth - marginLeft - marginRight
+      const dataX = (mouseX / dataWidth) * (endIndex - startIndex) + startIndex
 
-        const centerIndex = Math.round((startIndex + endIndex) / 2)
+      // Adjust the start and end indices of the chart data to zoom around the current mouse position
+      const newStartIndex = Math.max(
+        Math.round(dataX - visibleDataLength / 2),
+        0
+      )
+      const newEndIndex = Math.min(
+        Math.round(dataX + visibleDataLength / 2),
+        dataLength - 1
+      )
 
-        const newStartIndex = Math.max(
-          centerIndex - Math.round(visibleDataLength / 2),
-          0
-        )
-        const newEndIndex = Math.min(
-          newStartIndex + visibleDataLength,
-          dataLength - 1
-        )
-
-        setStartIndex(newStartIndex)
-        setEndIndex(newEndIndex)
-      }
-    }, 1),
-    [zoomLevel]
-  )
+      setZoomLevel(newZoomLevel)
+      setStartIndex(newStartIndex)
+      setEndIndex(newEndIndex)
+    }
+  }, 1)
 
   useEffect(() => {
     if (!chartContainer.current) return
@@ -124,6 +129,7 @@ export const PlotFundamentals = (props) => {
       </div>
 
       <LineChart
+        cursor="move"
         intractive={true}
         data={plotData.data.slice(startIndex, endIndex + 1)}
         align="right"
