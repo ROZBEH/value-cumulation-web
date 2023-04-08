@@ -14,9 +14,6 @@
   },
   "dependencies": {
     "@apollo/react-hooks": "^4.0.0",
-    "@devexpress/dx-react-chart": "^4.0.3",
-    "@devexpress/dx-react-chart-material-ui": "^4.0.3",
-    "@devexpress/dx-react-core": "^4.0.3",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@fontsource/roboto": "^4.5.8",
@@ -43,7 +40,6 @@
     "cheerio": "^1.0.0-rc.12",
     "immer": "^9.0.16",
     "jest-matcher-deep-close-to": "^3.0.2",
-    "loadash": "^1.0.0",
     "netlify-plugin-prisma-provider": "^0.3.0",
     "postcss-loader": "^7.0.1",
     "prop-types": "15.8.1",
