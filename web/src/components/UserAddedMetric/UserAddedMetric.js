@@ -213,7 +213,7 @@ export const UserAddedMetric = () => {
                   }}
                   {...params}
                   variant="outlined"
-                  placeholder="Starting typing to add metrics"
+                  label="Starting typing to add metrics"
                 />
               )
             }}

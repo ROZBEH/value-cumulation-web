@@ -296,7 +296,6 @@ export const Mainsubmission = () => {
                   {...params}
                   variant="standard"
                   fullWidth
-                  // placeholder="Enter Company Name"
                   label="Type Company Name or Ticker"
                   error={errors ? true : false}
                   helperText={errors}
