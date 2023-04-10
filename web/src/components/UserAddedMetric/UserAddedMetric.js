@@ -8,9 +8,9 @@ You are strictly prohibited from distributing or using this repository unless ot
 
 import { useState } from 'react'
 
-import { makeStyles, Chip, Tooltip } from '@material-ui/core'
+import { makeStyles, Chip, Tooltip, TextField } from '@material-ui/core'
 import { Favorite, CancelRounded } from '@material-ui/icons'
-import { Autocomplete, TextField } from '@mui/material'
+import { Autocomplete } from '@mui/material'
 import classNames from 'classnames'
 import { toast } from 'react-toastify'
 import { useRecoilState } from 'recoil'
@@ -79,6 +79,7 @@ export const UserAddedMetric = () => {
   const myChangeFunc = (event, values, reason, detail) => {
     // tmp arrays for keeping the values of metrics
     // Metrics to be shown to the user
+
     var tmpMetrics = [...metricsA]
     // Metrics to be loaded inside the AutoComplete text field
     var tmpVisiableOptions = [...defaultVisiableOptions]
@@ -129,7 +130,7 @@ export const UserAddedMetric = () => {
 
   const updateUserPickedMetrics = (values, _getTagProps) => {
     {
-      return values.map((option, index) => {
+      return values.map((option, _index) => {
         return (
           <Chip
             key={option.id}
@@ -177,7 +178,6 @@ export const UserAddedMetric = () => {
     },
   })
   const buttonColor = useStyles()
-  const [value, setValue] = useState([])
   const onDelete = (title) => () => {
     setDefaultVisiableOptions((value) => value.filter((v) => v.title !== title))
   }
@@ -204,6 +204,7 @@ export const UserAddedMetric = () => {
             isOptionEqualToValue={(option, value) => option.id === value.id}
             getOptionLabel={(option) => option.title}
             value={defaultVisiableOptions}
+            autoHighlight={true}
             renderInput={(params) => {
               return (
                 <TextField
@@ -213,7 +214,7 @@ export const UserAddedMetric = () => {
                   }}
                   {...params}
                   variant="outlined"
-                  placeholder="Starting typing to add metrics"
+                  label="Starting typing to add metrics"
                 />
               )
             }}

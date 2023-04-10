@@ -14,7 +14,7 @@ import {
   CartesianGrid,
   Tooltip,
   XAxis,
-  Brush,
+  // Brush,
 } from 'recharts'
 
 import { Infopop } from 'src/components/Infopop/Infopop'
@@ -31,6 +31,7 @@ export const PlotFundamentals = (props) => {
     '#4363d8',
     '#ffd8b1',
   ]
+  console.log('plotData.companyOrder = ', plotData.companyOrder)
 
   const DataFormater = (number) => {
     var absNumber = Math.abs(number)
@@ -46,7 +47,7 @@ export const PlotFundamentals = (props) => {
   }
 
   const CustomTooltip = ({ active, payload }) => {
-    if (!active) return null
+    if (!active & !payload) return null
     // Sort the payload by value so that the values are displayed in order
     payload.sort((a, b) => (a.value > b.value ? -1 : 1))
     return (
@@ -78,20 +79,10 @@ export const PlotFundamentals = (props) => {
         className="line-chart"
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <YAxis
-          tickFormatter={DataFormater}
-          className="y-axis-chart"
-          // label={
-          //   <text x={200} y={0} dx={50} dy={15} offset={0} angle={-90}>
-          //     {plotData.metricName}
-          //   </text>
-          // }
-        />
+        <YAxis tickFormatter={DataFormater} className="y-axis-chart" />
         <XAxis className="x-axis-chart" interval={0} dataKey="name" />
         <Legend />
 
-        {/* The following allows multiple lines to be plotted in the same
-          LineChart */}
         {plotData.nameCompany.map((name, index) => (
           <Line
             strokeWidth={plotData.strokeWidth[plotData.companyOrder[name]]}
@@ -106,7 +97,7 @@ export const PlotFundamentals = (props) => {
         <Tooltip
           content={(active, payload) => CustomTooltip(active, payload)}
         />
-        <Brush dataKey="name" height={40} />
+        {/* <Brush dataKey="name" height={40} /> */}
       </LineChart>
     </div>
   )

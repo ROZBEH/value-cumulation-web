@@ -43,7 +43,7 @@ export function popCompany(plotData, index) {
   return plotData
 }
 
-export function preparePlotData(data, plotData, index, strokeWidth) {
+export function preparePlotData(data, plotData, strokeWidth) {
   // Brining the data into a format that is recognizable by rechart
   // Data format for plotData is in the following format:
   // {
@@ -61,6 +61,13 @@ export function preparePlotData(data, plotData, index, strokeWidth) {
   if (strokeWidth === undefined) {
     strokeWidth = 1
   }
+  let index
+  if (Object.keys(plotData).length === 0) {
+    index = 0
+  } else {
+    index = plotData['netIncome']['nameCompany'].length
+  }
+
   const nameCompany = data.companyName
   const metricsArrays = data.metricValues
   const fullMetricNames = data.fullMetricNames
@@ -102,17 +109,10 @@ export function preparePlotData(data, plotData, index, strokeWidth) {
   return plotData
 }
 
-export function postProcess(
-  fudamentals,
-  currentSearchBox,
-  pltData,
-  setPltData,
-  setSECReports
-) {
+export function postProcess(fudamentals, pltData, setPltData, setSECReports) {
   let plotData = preparePlotData(
     fudamentals,
-    JSON.parse(JSON.stringify(pltData)),
-    currentSearchBox
+    JSON.parse(JSON.stringify(pltData))
   )
   // Clean up the SEC report data and save it as an object
   // The format of the report will be

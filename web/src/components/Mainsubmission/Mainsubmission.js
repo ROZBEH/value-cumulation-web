@@ -7,12 +7,14 @@ You are strictly prohibited from distributing or using this repository unless ot
  */
 
 import * as React from 'react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useLazyQuery } from '@apollo/client'
-import { Tooltip, TextField } from '@material-ui/core'
+import { makeStyles, Chip, Tooltip, TextField } from '@material-ui/core'
+import { CancelRounded } from '@material-ui/icons'
 import Autocomplete from '@mui/material/Autocomplete'
 import CircularProgress from '@mui/material/CircularProgress'
+import classNames from 'classnames'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
 import {
@@ -28,11 +30,7 @@ import {
   plottingData as plottingDataAtom,
   suggestions as suggestionsAtom,
   textPrompt as textPromptAtom,
-  counterCompany as counterCompanyAtom,
   secReports as secReportsAtom,
-  valueTicker as valueTickerAtom,
-  inputValueTicker as inputValueTickerAtom,
-  currentSearchBox as currentSearchBoxAtom,
 } from 'src/recoil/atoms'
 import { sectorCompanies as sectorCompaniesAtom } from 'src/recoil/sectorAtom'
 
@@ -41,30 +39,22 @@ import './Mainsubmission.css'
 export const Mainsubmission = () => {
   const [calledCompanies, setCalledCompanies] =
     useRecoilState(calledCompaniesAtom)
-  const [loadingFinancials, setLoading] = useRecoilState(loadingFinancialsAtom)
+  const [_loadingFinancials, setLoading] = useRecoilState(loadingFinancialsAtom)
   const companyList = useRecoilValue(companyListAtom)
   const [pltData, setPltData] = useRecoilState(plottingDataAtom)
   const [textPrompt, setPrompt] = useRecoilState(textPromptAtom)
   const [suggestions, setSuggestion] = useRecoilState(suggestionsAtom)
-  const [counterCompany, setCounterCompany] = useRecoilState(counterCompanyAtom)
   const [_secReport, setSECReports] = useRecoilState(secReportsAtom)
-  const [valueTicker, setValueTicker] = useRecoilState(valueTickerAtom)
-  const [inputValueTicker, setInputValueTicker] =
-    useRecoilState(inputValueTickerAtom)
-  const [sectorCompanies, setSectorCompanies] =
+  const [value, setValue] = useState(null)
+  const [inputValue, setInputValue] = useState('')
+
+  const [_sectorCompanies, setSectorCompanies] =
     useRecoilState(sectorCompaniesAtom)
   const loadingSuggestion = companyList.length === 0
-  const [currentSearchBox, setCurrentSearchBox] =
-    useRecoilState(currentSearchBoxAtom)
   const [getGPTResSector, { loading: loadingGPTSector }] = useLazyQuery(
     GPT_QUERY_SECTOR,
     {
       onCompleted: (data) => {
-        // First filter the list of available companies for GPT suggestions
-        // const tmpSectorComp = companyList.filter((company) =>
-        //   data.gptIntelligence.response.some((res) => res === company.symbol)
-        // )
-        // Now set the list of sector companies
         const query = data.gptIntelligence.query
         if (data.gptIntelligence.error) {
           console.log(data.gptIntelligence.error)
@@ -85,68 +75,6 @@ export const Mainsubmission = () => {
   })
   // Handling errors for user input
   let errors = ''
-
-  // counterArr keeps track of the number of searchbars
-  // Users can add and remove searchbars in order to search for multiple companies
-  // They cannot compare more than 5 companies simultaneously
-  // The minimum number of searchbars is 1
-  let counterArr = new Array(counterCompany).fill('').map((_, i) => i + 1)
-
-  const increaseCounter = () => {
-    if (counterCompany < 5) {
-      setValueTicker((currentState) => [...currentState, ''])
-      setInputValueTicker((currentState) => [...currentState, ''])
-      setCounterCompany(counterCompany + 1)
-      counterArr = new Array(counterCompany).fill('').map((_, i) => i + 1)
-    }
-  }
-
-  const decreaseCounter = () => {
-    let tmpSectorComp = { ...sectorCompanies }
-    if (counterCompany > 1) {
-      // remove the last item from the array
-      if (valueTicker.slice(-1)[0] == null) {
-        setCounterCompany(counterCompany - 1)
-        setValueTicker(valueTicker.slice(0, -1))
-        return
-      }
-      delete tmpSectorComp[valueTicker.slice(-1)[0].symbol]
-      setSectorCompanies(tmpSectorComp)
-      setCalledCompanies((currentState) => currentState.slice(0, -1))
-      setValueTicker(valueTicker.slice(0, -1))
-      setInputValueTicker(inputValueTicker.slice(0, -1))
-      setCounterCompany(counterCompany - 1)
-      counterArr = new Array(counterCompany).fill('').map((_, i) => i + 1)
-      var plotData = JSON.parse(JSON.stringify(pltData))
-      // Only remove it if there is more than one company in the plotData
-      if (plotData['netIncome']) {
-        // passing (counterCompany - 1) since js array starts at index 0
-        plotData = popCompany(plotData, counterCompany - 1)
-        setPltData(plotData)
-      }
-    } else if (counterCompany === 1) {
-      delete tmpSectorComp[valueTicker.slice(-1)[0].symbol]
-      setSectorCompanies(tmpSectorComp)
-      setCalledCompanies([])
-      setValueTicker([''])
-      setInputValueTicker([''])
-      plotData = JSON.parse(JSON.stringify(pltData))
-      if (plotData['netIncome']) {
-        // passing (counterCompany - 1) since js array starts at index 0
-        // plotData = popCompany(plotData, counterCompany - 1)
-        // setPltData(plotData)
-        setPltData({})
-        // Resetting the items inside the autocomplete searchbar
-        // This is kind of hacky but it works
-        const autoCompleteClear = document.getElementsByClassName(
-          'MuiAutocomplete-clearIndicator'
-        )[0]
-        if (autoCompleteClear) {
-          autoCompleteClear.click()
-        }
-      }
-    }
-  }
 
   // Spit out list of companies as the user types in the searchbar
   const onChangeTextField = async (inputPrompt) => {
@@ -174,7 +102,6 @@ export const Mainsubmission = () => {
         // Add this company to the list of companies that has been called
         postProcess(
           fundamentalanalysis.getFundamentals,
-          currentSearchBox,
           pltData,
           setPltData,
           setSECReports
@@ -183,15 +110,26 @@ export const Mainsubmission = () => {
     }
   )
 
-  const myChangeFunc = async (_event, values, reason, _details, index) => {
+  const clearInput = () => {
+    console.log('inside clear input')
+    const autoCompleteClear = document.getElementsByClassName(
+      'MuiAutocomplete-clearIndicator'
+    )[0]
+
+    if (autoCompleteClear) {
+      autoCompleteClear.click()
+    }
+  }
+
+  const myChangeFunc = async (_event, values, reason, _details) => {
     // If the user has selected a company(selectOption), then query the API
     // for the financial data. And if the user has removed the company(clear),
     // then remove the company from the plotData
-    var tmpValue = [...valueTicker]
-    tmpValue[index] = values
-    setValueTicker(tmpValue)
-    setCurrentSearchBox(index)
-    let plotData
+
+    if (reason === 'clear') {
+      clearInput()
+      return
+    }
 
     if (reason === 'selectOption') {
       // Add this company to the list of companies that has been called
@@ -202,7 +140,7 @@ export const Mainsubmission = () => {
       }
       setCalledCompanies((currentState) => {
         const newState = [...currentState]
-        newState.splice(index, 0, values)
+        newState.push(values)
         return newState
       })
       getFunamentals({
@@ -214,29 +152,71 @@ export const Mainsubmission = () => {
       getGPTResSentiment({
         variables: { query: `I  didn't liked last years result` },
       })
-    } else if (reason === 'clear') {
-      // The user entered a company that there was no match for
-      if (valueTicker.slice(-1)[0].symbol == null) {
-        return
-      }
-      let tmpSectorComp = { ...sectorCompanies }
-      delete tmpSectorComp[valueTicker[index].symbol]
-      setSectorCompanies(tmpSectorComp)
-      var tmpCalledCompanies = [...calledCompanies]
-      tmpCalledCompanies.splice(index, 1)
-      setCalledCompanies(tmpCalledCompanies)
-      // Autocomplete value
-      var tmpValueTicker = [...valueTicker]
-      tmpValueTicker[index] = ''
-      setValueTicker(tmpValueTicker)
-      // Autocomplete Input value
-      var tmpInputValueTicker = [...inputValueTicker]
-      tmpInputValueTicker[index] = ''
-      setInputValueTicker(tmpInputValueTicker)
-      plotData = JSON.parse(JSON.stringify(pltData))
-      plotData = popCompany(plotData, index)
-      setPltData(plotData)
+      // setPrompt('')
+      // setSuggestion([])
+      clearInput()
     }
+  }
+  console.log('calledCompanies=', calledCompanies)
+
+  const updateUserPickedMetrics = (values, _getTagProps) => {
+    {
+      return values.map((option, index) => {
+        return (
+          <Chip
+            key={index}
+            size="medium"
+            variant="outlined"
+            classes={{
+              root: classNames({
+                [buttonColor.backgroundTag]: true,
+              }),
+            }}
+            label={`${option.name} (${option.symbol})`}
+            // {...getTagProps({ index })}
+            deleteIcon={
+              <Tooltip title="Remove Metric">
+                <CancelRounded style={{ color: 'black' }} />
+              </Tooltip>
+            }
+            onDelete={onDelete(option.name)}
+          />
+        )
+      })
+    }
+  }
+
+  const useStyles = makeStyles({
+    backgroundTag: {
+      backgroundColor: '#4f46e5 !important',
+      fontFamily:
+        '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif',
+      color: 'white',
+      fontWeight: 'bold',
+    },
+  })
+  const buttonColor = useStyles()
+
+  const onDelete = (name) => () => {
+    const index = calledCompanies.findIndex((item) => item.name === name)
+    const toBeRemoved = calledCompanies[index]
+    const calledCompaniesLength = calledCompanies.length
+
+    setCalledCompanies((value) => value.filter((v) => v.name !== name))
+    // filtering out the company from the sectorCompanies
+
+    const { [toBeRemoved.symbol]: _removedKey, ...rest } = setSectorCompanies
+    setSectorCompanies(rest)
+
+    if (calledCompaniesLength == 1) {
+      setPltData({})
+      return
+    }
+
+    let plotData
+    plotData = JSON.parse(JSON.stringify(pltData))
+    plotData = popCompany(plotData, index)
+    setPltData(plotData)
   }
 
   // The following is kind of hacky, it should be refactored
@@ -247,96 +227,89 @@ export const Mainsubmission = () => {
     } else {
       setLoading(false)
     }
-  }, [setLoading, loadingFundamentals, loadingGPTSector])
+  }, [setLoading, loadingFundamentals, loadingGPTSector, textPrompt])
 
   return (
     <>
-      <div className="searchbar-company">
-        {counterArr.map((item, index) => (
-          <Autocomplete
-            noOptionsText="No company found"
-            loading={loadingSuggestion}
-            autoHighlight={true}
-            key={index}
-            freeSolo // for removing the dropdown arrow
-            onBlur={() => {
-              setTimeout(() => {
-                setPrompt(textPrompt)
-                setSuggestion([])
-              }, 100)
-            }}
-            value={valueTicker[index] || null}
-            inputValue={inputValueTicker[index]}
-            onChange={(event, values, reason, details) =>
-              myChangeFunc(event, values, reason, details, index)
-            }
-            onInputChange={(_e, newInputValue) => {
-              setInputValueTicker((prevInputValue) => {
-                const newArray = [...prevInputValue]
-                newArray[index] = newInputValue
-                return newArray
-              })
-            }}
-            sx={{ width: 1000 }}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
-            options={suggestions}
-            getOptionLabel={(option) => {
-              if (option && option.name) {
-                return `${option.name} (${option.symbol})`
-              } else {
-                errors = 'No company found. Pick a valid name or ticker'
-                return ''
-              }
-            }}
-            renderInput={(params) => {
-              return (
-                <TextField
-                  className="text-field-searchbar"
-                  onChange={(e) => onChangeTextField(e.target.value)}
-                  {...params}
-                  variant="standard"
-                  fullWidth
-                  // placeholder="Enter Company Name"
-                  label="Type Company Name or Ticker"
-                  error={errors ? true : false}
-                  helperText={errors}
-                  InputProps={{
-                    ...params.InputProps,
-                    endAdornment: (
-                      <React.Fragment>
-                        {loadingSuggestion ? (
-                          <CircularProgress color="inherit" size={20} />
-                        ) : null}
-                        {params.InputProps.endAdornment}
-                      </React.Fragment>
-                    ),
-                  }}
-                />
-              )
-            }}
-          />
-        ))}
-
-        <Tooltip title="Add Company">
-          <button
-            className="rounded-lg w-8 h-8 bg-lightsky-blue border border-gray-300 text-white text-xs cursor-pointer ml-1 mt-4"
-            name="comparisonMode"
-            onClick={increaseCounter}
-          >
-            +
-          </button>
-        </Tooltip>
-
-        <Tooltip title="Remove Company">
-          <button
-            className="rounded-lg w-8 h-8 bg-lightsky-blue border border-gray-300 text-white text-xs cursor-pointer ml-1"
-            name="comparisonMode"
-            onClick={decreaseCounter}
-          >
-            -
-          </button>
-        </Tooltip>
+      <div className="searchbar-company flex flex-row mt-5 mb-3">
+        <Autocomplete
+          clearIcon={
+            <Tooltip title="Clear the entry">
+              <CancelRounded />
+            </Tooltip>
+          }
+          renderTags={() => null}
+          // multiple
+          onChange={(event, values, reason, details) =>
+            myChangeFunc(event, values, reason, details)
+          }
+          filterSelectedOptions
+          value={value}
+          inputValue={inputValue}
+          onInputChange={(event, newInputValue) => {
+            setInputValue(newInputValue)
+          }}
+          options={suggestions}
+          isOptionEqualToValue={(option, value) => option.id === value.id}
+          getOptionLabel={(option) => `${option.name} (${option.symbol})`}
+          // value={valueTicker || null}
+          // value={defaultVisiableOptions}
+          // value={calledCompanies}
+          noOptionsText="No company found"
+          loading={loadingSuggestion}
+          // defaultValue={calledCompanies}
+          // value={''}
+          autoHighlight={true}
+          clearOnEscape={false}
+          freeSolo // for removing the dropdown arrow
+          // onBlur={() => {
+          //   setTimeout(() => {
+          //     setPrompt(textPrompt)
+          //     setSuggestion([])
+          //   }, 100)
+          // }}
+          // onInputChange={(event, value, reason) => {
+          //   if (reason === 'clear') {
+          //     clearInput()
+          //   }
+          // }}
+          sx={{ width: 1360 }}
+          // getOptionLabel={(option) => {
+          //   if (option && option.name) {
+          //     return `${option.name} (${option.symbol})`
+          //   } else {
+          //     errors = 'No company found. Pick a valid name or ticker'
+          //     return ''
+          //   }
+          // }}
+          renderInput={(params) => {
+            return (
+              <TextField
+                className="text-field-searchbar"
+                onChange={(e) => onChangeTextField(e.target.value)}
+                {...params}
+                variant="standard"
+                fullWidth
+                label="Type Company Name or Ticker"
+                error={errors ? true : false}
+                helperText={errors}
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: (
+                    <React.Fragment>
+                      {loadingSuggestion ? (
+                        <CircularProgress color="inherit" size={20} />
+                      ) : null}
+                      {params.InputProps.endAdornment}
+                    </React.Fragment>
+                  ),
+                }}
+              />
+            )
+          }}
+        />
       </div>
+      <div className="mb-10">{updateUserPickedMetrics(calledCompanies)}</div>
     </>
   )
 }
