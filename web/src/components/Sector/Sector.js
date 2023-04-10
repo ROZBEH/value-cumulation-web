@@ -44,8 +44,7 @@ export const Sector = () => {
           plotData = JSON.parse(JSON.stringify(plotData))
           plotData = preparePlotData(
             fundamentalanalysis.data.getFundamentals,
-            plotData,
-            i
+            plotData
           )
         })
       }
@@ -59,7 +58,6 @@ export const Sector = () => {
       plotData = preparePlotData(
         fundamentalanalysis.data.getFundamentals,
         plotData,
-        thisSector.length,
         4 // strokeWidth
       )
     })

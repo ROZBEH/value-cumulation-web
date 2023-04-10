@@ -31,6 +31,7 @@ export const PlotFundamentals = (props) => {
     '#4363d8',
     '#ffd8b1',
   ]
+  console.log('plotData.companyOrder = ', plotData.companyOrder)
 
   const DataFormater = (number) => {
     var absNumber = Math.abs(number)

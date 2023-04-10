@@ -1,6 +1,5 @@
 import { useQuery } from '@apollo/client'
 import { Skeleton } from '@mui/material'
-import { TailSpin } from 'react-loader-spinner'
 import { useRecoilState } from 'recoil'
 
 import { postProcess } from 'src/commons/processCompany'
@@ -103,10 +102,9 @@ export const StartUpFundamentals = ({ tickers }) => {
       }
       let tmpPlot = { ...pltData }
       data.groupFundamentals.forEach(
-        (fundamental, i) =>
+        (fundamental, _i) =>
           (tmpPlot = postProcess(
             fundamental,
-            i,
             tmpPlot,
             setPltData,
             setSECReports
