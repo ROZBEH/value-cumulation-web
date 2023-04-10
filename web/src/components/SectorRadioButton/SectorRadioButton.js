@@ -10,11 +10,13 @@ import { useRecoilValue, useRecoilState } from 'recoil'
 import {
   valueTicker as valueTickerAtom,
   sectorComp as sectorCompAtom,
+  calledCompanies as calledCompaniesAtom,
 } from 'src/recoil/atoms'
 export const SectorRadioButton = () => {
   const valueTicker = useRecoilValue(valueTickerAtom)
   const [value, setValue] = React.useState(valueTicker[0].symbol)
   const [sectorComp, setSectorComp] = useRecoilState(sectorCompAtom)
+  const calledCompanies = useRecoilValue(calledCompaniesAtom)
 
   React.useEffect(() => {
     if (sectorComp === '') setSectorComp(valueTicker[0].symbol)
@@ -44,7 +46,7 @@ export const SectorRadioButton = () => {
           setValue(event.target.value)
         }}
       >
-        {valueTicker
+        {calledCompanies
           .filter((item) => item != '')
           .map((value) => (
             <Sheet
