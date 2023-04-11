@@ -16,12 +16,15 @@ import {
   XAxis,
   // Brush,
 } from 'recharts'
+import { useRecoilValue } from 'recoil'
 
 import { Infopop } from 'src/components/Infopop/Infopop'
+import { calledCompanies as calledCompaniesAtom } from 'src/recoil/atoms'
 import './PlotFundamentals.css'
 
 export const PlotFundamentals = (props) => {
   const plotData = props.plottingData[props.metric]
+  const calledCompanies = useRecoilValue(calledCompaniesAtom)
   // stroke determines the color of each line in the plot
   const stroke = [
     '#87CEEB',
@@ -84,13 +87,13 @@ export const PlotFundamentals = (props) => {
 
         {plotData.nameCompany.map((name, index) => (
           <Line
-            strokeWidth={plotData.strokeWidth[plotData.companyOrder[name]]}
+            strokeWidth={plotData.strokeWidth[index]}
             datasetFill={true}
             key={index}
             isAnimationActive={false}
             type="monotone"
             dataKey={name}
-            stroke={stroke[plotData.companyOrder[name]]}
+            stroke={stroke[index]}
           />
         ))}
         <Tooltip
