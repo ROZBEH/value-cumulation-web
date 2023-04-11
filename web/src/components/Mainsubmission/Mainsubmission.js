@@ -231,82 +231,84 @@ export const Mainsubmission = () => {
   return (
     <>
       <div className="searchbar-company flex flex-row mt-5 mb-3">
-        <Autocomplete
-          clearIcon={
-            <Tooltip title="Clear the entry">
-              <CancelRounded />
-            </Tooltip>
-          }
-          renderTags={() => null}
-          // multiple
-          onChange={(event, values, reason, details) =>
-            myChangeFunc(event, values, reason, details)
-          }
-          filterSelectedOptions
-          value={value}
-          inputValue={inputValue}
-          onInputChange={(event, newInputValue) => {
-            setInputValue(newInputValue)
-          }}
-          options={suggestions}
-          isOptionEqualToValue={(option, value) => option.id === value.id}
-          getOptionLabel={(option) => `${option.name} (${option.symbol})`}
-          // value={valueTicker || null}
-          // value={defaultVisiableOptions}
-          // value={calledCompanies}
-          noOptionsText="No company found"
-          loading={loadingSuggestion}
-          // defaultValue={calledCompanies}
-          // value={''}
-          autoHighlight={true}
-          clearOnEscape={false}
-          freeSolo // for removing the dropdown arrow
-          // onBlur={() => {
-          //   setTimeout(() => {
-          //     setPrompt(textPrompt)
-          //     setSuggestion([])
-          //   }, 100)
-          // }}
-          // onInputChange={(event, value, reason) => {
-          //   if (reason === 'clear') {
-          //     clearInput()
-          //   }
-          // }}
-          sx={{ width: 1360 }}
-          // getOptionLabel={(option) => {
-          //   if (option && option.name) {
-          //     return `${option.name} (${option.symbol})`
-          //   } else {
-          //     errors = 'No company found. Pick a valid name or ticker'
-          //     return ''
-          //   }
-          // }}
-          renderInput={(params) => {
-            return (
-              <TextField
-                className="text-field-searchbar"
-                onChange={(e) => onChangeTextField(e.target.value)}
-                {...params}
-                variant="standard"
-                fullWidth
-                label="Type Company Name or Ticker"
-                error={errors ? true : false}
-                helperText={errors}
-                InputProps={{
-                  ...params.InputProps,
-                  endAdornment: (
-                    <React.Fragment>
-                      {loadingSuggestion ? (
-                        <CircularProgress color="inherit" size={20} />
-                      ) : null}
-                      {params.InputProps.endAdornment}
-                    </React.Fragment>
-                  ),
-                }}
-              />
-            )
-          }}
-        />
+        <div className="w-96">
+          <Autocomplete
+            clearIcon={
+              <Tooltip title="Clear the entry">
+                <CancelRounded />
+              </Tooltip>
+            }
+            renderTags={() => null}
+            // multiple
+            onChange={(event, values, reason, details) =>
+              myChangeFunc(event, values, reason, details)
+            }
+            filterSelectedOptions
+            value={value}
+            inputValue={inputValue}
+            onInputChange={(event, newInputValue) => {
+              setInputValue(newInputValue)
+            }}
+            options={suggestions}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            getOptionLabel={(option) => `${option.name} (${option.symbol})`}
+            // value={valueTicker || null}
+            // value={defaultVisiableOptions}
+            // value={calledCompanies}
+            noOptionsText="No company found"
+            loading={loadingSuggestion}
+            // defaultValue={calledCompanies}
+            // value={''}
+            autoHighlight={true}
+            clearOnEscape={false}
+            freeSolo // for removing the dropdown arrow
+            // onBlur={() => {
+            //   setTimeout(() => {
+            //     setPrompt(textPrompt)
+            //     setSuggestion([])
+            //   }, 100)
+            // }}
+            // onInputChange={(event, value, reason) => {
+            //   if (reason === 'clear') {
+            //     clearInput()
+            //   }
+            // }}
+            // sx={{ width: 1360 }}
+            // getOptionLabel={(option) => {
+            //   if (option && option.name) {
+            //     return `${option.name} (${option.symbol})`
+            //   } else {
+            //     errors = 'No company found. Pick a valid name or ticker'
+            //     return ''
+            //   }
+            // }}
+            renderInput={(params) => {
+              return (
+                <TextField
+                  className="text-field-searchbar"
+                  onChange={(e) => onChangeTextField(e.target.value)}
+                  {...params}
+                  variant="outlined"
+                  fullWidth={true}
+                  label="Type Company Name or Ticker"
+                  error={errors ? true : false}
+                  helperText={errors}
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <React.Fragment>
+                        {loadingSuggestion ? (
+                          <CircularProgress color="inherit" size={20} />
+                        ) : null}
+                        {params.InputProps.endAdornment}
+                      </React.Fragment>
+                    ),
+                  }}
+                />
+              )
+            }}
+          />
+        </div>
       </div>
       <div className="mb-10">{updateUserPickedMetrics(calledCompanies)}</div>
     </>
