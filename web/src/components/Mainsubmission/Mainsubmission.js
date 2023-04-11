@@ -45,7 +45,7 @@ export const Mainsubmission = () => {
   const [textPrompt, setPrompt] = useRecoilState(textPromptAtom)
   const [suggestions, setSuggestion] = useRecoilState(suggestionsAtom)
   const [_secReport, setSECReports] = useRecoilState(secReportsAtom)
-  const [value, setValue] = useState(null)
+  const [value, _setValue] = useState(null)
   const [inputValue, setInputValue] = useState('')
 
   const [sectorCompanies, setSectorCompanies] =
