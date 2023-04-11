@@ -29,9 +29,7 @@ export function popCompany(plotData, index) {
   } else {
     for (const metric in plotData) {
       let company = plotData[metric]['nameCompany'].splice(updatedIndex, 1)[0]
-      // var seqNum = plotData[metric]['companyOrder'][company]
-      // delete plotData[metric]['companyOrder'][company]
-      // delete plotData[metric]['companyOrder'][seqNum]
+
       // remove the specific stroke width
       plotData[metric]['strokeWidth'].splice(updatedIndex, 1)
       for (const companyName in plotData[metric]['data']) {
@@ -62,12 +60,6 @@ export function preparePlotData(data, plotData, strokeWidth) {
   if (strokeWidth === undefined) {
     strokeWidth = 1
   }
-  // let index
-  // if (Object.keys(plotData).length === 0) {
-  //   index = 0
-  // } else {
-  //   index = plotData['netIncome']['nameCompany'].length
-  // }
 
   const nameCompany = data.companyName
   const metricsArrays = data.metricValues
@@ -82,16 +74,10 @@ export function preparePlotData(data, plotData, strokeWidth) {
       plotData[metricNames[i]]['nameCompany'] = [nameCompany]
       plotData[metricNames[i]]['strokeWidth'] = [strokeWidth]
       plotData[metricNames[i]]['description'] = metricsDescription[i]
-      // companyOrder is an Object that keeps track of the order that companies have been
-      // added to the plotData. companyOrder will never get removed from the array until
-      // we delete the last company. It contains both key:value and value:key pairs.
-      // plotData[metricNames[i]]['companyOrder'] = {}
     } else {
       plotData[metricNames[i]]['nameCompany'].push(nameCompany)
       plotData[metricNames[i]]['strokeWidth'].push(strokeWidth)
     }
-    // plotData[metricNames[i]]['companyOrder'][index] = nameCompany
-    // plotData[metricNames[i]]['companyOrder'][nameCompany] = index
 
     if (!('data' in plotData[metricNames[i]])) {
       plotData[metricNames[i]]['data'] = metricsArrays[i].map((item, index) => {
