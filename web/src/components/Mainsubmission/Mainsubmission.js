@@ -34,8 +34,6 @@ import {
 } from 'src/recoil/atoms'
 import { sectorCompanies as sectorCompaniesAtom } from 'src/recoil/sectorAtom'
 
-import './Mainsubmission.css'
-
 export const Mainsubmission = () => {
   const [calledCompanies, setCalledCompanies] =
     useRecoilState(calledCompaniesAtom)
@@ -230,7 +228,7 @@ export const Mainsubmission = () => {
 
   return (
     <>
-      <div className="searchbar-company flex flex-row mt-5 mb-3">
+      <div className="flex flex-row mt-5 mb-3">
         <div className="w-96">
           <Autocomplete
             clearIcon={
@@ -285,7 +283,6 @@ export const Mainsubmission = () => {
             renderInput={(params) => {
               return (
                 <TextField
-                  className="text-field-searchbar"
                   onChange={(e) => onChangeTextField(e.target.value)}
                   {...params}
                   variant="outlined"
