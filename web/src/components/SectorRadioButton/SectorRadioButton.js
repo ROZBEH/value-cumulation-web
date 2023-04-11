@@ -8,19 +8,17 @@ import Sheet from '@mui/joy/Sheet'
 import { useRecoilValue, useRecoilState } from 'recoil'
 
 import {
-  valueTicker as valueTickerAtom,
   sectorComp as sectorCompAtom,
   calledCompanies as calledCompaniesAtom,
 } from 'src/recoil/atoms'
 export const SectorRadioButton = () => {
-  const valueTicker = useRecoilValue(valueTickerAtom)
-  const [value, setValue] = React.useState(valueTicker[0].symbol)
-  const [sectorComp, setSectorComp] = useRecoilState(sectorCompAtom)
   const calledCompanies = useRecoilValue(calledCompaniesAtom)
+  const [value, setValue] = React.useState(calledCompanies[0].symbol)
+  const [sectorComp, setSectorComp] = useRecoilState(sectorCompAtom)
 
   React.useEffect(() => {
-    if (sectorComp === '') setSectorComp(valueTicker[0].symbol)
-  }, [sectorComp, valueTicker, setSectorComp])
+    if (sectorComp === '') setSectorComp(calledCompanies[0].symbol)
+  }, [sectorComp, setSectorComp, calledCompanies])
   return (
     <Box sx={{ width: 300 }}>
       {/* <FormLabel

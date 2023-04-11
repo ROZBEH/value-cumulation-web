@@ -28,32 +28,6 @@ export const textPrompt = atom({
   default: '',
 })
 
-// Value and inputValue for mainSubmission autocomplete searchbar
-export const valueTicker = atom({
-  key: 'valueTicker',
-  default: [
-    {
-      exchange: 'NASDAQ Global Select',
-      exchangeShortName: 'NASDAQ',
-      name: 'Apple Inc.',
-      symbol: 'AAPL',
-      type: 'stock',
-    },
-    {
-      exchange: 'NASDAQ Global Select',
-      exchangeShortName: 'NASDAQ',
-      name: 'Microsoft Corporation',
-      symbol: 'MSFT',
-      type: 'stock',
-    },
-  ],
-})
-
-export const inputValueTicker = atom({
-  key: 'inputValueTicker',
-  default: ['', ''],
-})
-
 // List of companies to be suggested to the user based
 // on the text they type in the searchbar
 export const suggestions = atom({

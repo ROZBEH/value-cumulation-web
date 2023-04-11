@@ -31,7 +31,6 @@ export const PlotFundamentals = (props) => {
     '#4363d8',
     '#ffd8b1',
   ]
-  console.log('plotData.companyOrder = ', plotData.companyOrder)
 
   const DataFormater = (number) => {
     var absNumber = Math.abs(number)
@@ -85,13 +84,13 @@ export const PlotFundamentals = (props) => {
 
         {plotData.nameCompany.map((name, index) => (
           <Line
-            strokeWidth={plotData.strokeWidth[plotData.companyOrder[name]]}
+            strokeWidth={plotData.strokeWidth[index]}
             datasetFill={true}
             key={index}
             isAnimationActive={false}
             type="monotone"
             dataKey={name}
-            stroke={stroke[plotData.companyOrder[name]]}
+            stroke={stroke[index]}
           />
         ))}
         <Tooltip
