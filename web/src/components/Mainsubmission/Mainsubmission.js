@@ -48,7 +48,7 @@ export const Mainsubmission = () => {
   const [value, setValue] = useState(null)
   const [inputValue, setInputValue] = useState('')
 
-  const [_sectorCompanies, setSectorCompanies] =
+  const [sectorCompanies, setSectorCompanies] =
     useRecoilState(sectorCompaniesAtom)
   const loadingSuggestion = companyList.length === 0
   const [getGPTResSector, { loading: loadingGPTSector }] = useLazyQuery(
@@ -111,7 +111,6 @@ export const Mainsubmission = () => {
   )
 
   const clearInput = () => {
-    console.log('inside clear input')
     const autoCompleteClear = document.getElementsByClassName(
       'MuiAutocomplete-clearIndicator'
     )[0]
@@ -157,7 +156,6 @@ export const Mainsubmission = () => {
       clearInput()
     }
   }
-  console.log('calledCompanies=', calledCompanies)
 
   const updateUserPickedMetrics = (values, _getTagProps) => {
     {
@@ -205,8 +203,9 @@ export const Mainsubmission = () => {
     setCalledCompanies((value) => value.filter((v) => v.name !== name))
     // filtering out the company from the sectorCompanies
 
-    const { [toBeRemoved.symbol]: _removedKey, ...rest } = setSectorCompanies
-    setSectorCompanies(rest)
+    const { [toBeRemoved.symbol]: _removedKey, ...remained } = sectorCompanies
+
+    setSectorCompanies(remained)
 
     if (calledCompaniesLength == 1) {
       setPltData({})
