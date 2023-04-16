@@ -26,7 +26,7 @@ import './scaffold.css'
 import './index.css'
 
 const stripePromise = loadStripe(process.env.STRIPE_PK)
-const TRACKING_ID = 'G-7PBJEP7P70'
+const TRACKING_ID = 'G-DBB4R16G46'
 ReactGA.initialize(TRACKING_ID)
 
 const App = () => (
