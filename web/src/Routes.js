@@ -22,7 +22,7 @@ import ReactGA from 'react-ga'
 import { Router, Private, Route, Set } from '@redwoodjs/router'
 
 // Get the tracking ID from the environment variable
-const TRACKING_ID = process.env.GOOGLE_ANALYTICS_ID
+const TRACKING_ID = 'G-7PBJEP7P70'
 ReactGA.initialize(TRACKING_ID)
 
 import MainLayout from 'src/layouts/MainLayout'
