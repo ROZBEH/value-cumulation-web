@@ -8,7 +8,6 @@ You are strictly prohibited from distributing or using this repository unless ot
 
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
-import ReactGA from 'react-ga'
 import { RecoilRoot } from 'recoil'
 
 import '@fontsource/roboto/300.css'
@@ -26,8 +25,6 @@ import './scaffold.css'
 import './index.css'
 
 const stripePromise = loadStripe(process.env.STRIPE_PK)
-const TRACKING_ID = process.env.GOOGLE_ANALYTICS_ID
-ReactGA.initialize(TRACKING_ID)
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>

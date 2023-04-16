@@ -15,21 +15,10 @@ You are strictly prohibited from distributing or using this repository unless ot
 // 'src/pages/HomePage/HomePage.js'         -> HomePage
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
-import React, { useEffect } from 'react'
-
-import ReactGA from 'react-ga'
-
 import { Router, Private, Route, Set } from '@redwoodjs/router'
-
-// Get the tracking ID from the environment variable
-const TRACKING_ID = process.env.GOOGLE_ANALYTICS_ID
-ReactGA.initialize(TRACKING_ID)
 
 import MainLayout from 'src/layouts/MainLayout'
 const Routes = () => {
-  useEffect(() => {
-    ReactGA.pageview(window.location.pathname + window.location.search)
-  }, [])
   return (
     <Router>
       <Set wrap={[MainLayout]}>
