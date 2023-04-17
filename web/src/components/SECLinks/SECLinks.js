@@ -104,10 +104,10 @@ export const SECLinks = () => {
   return (
     <>
       <div>
-        <div>
-          {calledCompanies.length > 0 && (
-            <div className="ml-1">
-              {/* Pick Company */}
+        {calledCompanies.length > 0 && (
+          <div className="flex">
+            {/* Pick Company */}
+            <div className="w-1/5 ml-2">
               <Autocomplete
                 onBlur={() => {
                   setTimeout(() => {}, 100)
@@ -124,18 +124,18 @@ export const SECLinks = () => {
                 options={calledCompanies}
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 getOptionLabel={(option) => `${option.name} (${option.symbol})`}
-                sx={{ width: 1100 }}
                 renderInput={(params) => (
                   <TextField
                     className="text-field-searchbar"
                     variant="standard"
-                    // fullWidth
                     {...params}
                     label="Pick a Company"
                   />
                 )}
               />
-              {/* Pick Report */}
+            </div>
+            {/* Pick Report */}
+            <div className="w-1/5 ml-4">
               <Autocomplete
                 onBlur={() => {
                   setTimeout(() => {}, 100)
@@ -152,19 +152,18 @@ export const SECLinks = () => {
                 options={reportNameArrays}
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 getOptionLabel={(option) => option}
-                sx={{ width: 1100 }}
                 renderInput={(params) => (
                   <TextField
-                    className="text-field-searchbar ml-12"
-                    style={{ marginLeft: '15px' }}
+                    className="text-field-searchbar"
                     variant="standard"
-                    // fullWidth
                     {...params}
                     label="Pick a Report"
                   />
                 )}
               />
-              {/* Pick Date */}
+            </div>
+            {/* Pick Date */}
+            <div className="w-1/5 ml-4">
               <Autocomplete
                 onBlur={() => {
                   setTimeout(() => {}, 100)
@@ -181,25 +180,24 @@ export const SECLinks = () => {
                 options={pickedReportArrays}
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 getOptionLabel={(option) => option.fillingDate}
-                sx={{ width: 1100 }}
+                // sx={{ width: 1100 }}
                 renderInput={(params) => (
                   <TextField
                     className="text-field-searchbar"
                     variant="standard"
-                    // fullWidth
-                    style={{ marginLeft: '15px' }}
                     {...params}
                     label="Pick a Date"
                   />
                 )}
               />
             </div>
-          )}
-          {calledCompanies.length == 0 && (
-            <div>Please first pick a company on the FINANCIALS tab</div>
-          )}
-        </div>
+          </div>
+        )}
+        {calledCompanies.length == 0 && (
+          <div>Please first pick a company on the FINANCIALS tab</div>
+        )}
       </div>
+
       <div className="clear-left my-1"></div>
       {calledCompanies.length > 0 && reportLink && (
         <div className="clear-left my-10">
