@@ -105,6 +105,11 @@ export class Checklist {
     return this.metricDelta(this.dfIncomeStatement, 'revenue', years)
   }
 
+  revenue = (years = 10) => {
+    /*revenue over the years */
+    return this.dfIncomeStatement.getSeries('revenue').toArray().slice(0, years)
+  }
+
   costRevenueDelta = (years = 10) => {
     /* change in cost of revenue over the years */
     return this.metricDelta(this.dfIncomeStatement, 'costOfRevenue', years)

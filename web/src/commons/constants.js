@@ -12,6 +12,7 @@ const availableMetrics = [
   'netProfitMargin',
   'debtRatio',
   'netIncome',
+  'revenue',
   'freeCashFlow',
   'marketCapChangeWithRetainedEarnings',
   'grossProfitMargin',
