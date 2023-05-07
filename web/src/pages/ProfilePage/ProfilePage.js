@@ -15,7 +15,7 @@ import { Autocomplete, TextField } from '@mui/material'
 import { toast } from 'react-toastify'
 import { useRecoilState } from 'recoil'
 
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 import { MetaTags, useMutation } from '@redwoodjs/web'
 
 import { AVAILABLE_METRICS } from 'src/commons/constants'

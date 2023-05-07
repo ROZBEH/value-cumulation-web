@@ -13,7 +13,7 @@ import DoneIcon from '@mui/icons-material/Done'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 import {
   Form,
   Label,

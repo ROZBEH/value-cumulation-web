@@ -14,7 +14,6 @@ import DoneIcon from '@mui/icons-material/Done'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -25,6 +24,9 @@ import {
 } from '@redwoodjs/forms'
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
+
+import { useAuth } from 'src/auth'
+import GoogleSignInButton from 'src/components/GoogleSignInButton'
 
 const SignupPage = () => {
   const [_spreeState, spreeSubmit] = useSpreeForm('xvongzpq')
@@ -112,6 +114,7 @@ const SignupPage = () => {
       <MetaTags title="Signup" />
 
       <main className="rw-main">
+        <GoogleSignInButton />
         <div className="rw-scaffold rw-login-container">
           <div className="rw-segment">
             <header className="rw-segment-header">
