@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@redwoodjs/api": "5.0.6",
+    "@redwoodjs/auth-dbauth-api": "^5.0.6",
     "@redwoodjs/graphql-server": "5.0.6",
     "@stripe/stripe-js": "^1.36.0",
     "@xstate/immer": "^0.3.1",
@@ -14,12 +15,11 @@
     "data-forge": "^1.9.6",
     "express": "^4.18.1",
     "filereader": "^0.10.3",
-    "googleapis": "^118.0.0",
+    "from": "^0.1.7",
     "jest-matcher-deep-close-to": "^3.0.2",
     "nodemailer": "^6.9.0",
     "openai": "^3.2.1",
     "passport": "^0.6.0",
-    "passport-google-oauth20": "^2.0.0",
     "stripe": "^12.4.0",
     "tailwindcss": "^3.0.24"
   }
