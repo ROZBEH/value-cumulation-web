@@ -1,7 +1,40 @@
+/**
+Value Cumulation
+Copyright (c) 2022 Value Cumulation
+
+Notice: All code and information in this repository is the property of Value Cumulation.
+You are strictly prohibited from distributing or using this repository unless otherwise stated.
+ */
+
+import { randomUUID } from 'crypto'
+
 import { DbAuthHandler } from '@redwoodjs/auth-dbauth-api'
 
 import { db } from 'src/lib/db'
+import { logger } from 'src/lib/logger'
+import { sendEmail } from 'src/lib/mailer'
+// import { logger } from 'src/lib/logger'
+import { stripe } from 'src/lib/stripe'
 
+const verificationEmail = {
+  subject: () => 'Verify Email',
+  htmlBody: (user) => {
+    const link = `${process.env.REDIRECT_URL}/verification?verifyToken=${user.verifyToken}`
+    const appName = process.env.APP_NAME
+
+    if (process.env.NODE_ENV === 'development') {
+      logger.debug(link)
+    }
+
+    return `
+        <div> Hi ${user.name}, </div>
+        <p>Please find below a link to verify your email for the ${appName}:</p>
+        <a href="${link}">${link}</a>
+        <p>If you did not request this action, please ignore this email.</p>
+        <p>We appreciate doing busines with you ❤️</p>
+      `
+  },
+}
 export const handler = async (event, context) => {
   const forgotPasswordOptions = {
     // handler() is invoked after verifying that a user was found with the given
@@ -16,12 +49,25 @@ export const handler = async (event, context) => {
     // You could use this return value to, for example, show the email
     // address in a toast message so the user will know it worked and where
     // to look for the email.
-    handler: (user) => {
+    handler: async (user) => {
+      const resetLink = `${process.env.REDIRECT_URL}/reset-password?resetToken=${user.resetToken}`
+      const message = {
+        to: user.email,
+        subject: 'Reset Password',
+        html: `
+        <p>Here is the link to reset your password. It will expire after 5 minutes. <a href="${resetLink}">Reset my Password</a></p>
+        <p> Please copy and paste the following link into your browser if the above link does not work.</p>
+        <p>${resetLink}</p>
+        <p>If you did not request a password reset, please ignore this email.</p>
+        <p>We appreciate doing busines with you ❤️</p>`,
+      }
+      await sendEmail(message)
+
       return user
     },
 
-    // How long the resetToken is valid for, in seconds (default is 24 hours)
-    expires: 60 * 60 * 24,
+    // How long the resetToken is valid for, in seconds (default is 5minutes)
+    expires: 60 * 5,
 
     errors: {
       // for security reasons you may want to be vague here rather than expose
@@ -46,16 +92,19 @@ export const handler = async (event, context) => {
     // by the `logIn()` function from `useAuth()` in the form of:
     // `{ message: 'Error message' }`
     handler: (user) => {
+      // if (user.verifyToken) {
+      //   throw new Error('Please check your email to verify your account.')
+      // }
       return user
     },
 
     errors: {
       usernameOrPasswordMissing: 'Both username and password are required',
-      usernameNotFound: 'Username ${username} not found',
+      usernameNotFound: 'Invalid username or password',
       // For security reasons you may want to make this the same as the
       // usernameNotFound error so that a malicious user can't use the error
       // to narrow down if it's the username or password that's incorrect
-      incorrectPassword: 'Incorrect password for ${username}',
+      incorrectPassword: 'Invalid username or password',
     },
 
     // How long a user will remain logged in, in seconds
@@ -67,12 +116,12 @@ export const handler = async (event, context) => {
     // the database. Returning anything truthy will automatically logs the user
     // in. Return `false` otherwise, and in the Reset Password page redirect the
     // user to the login page.
-    handler: (_user) => {
-      return true
+    handler: (user) => {
+      return user
     },
 
     // If `false` then the new password MUST be different than the current one
-    allowReusedPassword: true,
+    allowReusedPassword: false,
 
     errors: {
       // the resetToken is valid, but expired
@@ -102,21 +151,93 @@ export const handler = async (event, context) => {
     //
     // If this returns anything else, it will be returned by the
     // `signUp()` function in the form of: `{ message: 'String here' }`.
-    handler: ({ username, hashedPassword, salt, userAttributes }) => {
-      return db.user.create({
+    handler: async ({
+      username: email,
+      hashedPassword: hashedPassword,
+      salt,
+      userAttributes,
+    }) => {
+      // get customerID from Stripe using email
+      const customerList = await stripe.customers.list({ email })
+      let customerId = ''
+      let customerName = userAttributes.name
+      if (customerList.data.length > 0) {
+        customerId = customerList.data[0].id
+        customerName = customerList.data[0].name
+      } else {
+        const newCustomer = await stripe.customers.create({
+          email,
+          name: customerName,
+        })
+        customerId = newCustomer.id
+      }
+      const user = await db.user.create({
         data: {
-          email: username,
+          id: customerId,
+          email,
           hashedPassword: hashedPassword,
           salt: salt,
+          name: customerName,
+          verifyToken: randomUUID(),
           // name: userAttributes.name
         },
       })
+
+      await Promise.all([
+        sendEmail({
+          to: user.email,
+          subject: verificationEmail.subject(),
+          html: verificationEmail.htmlBody(user),
+        }),
+        sendEmail({
+          to: 'rouzbeh.asghari@gmail.com',
+          subject: 'New User Signed Up',
+          html: `<p>${user.name} with the email ${user.email} signed up</p>`,
+        }),
+      ])
+
+      const msg = '🙏 Please check your email to verify your account.'
+
+      // return msg
+      return user
     },
 
-    // Include any format checks for password here. Return `true` if the
-    // password is valid, otherwise throw a `PasswordValidationError`.
-    // Import the error along with `DbAuthHandler` from `@redwoodjs/api` above.
-    passwordValidation: (_password) => {
+    passwordValidation: (password) => {
+      if (password.length < 8) {
+        throw new PasswordValidationError(
+          'Password must be at least 8 characters'
+        )
+      }
+
+      if (!password.match(/[A-Z]/)) {
+        {
+          throw new PasswordValidationError(
+            'Password must contain at least one uppercase letter'
+          )
+        }
+      }
+      if (!password.match(/[a-z]/)) {
+        {
+          throw new PasswordValidationError(
+            'Password must contain at least one lowercase letter'
+          )
+        }
+      }
+      if (!password.match(/[0-9]/)) {
+        {
+          throw new PasswordValidationError(
+            'Password must contain at least one number'
+          )
+        }
+      }
+      if (!password.match(/[!@#$%^&*()]/)) {
+        {
+          throw new PasswordValidationError(
+            'Password must contain at least one special character'
+          )
+        }
+      }
+
       return true
     },
 
@@ -135,10 +256,6 @@ export const handler = async (event, context) => {
     // ie. if your Prisma model is named `User` this value would be `user`, as in `db.user`
     authModelAccessor: 'user',
 
-    // The name of the property you'd call on `db` to access your user credentials table.
-    // ie. if your Prisma model is named `UserCredential` this value would be `userCredential`, as in `db.userCredential`
-    credentialModelAccessor: 'userCredential',
-
     // A map of what dbAuth calls a field to what your database calls it.
     // `id` is whatever column you use to uniquely identify a user (probably
     // something like `id` or `userId` or even `email`)
@@ -149,7 +266,7 @@ export const handler = async (event, context) => {
       salt: 'salt',
       resetToken: 'resetToken',
       resetTokenExpiresAt: 'resetTokenExpiresAt',
-      challenge: 'webAuthnChallenge',
+      // favoriteMetrics: 'favoriteMetrics',
     },
 
     // Specifies attributes on the cookie that dbAuth sets in order to remember
@@ -169,34 +286,6 @@ export const handler = async (event, context) => {
     login: loginOptions,
     resetPassword: resetPasswordOptions,
     signup: signupOptions,
-
-    // See https://redwoodjs.com/docs/authentication/dbauth#webauthn for options
-    webAuthn: {
-      enabled: true,
-      // How long to allow re-auth via WebAuthn in seconds (default is 10 years).
-      // The `login.expires` time denotes how many seconds before a user will be
-      // logged out, and this value is how long they'll be to continue to use a
-      // fingerprint/face scan to log in again. When this one expires they
-      // *must* re-enter username and password to authenticate (WebAuthn will
-      // then be re-enabled for this amount of time).
-      expires: 60 * 60 * 24 * 365 * 10,
-      name: 'Redwood Application',
-      domain:
-        process.env.NODE_ENV === 'development' ? 'localhost' : 'server.com',
-      origin:
-        process.env.NODE_ENV === 'development'
-          ? 'http://localhost:8910'
-          : 'https://server.com',
-      type: 'platform',
-      timeout: 60000,
-      credentialFields: {
-        id: 'id',
-        userId: 'userId',
-        publicKey: 'publicKey',
-        transports: 'transports',
-        counter: 'counter',
-      },
-    },
   })
 
   return await authHandler.invoke()
