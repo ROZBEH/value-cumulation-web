@@ -15,9 +15,9 @@ import classNames from 'classnames'
 import { toast } from 'react-toastify'
 import { useRecoilState } from 'recoil'
 
-import { useAuth } from '@redwoodjs/auth'
 import { useMutation } from '@redwoodjs/web'
 
+import { useAuth } from 'src/auth'
 import { AVAILABLE_METRICS } from 'src/commons/constants'
 import { UPDATE_FAVORITES, DELETE_FAVORITES } from 'src/commons/gql'
 import {
