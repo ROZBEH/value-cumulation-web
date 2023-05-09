@@ -12,7 +12,6 @@ import { useEffect } from 'react'
 import { useForm as useSpreeForm } from '@formspree/react'
 import { toast } from 'react-toastify'
 
-import { useAuth } from 'src/auth'
 import {
   Form,
   Label,
@@ -24,7 +23,7 @@ import {
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
-import GoogleSignInButton from 'src/components/GoogleSignInButton'
+import { useAuth } from 'src/auth'
 
 const LoginPage = () => {
   const [_spreeState, spreeSubmit] = useSpreeForm('xknagowb')
@@ -62,7 +61,6 @@ const LoginPage = () => {
     <>
       <MetaTags title="Login" />
       <main className="rw-main">
-        <GoogleSignInButton />
         <div className="rw-scaffold rw-login-container">
           <div className="rw-segment">
             <header className="rw-segment-header">
