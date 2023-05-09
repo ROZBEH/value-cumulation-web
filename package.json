@@ -12,7 +12,7 @@
     "@redwoodjs/core": "5.0.6"
   },
   "dependencies": {
-    "@redwoodjs/core": "^3.4.0"
+    "@redwoodjs/core": "^5.0.6"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
