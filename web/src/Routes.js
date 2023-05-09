@@ -17,10 +17,12 @@ You are strictly prohibited from distributing or using this repository unless ot
 
 import { Router, Private, Route, Set } from '@redwoodjs/router'
 
+import { useAuth } from 'src/auth'
 import MainLayout from 'src/layouts/MainLayout'
+
 const Routes = () => {
   return (
-    <Router>
+    <Router useAuth={useAuth}>
       <Set wrap={[MainLayout]}>
         <Route path="/login" page={LoginPage} name="login" />
         <Route path="/signup" page={SignupPage} name="signup" />

@@ -13,7 +13,6 @@ import DoneIcon from '@mui/icons-material/Done'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -23,6 +22,8 @@ import {
 } from '@redwoodjs/forms'
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
+
+import { useAuth } from 'src/auth'
 
 const ResetPasswordPage = ({ resetToken }) => {
   const { isAuthenticated, reauthenticate, validateResetToken, resetPassword } =

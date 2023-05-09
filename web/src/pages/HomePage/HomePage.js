@@ -8,13 +8,12 @@ You are strictly prohibited from distributing or using this repository unless ot
 import * as React from 'react'
 import { useEffect } from 'react'
 
-import { useLazyQuery } from '@apollo/react-hooks'
+import { useLazyQuery } from '@apollo/client'
 import { Tabs, Tab, Box } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import PropTypes from 'prop-types'
 
-import { useAuth } from '@redwoodjs/auth'
-
+import { useAuth } from 'src/auth'
 import { SUBS_HISTORY } from 'src/commons/gql'
 import { Companyfinder } from 'src/components/Companyfinder/Companyfinder'
 import { Financials } from 'src/components/Financials/Financials'

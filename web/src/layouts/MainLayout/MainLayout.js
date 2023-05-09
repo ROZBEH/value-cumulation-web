@@ -9,8 +9,9 @@ You are strictly prohibited from distributing or using this repository unless ot
 import '!style-loader!css-loader!react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
 
-import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
+
+import { useAuth } from 'src/auth'
 // import Cart from 'src/components/Cart'
 const MainLayout = ({ children }) => {
   const { isAuthenticated, currentUser, logOut, loading } = useAuth()

@@ -8,7 +8,7 @@ You are strictly prohibited from distributing or using this repository unless ot
 
 import { useEffect } from 'react'
 
-import { useLazyQuery } from '@apollo/react-hooks'
+import { useLazyQuery } from '@apollo/client'
 import { TailSpin } from 'react-loader-spinner'
 import { useRecoilValue, useRecoilState } from 'recoil'
 

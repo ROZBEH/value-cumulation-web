@@ -1,11 +1,4 @@
-/**
-Value Cumulation
-Copyright (c) 2022 Value Cumulation
-
-Notice: All code and information in this repository is the property of Value Cumulation.
-You are strictly prohibited from distributing or using this repository unless otherwise stated.
- */
-
+import { authDecoder } from '@redwoodjs/auth-dbauth-api'
 import { createGraphQLHandler } from '@redwoodjs/graphql-server'
 
 import directives from 'src/directives/**/*.{js,ts}'
@@ -17,6 +10,7 @@ import { db } from 'src/lib/db'
 import { logger } from 'src/lib/logger'
 
 export const handler = createGraphQLHandler({
+  authDecoder,
   getCurrentUser,
   // cors: {
   //   origin: '*',
@@ -26,6 +20,7 @@ export const handler = createGraphQLHandler({
   directives,
   sdls,
   services,
+  armorConfig: { maxDepth: { n: 6 } },
   onException: () => {
     // Disconnect from your database with an unhandled exception.
     db.$disconnect()
