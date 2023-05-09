@@ -11,6 +11,9 @@
     "@redwoodjs/auth-dbauth-setup": "5.0.6",
     "@redwoodjs/core": "5.0.6"
   },
+  "dependencies": {
+    "@redwoodjs/core": "^3.4.0"
+  },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
     "root": true
