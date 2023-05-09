@@ -7,7 +7,7 @@ You are strictly prohibited from distributing or using this repository unless ot
  */
 
 export const STARTUP_QUERY = gql`
-  query {
+  query Companyslist {
     companyslist {
       symbol
       name
@@ -20,7 +20,7 @@ export const STARTUP_QUERY = gql`
 `
 
 export const USER_QUERY = gql`
-  query ($id: String!) {
+  query User($id: String!) {
     user(id: $id) {
       email
       favorites {
@@ -88,7 +88,7 @@ export const CREATE_CONTACT = gql`
 `
 
 export const GPT_QUERY_SECTOR = gql`
-  query ($query: String!) {
+  query GptIntelligence($query: String!) {
     gptIntelligence(query: $query) {
       query
       response {
@@ -105,7 +105,7 @@ export const GPT_QUERY_SECTOR = gql`
 `
 
 export const GPT_QUERY_SENTIMENT = gql`
-  query ($query: String!) {
+  query GptSentiment($query: String!) {
     gptSentiment(query: $query) {
       query
       sentiment
