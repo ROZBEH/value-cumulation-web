@@ -9,6 +9,7 @@ You are strictly prohibited from distributing or using this repository unless ot
 export const metricsDefinition = {
   netIncome: `The net income of a company is its total revenue minus its total expenses.`,
   ratioCostOfRevenue: `Ratio of cost of revenue to revenue. This shows how much the company needs to spend in order to increase $1 in the revenue.`,
+  revenue: `The revenue of a company is the total amount of money that the company has earned from its normal business activities.`,
   burnRatio: `How much a company has to spend in order to generate $1 in revenue.`,
   rAndDBudgetToRevenue: `The R&D budget to revenue of a company is the percentage of the company's total revenue that is spent on research and development.`,
   grossProfitMargin: `The growth profit margin of a company is the percentage of its total revenue that is profit.`,

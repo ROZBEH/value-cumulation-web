@@ -1,8 +1,8 @@
 import { toast } from 'react-toastify'
 
-import { useAuth } from '@redwoodjs/auth'
 import { useMutation } from '@redwoodjs/web'
 
+import { useAuth } from 'src/auth'
 import { CREATE_BILLING_PORTAL_SESSION } from 'src/commons/gql'
 
 function timeout(delay) {

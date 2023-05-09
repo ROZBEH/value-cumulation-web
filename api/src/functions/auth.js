@@ -8,7 +8,10 @@ You are strictly prohibited from distributing or using this repository unless ot
 
 import { randomUUID } from 'crypto'
 
-import { DbAuthHandler, PasswordValidationError } from '@redwoodjs/api'
+import {
+  DbAuthHandler,
+  PasswordValidationError,
+} from '@redwoodjs/auth-dbauth-api'
 
 import { db } from 'src/lib/db'
 import { logger } from 'src/lib/logger'

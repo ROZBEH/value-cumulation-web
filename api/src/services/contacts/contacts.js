@@ -6,7 +6,7 @@ Notice: All code and information in this repository is the property of Value Cum
 You are strictly prohibited from distributing or using this repository unless otherwise stated.
  */
 
-import { validate } from '@redwoodjs/api'
+import { validate } from '@redwoodjs/auth-dbauth-api'
 
 import { db } from 'src/lib/db'
 import { sendEmail } from 'src/lib/mailer'

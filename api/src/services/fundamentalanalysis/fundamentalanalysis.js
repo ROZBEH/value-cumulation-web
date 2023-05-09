@@ -18,6 +18,7 @@ async function callApi(ticker) {
   var metrics = [
     'netIncome',
     'ratioCostOfRevenue',
+    'revenue',
     'burnRatio',
     'rAndDBudgetToRevenue',
     'grossProfitMargin',

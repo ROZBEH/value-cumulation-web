@@ -19,7 +19,13 @@ export const metricBox = atom({
 // Create an atom for the list of metrics to be added to the plot
 export const metrics = atom({
   key: 'metrics',
-  default: ['netIncome', 'freeCashFlow', 'grossProfitMargin', 'priceToEarning'],
+  default: [
+    'netIncome',
+    'revenue',
+    'freeCashFlow',
+    'grossProfitMargin',
+    'priceToEarning',
+  ],
 })
 
 // Saves the current text in the searchbar as user types
