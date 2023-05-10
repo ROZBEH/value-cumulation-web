@@ -12,7 +12,6 @@ import { useEffect } from 'react'
 import { useForm as useSpreeForm } from '@formspree/react'
 import { toast } from 'react-toastify'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -23,6 +22,8 @@ import {
 } from '@redwoodjs/forms'
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
+
+import { useAuth } from 'src/auth'
 
 const LoginPage = () => {
   const [_spreeState, spreeSubmit] = useSpreeForm('xknagowb')

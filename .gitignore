@@ -26,7 +26,6 @@ api/types/graphql.d.ts
 .env.defaults
 .env.example
 .nvmrc
-.yarnrc.yml
+# .yarnrc.yml
 .vscode
-.yarn/releases
 __pycache__/

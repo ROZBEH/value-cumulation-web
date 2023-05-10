@@ -2,10 +2,11 @@ import { useEffect } from 'react'
 
 import { toast } from 'react-toastify'
 
-import { useAuth } from '@redwoodjs/auth'
 import { useMutation } from '@redwoodjs/web'
 
+import { useAuth } from 'src/auth'
 import { CREATE_CHECKOUT_SESSION } from 'src/commons/gql'
+
 const StripeCheckout = () => {
   const { currentUser } = useAuth()
 

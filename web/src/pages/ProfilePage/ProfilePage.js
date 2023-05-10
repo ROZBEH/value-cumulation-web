@@ -8,16 +8,16 @@ You are strictly prohibited from distributing or using this repository unless ot
 
 import { useState, useEffect } from 'react'
 
-import { useLazyQuery } from '@apollo/react-hooks'
+import { useLazyQuery } from '@apollo/client'
 import { Chip, Tooltip } from '@material-ui/core'
 import { CancelRounded } from '@material-ui/icons'
 import { Autocomplete, TextField } from '@mui/material'
 import { toast } from 'react-toastify'
 import { useRecoilState } from 'recoil'
 
-import { useAuth } from '@redwoodjs/auth'
 import { MetaTags, useMutation } from '@redwoodjs/web'
 
+import { useAuth } from 'src/auth'
 import { AVAILABLE_METRICS } from 'src/commons/constants'
 import {
   USER_QUERY,
