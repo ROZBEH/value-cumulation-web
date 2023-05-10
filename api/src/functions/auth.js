@@ -10,6 +10,7 @@ import { randomUUID } from 'crypto'
 
 import { DbAuthHandler } from '@redwoodjs/auth-dbauth-api'
 
+import { handler as googleLogin } from 'src/functions/googleLogin'
 import { db } from 'src/lib/db'
 import { logger } from 'src/lib/logger'
 import { sendEmail } from 'src/lib/mailer'
