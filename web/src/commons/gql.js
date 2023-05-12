@@ -162,3 +162,12 @@ export const CREATE_BILLING_PORTAL_SESSION = gql`
     }
   }
 `
+
+export const GOOGLE_LOGIN = gql`
+  query Googlelogin($idToken: String!) {
+    googlelogin(idToken: $idToken) {
+      status
+      sessionToken
+    }
+  }
+`
