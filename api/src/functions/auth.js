@@ -10,7 +10,6 @@ import { randomUUID } from 'crypto'
 
 import { DbAuthHandler } from '@redwoodjs/auth-dbauth-api'
 
-import { handler as googleLogin } from 'src/functions/googleLogin'
 import { db } from 'src/lib/db'
 import { logger } from 'src/lib/logger'
 import { sendEmail } from 'src/lib/mailer'
@@ -96,6 +95,7 @@ export const handler = async (event, context) => {
       // if (user.verifyToken) {
       //   throw new Error('Please check your email to verify your account.')
       // }
+      console.log('user inside handler:', user)
       return user
     },
 
@@ -288,6 +288,44 @@ export const handler = async (event, context) => {
     resetPassword: resetPasswordOptions,
     signup: signupOptions,
   })
+
+  const originalLogin = authHandler.login
+
+  authHandler.login = async () => {
+    console.log('inside the  newly defined login function!')
+    const user = {
+      id: 'cus_NsivtXW7BsajRA',
+      email: 'rouzbeh.asghari@gmail.com',
+      // googleId: null,
+      // name: 'Rouzbeh Shirvani',
+    }
+    console.log('user:', user)
+    const loginResponse = authHandler._loginResponse(user)
+    // console.log('loginResponse:', loginResponse)
+    // return loginResponse
+
+    console.log('inside the newly defined login function!')
+    console.log('authHandler.params:', authHandler.params)
+    const { type, username, password } = authHandler.params
+    console.log('params:', authHandler.params)
+    return loginResponse
+
+    // if (type) {
+    //   // assume type is only present for OAuth logins
+
+    //   console.log('type:', type)
+    //   return { response: 'type' }
+    // } else if (username && password) {
+    //   // assume both are present for traditional logins
+    //   // Call the original login method
+    //   const callOriginalLogin = originalLogin.call(authHandler)
+    //   console.log('callOriginalLogin:', callOriginalLogin)
+    //   return callOriginalLogin
+    // } else {
+    //   // ...handle case where necessary parameters are missing...
+    //   throw 'logIn() Username, password or OAuth details not provided.'
+    // }
+  }
 
   return await authHandler.invoke()
 }
