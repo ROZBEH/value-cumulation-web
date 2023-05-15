@@ -13,7 +13,7 @@ export const handler = createGraphQLHandler({
   authDecoder,
   getCurrentUser,
   // cors: {
-  //   origin: '*',
+  //   origin: ['http://localhost:8910', 'http://localhost'],
   //   credentials: true,
   // },
   loggerConfig: { logger, options: { requestId: true } },

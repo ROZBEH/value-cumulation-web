@@ -203,26 +203,34 @@ export const handler = async (event, context) => {
     },
 
     passwordValidation: (password) => {
-      if (password.length < 8) {
+      if (password.length < 6) {
         throw new PasswordValidationError(
-          'Password must be at least 8 characters'
+          'Password must be at least 6 characters'
         )
       }
 
-      if (!password.match(/[A-Z]/)) {
+      if (!password.match(/[a-zA-Z]/)) {
         {
           throw new PasswordValidationError(
             'Password must contain at least one uppercase letter'
           )
         }
       }
-      if (!password.match(/[a-z]/)) {
-        {
-          throw new PasswordValidationError(
-            'Password must contain at least one lowercase letter'
-          )
-        }
-      }
+
+      // if (!password.match(/[A-Z]/)) {
+      //   {
+      //     throw new PasswordValidationError(
+      //       'Password must contain at least one uppercase letter'
+      //     )
+      //   }
+      // }
+      // if (!password.match(/[a-z]/)) {
+      //   {
+      //     throw new PasswordValidationError(
+      //       'Password must contain at least one lowercase letter'
+      //     )
+      //   }
+      // }
       if (!password.match(/[0-9]/)) {
         {
           throw new PasswordValidationError(
@@ -230,13 +238,13 @@ export const handler = async (event, context) => {
           )
         }
       }
-      if (!password.match(/[!@#$%^&*()]/)) {
-        {
-          throw new PasswordValidationError(
-            'Password must contain at least one special character'
-          )
-        }
-      }
+      // if (!password.match(/[!@#$%^&*()]/)) {
+      //   {
+      //     throw new PasswordValidationError(
+      //       'Password must contain at least one special character'
+      //     )
+      //   }
+      // }
 
       return true
     },

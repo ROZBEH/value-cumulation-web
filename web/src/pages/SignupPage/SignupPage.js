@@ -48,31 +48,35 @@ const SignupPage = () => {
   const [errors, setErrors] = useState({})
 
   const checkErrors = (password) => {
-    const length = password.length >= 8
-    const uppercase = /[A-Z]/.test(password)
-    const lowercase = /[a-z]/.test(password)
+    const length = password.length >= 6
+    // const uppercase = /[A-Z]/.test(password)
+    // const lowercase = /[a-z]/.test(password)
+    const hasLetter = /[a-zA-Z]/.test(password)
     const number = /[0-9]/.test(password)
-    const special = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
-    const whitespace = !/\s/.test(password)
+    // const special = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
+    // const whitespace = !/\s/.test(password)
 
     setErrors({
       length: length,
-      uppercase: uppercase,
-      lowercase: lowercase,
+      // uppercase: uppercase,
+      // lowercase: lowercase,
       number: number,
-      special: special,
-      whitespace: whitespace,
+      hasLetter: hasLetter,
+      // special: special,
+      // whitespace: whitespace,
     })
   }
   const errMsg = (error) => {
     if (error === 'length') {
-      return 'Password must be at least 8 characters'
+      return 'Password must be at least 6 characters'
     } else if (error === 'uppercase') {
       return 'Password must contain at least one uppercase letter'
     } else if (error === 'lowercase') {
       return 'Password must contain at least one lowercase letter'
     } else if (error === 'number') {
       return 'Password must contain at least one number'
+    } else if (error === 'hasLetter') {
+      return 'Password must contain at least one letter'
     } else if (error === 'special') {
       return 'Password must contain at least one special character (!@#$%^()&*)'
     } else if (error === 'whitespace') {
@@ -151,7 +155,7 @@ const SignupPage = () => {
                   />
                   <FieldError name="username" className="rw-field-error" />
 
-                  <Label
+                  {/* <Label
                     name="name"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
@@ -170,7 +174,7 @@ const SignupPage = () => {
                     }}
                   />
 
-                  <FieldError name="name" className="rw-field-error" />
+                  <FieldError name="name" className="rw-field-error" /> */}
 
                   <Label
                     name="password"
@@ -220,7 +224,7 @@ const SignupPage = () => {
                     )
                   })}
 
-                  <Label
+                  {/* <Label
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                     name="password_confirm"
@@ -241,7 +245,7 @@ const SignupPage = () => {
                   <FieldError
                     name="password_confirm"
                     className="rw-field-error"
-                  />
+                  /> */}
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">

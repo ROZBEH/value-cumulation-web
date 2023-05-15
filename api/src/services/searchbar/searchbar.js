@@ -10,6 +10,7 @@ import { fetch } from '@whatwg-node/fetch'
 
 export const companyslist = async () => {
   // Get the list of all available companies from the API
+
   const response = await fetch(
     `https://financialmodelingprep.com/api/v3/stock/list?apikey=${process.env.FINANCIAL_API_KEY}`
   )
@@ -33,6 +34,7 @@ export const companyslist = async () => {
       return null
     }
   })
+
   matches = matches.map((res) => {
     return {
       symbol: res.symbol ? res.symbol : 'N/A',
@@ -41,6 +43,15 @@ export const companyslist = async () => {
       exchange: res.exchange ? res.exchange : 'N/A',
       exchangeShortName: res.exchangeShortName ? res.exchangeShortName : 'N/A',
       type: res.type ? res.type : 'N/A',
+    }
+  })
+
+  // filter out the ones that the type is stock
+  matches = matches.filter((res) => {
+    if (res.type === 'stock') {
+      return true
+    } else {
+      return null
     }
   })
 
