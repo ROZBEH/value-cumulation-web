@@ -6,9 +6,9 @@ Notice: All code and information in this repository is the property of Value Cum
 You are strictly prohibited from distributing or using this repository unless otherwise stated.
 */
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useCallback } from 'react'
 
-// import { useLazyQuery } from '@apollo/client'
+import { useLazyQuery } from '@apollo/client'
 import { useForm as useSpreeForm } from '@formspree/react'
 import { toast } from 'react-toastify'
 
@@ -24,22 +24,22 @@ import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
-// import { GOOGLE_LOGIN } from 'src/commons/gql'
-// import GoogleButton from 'src/components/GoogleButton/GoogleButton'
+import { GOOGLE_LOGIN } from 'src/commons/gql'
+import GoogleButton from 'src/components/GoogleButton/GoogleButton'
 
 const LoginPage = () => {
   const [_spreeState, spreeSubmit] = useSpreeForm('xknagowb')
   const { isAuthenticated, logIn } = useAuth()
   // const { logIn: googLogIn } = useAuth('customGoogle')
-  // const [googleLogin] = useLazyQuery(GOOGLE_LOGIN, {
-  //   onCompleted: (data) => {
-  //     //pass
-  //     // var favMetrics = data.user.favorites.map(function (fav) {
-  //     //   return fav.name
-  //     // })
-  //     // setUserFavMetrics(favMetrics)
-  //   },
-  // })
+  const [googleLogin] = useLazyQuery(GOOGLE_LOGIN, {
+    onCompleted: (data) => {
+      //pass
+      // var favMetrics = data.user.favorites.map(function (fav) {
+      //   return fav.name
+      // })
+      // setUserFavMetrics(favMetrics)
+    },
+  })
 
   // const onGoogleLogin = useCallback(
   //   (response) => {
@@ -93,7 +93,9 @@ const LoginPage = () => {
       duration: Infinity,
     })
     const { username, password } = data
-    const response = await logIn({ username, password, method: 'email' })
+    // const response = await logIn({ username, password, method: 'email' })
+    const response = await logIn({ id: 'cus_NssOD0je7EFzF2', method: 'email' })
+
     toast.dismiss()
 
     if (response.message) {
@@ -184,13 +186,13 @@ const LoginPage = () => {
               Sign up!
             </Link>
           </div>
-          {/* <div className="g_id_signin" data-type="standard"></div>
-          <GoogleButton /> */}
-          {/* <div
+          <div className="g_id_signin" data-type="standard"></div>
+          <GoogleButton />
+          <div
             id="g_id_onload"
             data-client_id="345100971561-6m6ftaqa4fn9ls6cg3m6akinkfjl55sa.apps.googleusercontent.com"
             data-callback="handleCredentialResponse"
-          ></div> */}
+          ></div>
         </div>
       </main>
     </>

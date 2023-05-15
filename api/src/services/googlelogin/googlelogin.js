@@ -8,6 +8,9 @@ You are strictly prohibited from distributing or using this repository unless ot
 import { google } from 'googleapis'
 import jwt from 'jsonwebtoken'
 
+import { DbAuthHandler } from '@redwoodjs/auth-dbauth-api'
+
+import { handler as handleAuth } from 'src/functions/auth'
 import { db } from 'src/lib/db'
 import { stripe } from 'src/lib/stripe'
 // Use a long random string for your secret
@@ -50,8 +53,8 @@ export const googlelogin = async ({ idToken }) => {
     const customerList = await stripe.customers.list({
       email: payload['email'],
     })
-    let customerId = ''
-    let customerName = payload['given_name'] + ' ' + payload['family_name']
+    var customerId = ''
+    var customerName = payload['given_name'] + ' ' + payload['family_name']
     if (customerList.data.length > 0) {
       customerId = customerList.data[0].id
       customerName = customerList.data[0].name
@@ -76,6 +79,40 @@ export const googlelogin = async ({ idToken }) => {
   // You can now sign them in. You'll need to generate a session token.
   // Here, I'll assume you have a way to do this:
   const sessionToken = await createSessionTokenForUser(user)
+  const authHandler = new DbAuthHandler({
+    // Provide prisma db client
+    cookie: {
+      HttpOnly: true,
+      Path: '/',
+      SameSite: 'Strict',
+      Secure: process.env.NODE_ENV !== 'development' ? true : false,
+    },
+    db: db,
+
+    authModelAccessor: 'user',
+
+    authFields: {
+      id: 'id',
+      username: 'email',
+      hashedPassword: 'hashedPassword',
+      salt: 'salt',
+      resetToken: 'resetToken',
+      resetTokenExpiresAt: 'resetTokenExpiresAt',
+      // favoriteMetrics: 'favoriteMetrics',
+    },
+  })
+
+  authHandler.login = async (user) => {
+    const loginResponse = authHandler._loginResponse(user)
+    return loginResponse
+  }
+
+  const logInResponse = authHandler.login({
+    id: customerId,
+    email: payload['email'],
+  })
+  console.log('After handleAuth')
+  console.log('logInResponse: ', logInResponse)
 
   return {
     status: 'success',

@@ -15,7 +15,15 @@ import { logger } from 'src/lib/logger'
 import { sendEmail } from 'src/lib/mailer'
 // import { logger } from 'src/lib/logger'
 import { stripe } from 'src/lib/stripe'
-
+export const cors = {
+  origin: [
+    'http://0.0.0.0:8910',
+    'http://localhost:8910',
+    'http://localhost',
+    'http://10.0.2.2:8910',
+  ],
+  credentials: true,
+}
 const verificationEmail = {
   subject: () => 'Verify Email',
   htmlBody: (user) => {
@@ -256,6 +264,11 @@ export const handler = async (event, context) => {
     // The name of the property you'd call on `db` to access your user table.
     // ie. if your Prisma model is named `User` this value would be `user`, as in `db.user`
     authModelAccessor: 'user',
+    // cors,
+    // authFields: {
+    //   id: 'id',
+    //   username: 'username',
+    // },
 
     // A map of what dbAuth calls a field to what your database calls it.
     // `id` is whatever column you use to uniquely identify a user (probably
@@ -289,43 +302,81 @@ export const handler = async (event, context) => {
     signup: signupOptions,
   })
 
-  const originalLogin = authHandler.login
+  // authHandler.login = async () => {
+  //   const { code, state } = authHandler.params
+  //   console.log('authHandler.params = ', authHandler.params)
+  //   return true
+  //   // validateLoginRequest({ type })
+  //   // if (!code || !state) throw 'logIn() Code or state not provided.'
 
-  authHandler.login = async () => {
+  //   // const tokens = await submitCodeGrant({
+  //   //   state,
+  //   //   code,
+  //   //   type,
+  //   // })
+  //   // const user = await providers[type].onConnected(tokens)
+  //   // const sessionData = { id: user[authHandler.options.authFields.id] }
+
+  //   // // TODO: this needs to go into graphql somewhere so that each request makes
+  //   // // a new CSRF token and sets it in both the encrypted session and the
+  //   // // csrf-token header
+  //   // const csrfToken = DbAuthHandler.CSRF_TOKEN
+
+  //   // const response = [
+  //   //   sessionData,
+  //   //   {
+  //   //     'csrf-token': csrfToken,
+  //   //     ...authHandler._createSessionHeader(sessionData, csrfToken),
+  //   //   },
+  //   // ]
+  //   // logger.debug({ custom: response }, 'login() cookie')
+  //   // return response
+  // }
+
+  // const originalLogin = authHandler.login
+
+  authHandler.login = async (user) => {
     console.log('inside the  newly defined login function!')
-    const user = {
-      id: 'cus_NsivtXW7BsajRA',
-      email: 'rouzbeh.asghari@gmail.com',
-      // googleId: null,
-      // name: 'Rouzbeh Shirvani',
-    }
     console.log('user:', user)
-    const loginResponse = authHandler._loginResponse(user)
-    // console.log('loginResponse:', loginResponse)
-    // return loginResponse
+    const usr = {
+      id: 'cus_NssOD0je7EFzF2',
+      email: 'rouzbeh.asghari@gmail.com',
+    }
+    const loginResponse = authHandler._loginResponse(usr)
+    console.log('loginResponse:', loginResponse)
 
-    console.log('inside the newly defined login function!')
-    console.log('authHandler.params:', authHandler.params)
-    const { type, username, password } = authHandler.params
-    console.log('params:', authHandler.params)
     return loginResponse
-
-    // if (type) {
-    //   // assume type is only present for OAuth logins
-
-    //   console.log('type:', type)
-    //   return { response: 'type' }
-    // } else if (username && password) {
-    //   // assume both are present for traditional logins
-    //   // Call the original login method
-    //   const callOriginalLogin = originalLogin.call(authHandler)
-    //   console.log('callOriginalLogin:', callOriginalLogin)
-    //   return callOriginalLogin
-    // } else {
-    //   // ...handle case where necessary parameters are missing...
-    //   throw 'logIn() Username, password or OAuth details not provided.'
-    // }
   }
+  //   // googleId: null,
+  //   // name: 'Rouzbeh Shirvani',
+  // }
+  // console.log('user:', user)
+  // const loginResponse = authHandler._loginResponse(user)
+  // console.log('loginResponse:', loginResponse)
+  // return loginResponse
+
+  // console.log('inside the newly defined login function!')
+  // console.log('authHandler.params:', authHandler.params)
+  // const { type, username, password } = authHandler.params
+  // console.log('params:', authHandler.params)
+  // return loginResponse
+
+  // if (type) {
+  //   // assume type is only present for OAuth logins
+
+  //   console.log('type:', type)
+  //   return { response: 'type' }
+  // } else if (username && password) {
+  //   // assume both are present for traditional logins
+  //   // Call the original login method
+  //   const callOriginalLogin = originalLogin.call(authHandler)
+  //   console.log('callOriginalLogin:', callOriginalLogin)
+  //   return callOriginalLogin
+  // } else {
+  //   // ...handle case where necessary parameters are missing...
+  //   throw 'logIn() Username, password or OAuth details not provided.'
+  // }
+  // }
 
   return await authHandler.invoke()
 }
