@@ -45,9 +45,7 @@ const LoginPage = () => {
     toast.loading('Logging You in...', {
       duration: Infinity,
     })
-    const { username, password } = data
-    const response = await logIn({ username, password })
-
+    const response = await logIn({ ...data })
     toast.dismiss()
 
     if (response.message) {
