@@ -49,7 +49,7 @@ export const Financials = () => {
 
   const calledCompanies = useRecoilValue(calledCompaniesAtom)
   const plottingData = useRecoilValue(plottingDataAtom)
-  const [_companyList, setCompanyList] = useRecoilState(companyListAtom)
+  const [companyList, setCompanyList] = useRecoilState(companyListAtom)
   const [metrics, _setMetrics] = useRecoilState(metricsAtom)
   const loadingFinancials = useRecoilValue(loadingFinancialsAtom)
 
@@ -59,11 +59,10 @@ export const Financials = () => {
     //   getCompanies({
     //     variables: { id: currentUser.id },
     //   })
-    getCompanies()
-    // getCompanies({
-    //   variables: { id: currentUser.id },
-    // })
-  }, [getCompanies])
+    if (companyList.length == 0) {
+      getCompanies()
+    }
+  }, [getCompanies, companyList.length])
 
   return (
     <>
