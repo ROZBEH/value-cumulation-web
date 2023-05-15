@@ -128,7 +128,8 @@ const HomePage = () => {
         <SECLinks />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        {renderPanel(isAuthenticated, subscriptionHistory, 'sector')}
+        {/* {renderPanel(isAuthenticated, subscriptionHistory, 'sector')} */}
+        <Sector />
       </TabPanel>
       <TabPanel value={value} index={3}>
         {renderPanel(isAuthenticated, subscriptionHistory, 'companyFinder')}
