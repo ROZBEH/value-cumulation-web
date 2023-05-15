@@ -40,7 +40,6 @@ const LoginPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    console.log('data: ', data)
     spreeSubmit({ username: data.username })
     toast.loading('Logging You in...', {
       duration: Infinity,

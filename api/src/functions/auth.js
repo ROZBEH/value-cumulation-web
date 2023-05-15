@@ -95,7 +95,6 @@ export const handler = async (event, context) => {
       // if (user.verifyToken) {
       //   throw new Error('Please check your email to verify your account.')
       // }
-
       return user
     },
 
@@ -256,6 +255,7 @@ export const handler = async (event, context) => {
     // The name of the property you'd call on `db` to access your user table.
     // ie. if your Prisma model is named `User` this value would be `user`, as in `db.user`
     authModelAccessor: 'user',
+
     // A map of what dbAuth calls a field to what your database calls it.
     // `id` is whatever column you use to uniquely identify a user (probably
     // something like `id` or `userId` or even `email`)
