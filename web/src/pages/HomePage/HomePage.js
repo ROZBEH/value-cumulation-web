@@ -17,6 +17,7 @@ import { useAuth } from 'src/auth'
 import { SUBS_HISTORY } from 'src/commons/gql'
 import { Companyfinder } from 'src/components/Companyfinder/Companyfinder'
 import { Financials } from 'src/components/Financials/Financials'
+import { Finchat } from 'src/components/Finchat/Finchat'
 import { SECLinks } from 'src/components/SECLinks/SECLinks'
 import { Sector } from 'src/components/Sector/Sector'
 import SubscriptionCell from 'src/components/SubscriptionCell'
@@ -96,7 +97,7 @@ const HomePage = () => {
     <Box sx={{ width: '100%' }}>
       <Box
         sx={{
-          width: '50%',
+          width: '65%',
           borderBottom: 1,
           borderColor: 'divider',
           marginLeft: '30px',
@@ -111,6 +112,7 @@ const HomePage = () => {
           onChange={handleChange}
         >
           <Tab label="Financials" />
+          <Tab label="FinChat(AI Powered)" />
           <Tab label="SEC Reports" />
           <Tab
             // style={{ minWidth: '2%' }}
@@ -125,13 +127,16 @@ const HomePage = () => {
         <Financials />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <SECLinks />
+        <Finchat />
       </TabPanel>
       <TabPanel value={value} index={2}>
+        <SECLinks />
+      </TabPanel>
+      <TabPanel value={value} index={3}>
         {/* {renderPanel(isAuthenticated, subscriptionHistory, 'sector')} */}
         <Sector />
       </TabPanel>
-      <TabPanel value={value} index={3}>
+      <TabPanel value={value} index={4}>
         {renderPanel(isAuthenticated, subscriptionHistory, 'companyFinder')}
       </TabPanel>
     </Box>
