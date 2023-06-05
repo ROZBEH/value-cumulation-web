@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 
+import CircularProgress from '@mui/material/CircularProgress'
+
 import axios from 'axios'
 
 export const Finchat = () => {
@@ -10,6 +12,7 @@ export const Finchat = () => {
 
   const getAnswer = () => {
     setLoading(true)
+    setResult(null)
     axios
       .get('http://127.0.0.1:5000/answer_financial_queries', {
         headers: {
@@ -23,6 +26,7 @@ export const Finchat = () => {
       .then((response) => {
         setResult(response.data.response)
         setLoading(false)
+        setLogs([])
       })
       .catch((error) => {
         console.error(`Error: ${error}`)
@@ -57,33 +61,33 @@ export const Finchat = () => {
 
   return (
     <div>
-      <input
-        className="shadow appearance-none border-1 rounded h-16 w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        value={query}
-        onChange={handleQueryChange}
-        id="username"
-        type="text"
-        placeholder="Enter your query"
-      ></input>
-
       <div>
-        <button className="py-3" onClick={getAnswer} disabled={loading}>
-          {loading ? 'Loading...' : 'Submit'}
+        <input
+          className="shadow appearance-none border-1 rounded h-16 w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          value={query}
+          onChange={handleQueryChange}
+          id="username"
+          type="text"
+          placeholder="Enter your query"
+        ></input>
+
+        <button
+          className="rounded-lg w-20 h-8 bg-lightsky-blue border border-gray-300 text-white cursor-pointer ml-1"
+          onClick={getAnswer}
+          disabled={loading}
+        >
+          Submit
         </button>
       </div>
-
-      {result && <div>Answer: {result}</div>}
-
-      {logs.length > 0 && (
+      {loading && logs.length > 0 && (
         <div>
-          <h3>Logs</h3>
-          <ul>
-            {logs.map((log, index) => (
-              <li key={index}>{log}</li>
-            ))}
-          </ul>
+          <CircularProgress color="inherit" size={20} />
+          {logs.map((log, index) => (
+            <div key={index}>{log}</div>
+          ))}
         </div>
       )}
+      {result && <div>{result}</div>}
     </div>
   )
 }
