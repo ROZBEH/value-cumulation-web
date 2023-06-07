@@ -21,7 +21,7 @@ export const Finchat = () => {
     setLoading(true)
     setResult(null)
     axios
-      .get('http://127.0.0.1:5000/answer_financial_queries', {
+      .get(`${process.env.FLASK_API_URL}/answer_financial_queries`, {
         headers: {
           VALUE_CUMULATION_API_KEY: process.env.VALUE_CUMULATION_API_KEY,
         },
