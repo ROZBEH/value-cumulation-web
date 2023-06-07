@@ -20,7 +20,7 @@ export const Finchat = () => {
         },
         params: {
           query: query,
-          ticker: 'QCOM', // we're not changing this for now
+          ticker: 'AAPL', // we're not changing this for now
         },
       })
       .then((response) => {
