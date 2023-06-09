@@ -8,7 +8,8 @@ export const Finchat = () => {
   const [chatHistory, setChatHistory] = useState([])
   const [query, setQuery] = useState('')
 
-  const getAnswer = () => {
+  const getAnswer = (event) => {
+    event.preventDefault() // This will prevent the page from refreshing
     setLoading(true)
 
     axios
@@ -43,28 +44,35 @@ export const Finchat = () => {
   }
 
   return (
-    <div>
-      {chatHistory.map((chat, index) => (
-        <div key={index}>
-          <span
-            style={{ fontWeight: chat.type === 'user' ? 'bold' : 'normal' }}
-          >
-            {chat.message}
-          </span>
-        </div>
-      ))}
-      <div>
-        <input
-          value={query}
-          onChange={handleQueryChange}
-          id="username"
-          type="text"
-          placeholder="Enter your query"
-        />
+    <div className="flex flex-col h-screen">
+      <div className="overflow-y-auto flex-grow p-4">
+        {chatHistory.map((chat, index) => (
+          <div key={index}>
+            <span className={chat.type === 'user' ? 'font-bold' : ''}>
+              {chat.message}
+            </span>
+          </div>
+        ))}
+      </div>
+      <div className="p-4 flex justify-center bg-gray-200 sticky bottom-0">
+        <form onSubmit={getAnswer} className="flex w-3/5">
+          <input
+            value={query}
+            onChange={handleQueryChange}
+            id="username"
+            type="text"
+            placeholder="Enter your query"
+            className="flex-grow mr-2 py-2 px-4 rounded border-2 border-gray-300"
+          />
 
-        <button onClick={getAnswer} disabled={loading}>
-          Submit
-        </button>
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Submit
+          </button>
+        </form>
       </div>
       {loading && (
         <div>
