@@ -11,6 +11,10 @@ export const Finchat = () => {
   const getAnswer = (event) => {
     event.preventDefault() // This will prevent the page from refreshing
     setLoading(true)
+    setChatHistory((prevHistory) => [
+      ...prevHistory,
+      { message: query, type: 'user' },
+    ])
 
     axios
       .post(
@@ -27,7 +31,6 @@ export const Finchat = () => {
       .then((response) => {
         setChatHistory((prevHistory) => [
           ...prevHistory,
-          { message: query, type: 'user' },
           { message: response.data.response, type: 'bot' },
         ])
         setQuery('')
@@ -56,15 +59,23 @@ export const Finchat = () => {
       </div>
       <div className="p-4 flex justify-center bg-gray-200 sticky bottom-0">
         <form onSubmit={getAnswer} className="flex w-3/5">
-          <input
-            value={query}
-            onChange={handleQueryChange}
-            id="username"
-            type="text"
-            placeholder="Enter your query"
-            className="flex-grow mr-2 py-2 px-4 rounded border-2 border-gray-300"
-          />
-
+          <div className="relative flex-grow mr-2">
+            <input
+              value={query}
+              onChange={handleQueryChange}
+              id="username"
+              type="text"
+              placeholder="Enter your query"
+              className="w-full py-2 px-4 rounded border-2 border-gray-300 pl-10"
+            />
+            {loading && (
+              <CircularProgress
+                className="absolute right-4 top-2"
+                size={20}
+                color="secondary"
+              />
+            )}
+          </div>
           <button
             type="submit"
             disabled={loading}
@@ -74,11 +85,6 @@ export const Finchat = () => {
           </button>
         </form>
       </div>
-      {loading && (
-        <div>
-          <CircularProgress color="inherit" size={20} />
-        </div>
-      )}
     </div>
   )
 }
