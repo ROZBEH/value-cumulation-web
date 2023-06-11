@@ -15,6 +15,7 @@ export const Finchat = () => {
   const [loading, setLoading] = useRecoilState(setLoadingAtom)
   const [chatHistory, setChatHistory] = useRecoilState(setChatHistoryAtom)
   const [query, setQuery] = useRecoilState(setQueryAtom)
+  const [isInputEmpty, setIsInputEmpty] = useState(true)
 
   const [chatContainer, setChatContainer] = useState(null)
   const scrollContainerRef = useRef(null)
@@ -91,7 +92,9 @@ export const Finchat = () => {
   }
 
   const handleQueryChange = (event) => {
-    setQuery(event.target.value)
+    const inputValue = event.target.value
+    setQuery(inputValue)
+    setIsInputEmpty(inputValue === '')
   }
 
   return (
@@ -133,9 +136,11 @@ export const Finchat = () => {
             )}
           </div>
           <button
+            disabled={loading || isInputEmpty}
             type="submit"
-            disabled={loading}
-            className="bg-green-300 hover:bg-green-500 text-white font-bold py-2 px-4 rounded"
+            className={`${
+              isInputEmpty ? 'bg-gray-300' : 'bg-green-500'
+            } text-white font-bold py-2 px-4 rounded`}
           >
             <SendIcon />
           </button>
