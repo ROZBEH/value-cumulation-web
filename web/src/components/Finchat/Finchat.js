@@ -1,12 +1,19 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import CircularProgress from '@mui/material/CircularProgress'
 import axios from 'axios'
+import { useRecoilState } from 'recoil'
+
+import {
+  setLoading as setLoadingAtom,
+  setChatHistory as setChatHistoryAtom,
+  setQuery as setQueryAtom,
+} from 'src/recoil/atoms'
 
 export const Finchat = () => {
-  const [loading, setLoading] = useState(false)
-  const [chatHistory, setChatHistory] = useState([])
-  const [query, setQuery] = useState('')
+  const [loading, setLoading] = useRecoilState(setLoadingAtom)
+  const [chatHistory, setChatHistory] = useRecoilState(setChatHistoryAtom)
+  const [query, setQuery] = useRecoilState(setQueryAtom)
 
   const getAnswer = (event) => {
     event.preventDefault() // This will prevent the page from refreshing
@@ -15,6 +22,7 @@ export const Finchat = () => {
       ...prevHistory,
       { message: query, type: 'user' },
     ])
+    setQuery('')
 
     axios
       .post(
@@ -33,7 +41,6 @@ export const Finchat = () => {
           ...prevHistory,
           { message: response.data.response, type: 'bot' },
         ])
-        setQuery('')
         setLoading(false)
       })
       .catch((error) => {
@@ -56,6 +63,13 @@ export const Finchat = () => {
             </span>
           </div>
         ))}
+        {loading && (
+          <div className="flex space-x-2 mt-2">
+            <div className="w-1 h-1 bg-gray-500 rounded-full animate-bounce delay-500"></div>
+            <div className="w-1 h-1 bg-gray-500 rounded-full animate-bounce delay-600"></div>
+            <div className="w-1 h-1 bg-gray-500 rounded-full animate-bounce delay-700"></div>
+          </div>
+        )}
       </div>
       <div className="p-4 flex justify-center bg-gray-200 sticky bottom-0">
         <form onSubmit={getAnswer} className="flex w-3/5">
@@ -63,10 +77,11 @@ export const Finchat = () => {
             <input
               value={query}
               onChange={handleQueryChange}
-              id="username"
               type="text"
               placeholder="Enter your query"
               className="w-full py-2 px-4 rounded border-2 border-gray-300 pl-10"
+              autoComplete="off"
+              // key={Date.now()}
             />
             {loading && (
               <CircularProgress

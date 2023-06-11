@@ -126,3 +126,18 @@ export const sectorComp = atom({
   key: 'sectorComp',
   default: '',
 })
+
+export const setLoading = atom({
+  key: 'setLoading',
+  default: false,
+})
+
+export const setChatHistory = atom({
+  key: 'setChatHistory',
+  default: [],
+})
+
+export const setQuery = atom({
+  key: 'setQuery',
+  default: '',
+})

@@ -42,6 +42,15 @@ module.exports = {
         '1/2': '50%',
         '3/4': '75%',
       },
+      animation: {
+        bounce: 'bounce 1s infinite',
+      },
+      keyframes: {
+        bounce: {
+          '0%, 80%, 100%': { transform: 'scale(0)' },
+          '40%': { transform: 'scale(1)' },
+        },
+      },
     },
   },
   plugins: [],
