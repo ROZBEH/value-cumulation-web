@@ -97,11 +97,13 @@ const HomePage = () => {
     <Box sx={{ width: '100%' }}>
       <Box
         sx={{
-          width: '65%',
+          position: 'sticky',
+          top: '80px', // corresponds to h-20 in the main layout
+          width: '100%',
           borderBottom: 1,
           borderColor: 'divider',
-          marginLeft: '30px',
-          marginRight: '20px',
+          zIndex: 1000, // set a high z-index
+          backgroundColor: '#fff', // set a background color
         }}
       >
         <div style={{ position: 'fixed', zIndex: '-1' }}> </div>
@@ -118,11 +120,12 @@ const HomePage = () => {
             // style={{ minWidth: '2%' }}
             // variant="fullWidth"
             label="Sector Comparison(AI Powered)"
-            wrapped
+            // wrapped
           />
           <Tab label="Company Finder" />
         </Tabs>
       </Box>
+
       <TabPanel value={value} index={0}>
         <Financials />
       </TabPanel>

@@ -29,8 +29,8 @@ const MainLayout = ({ children }) => {
         pauseOnHover
         theme="light"
       />
-      <header className="bg-slate-100 sticky top-0 z-50 rounded-b-xl">
-        <nav className="flex items-center justify-between flex-wrap bg-gold-800 p-6">
+      <header className="bg-slate-100 sticky top-0 z-50 rounded-b-xl h-20">
+        <nav className="flex items-center justify-between flex-wrap bg-gold-800 h-full">
           <div>
             <Link to={routes.home()}>
               <img
