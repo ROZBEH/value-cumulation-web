@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
+import SendIcon from '@mui/icons-material/Send'
 import CircularProgress from '@mui/material/CircularProgress'
 import axios from 'axios'
 import { useRecoilState } from 'recoil'
@@ -14,6 +15,46 @@ export const Finchat = () => {
   const [loading, setLoading] = useRecoilState(setLoadingAtom)
   const [chatHistory, setChatHistory] = useRecoilState(setChatHistoryAtom)
   const [query, setQuery] = useRecoilState(setQueryAtom)
+
+  const [chatContainer, setChatContainer] = useState(null)
+  const scrollContainerRef = useRef(null)
+
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      setChatContainer(scrollContainerRef.current)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (chatContainer) {
+      // create observer
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.addedNodes.length) {
+            const latestChat =
+              mutation.addedNodes[mutation.addedNodes.length - 1]
+            if (latestChat) {
+              const rect = latestChat.getBoundingClientRect()
+              if (rect.bottom > window.innerHeight || rect.top < 0) {
+                latestChat.scrollIntoView({
+                  behavior: 'smooth',
+                  block: 'end',
+                })
+              }
+            }
+          }
+        })
+      })
+
+      // start observing
+      observer.observe(chatContainer, {
+        childList: true,
+      })
+
+      // cleanup
+      return () => observer.disconnect()
+    }
+  }, [chatContainer])
 
   const getAnswer = (event) => {
     event.preventDefault() // This will prevent the page from refreshing
@@ -55,7 +96,7 @@ export const Finchat = () => {
 
   return (
     <div className="flex flex-col h-screen">
-      <div className="overflow-y-auto flex-grow p-4">
+      <div ref={scrollContainerRef} className="flex-grow p-4">
         {chatHistory.map((chat, index) => (
           <div key={index}>
             <span className={chat.type === 'user' ? 'font-bold' : ''}>
@@ -71,7 +112,7 @@ export const Finchat = () => {
           </div>
         )}
       </div>
-      <div className="p-4 flex justify-center bg-gray-200 sticky bottom-0">
+      <div className="p-4 flex justify-center bg-gray-700 sticky bottom-0 rounded-xl">
         <form onSubmit={getAnswer} className="flex w-3/5">
           <div className="relative flex-grow mr-2">
             <input
@@ -94,9 +135,9 @@ export const Finchat = () => {
           <button
             type="submit"
             disabled={loading}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-green-300 hover:bg-green-500 text-white font-bold py-2 px-4 rounded"
           >
-            Submit
+            <SendIcon />
           </button>
         </form>
       </div>
