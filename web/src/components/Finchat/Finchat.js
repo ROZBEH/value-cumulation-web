@@ -84,6 +84,7 @@ export const Finchat = () => {
           { message: response.data.response, type: 'bot' },
         ])
         setLoading(false)
+        setIsInputEmpty(true)
       })
       .catch((error) => {
         console.error(`Error: ${error}`)
