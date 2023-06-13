@@ -139,7 +139,7 @@ export const Finchat = () => {
             disabled={loading || isInputEmpty}
             type="submit"
             className={`${
-              isInputEmpty ? 'bg-gray-300' : 'bg-green-500'
+              loading || isInputEmpty ? 'bg-gray-300' : 'bg-green-500'
             } text-white font-bold py-2 px-4 rounded`}
           >
             <SendIcon />
