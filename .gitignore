@@ -29,3 +29,4 @@ api/types/graphql.d.ts
 # .yarnrc.yml
 .vscode
 __pycache__/
+.ipynb_checkpoints/
